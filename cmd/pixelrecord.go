@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/noissefnoc/pixela/pixel"
+	"github.com/noissefnoc/pixela-client-go/pixel"
 
 	"github.com/spf13/cobra"
 )
@@ -10,8 +10,8 @@ import (
 var pixelrecordCmd = &cobra.Command{
 	Use:   "record",
 	Short: "record quantity to graph.",
-	Long: `record quantity to graph.`,
-	Run: pixel.Record,
+	Long:  `record quantity to graph.`,
+	Run:   pixel.Record,
 }
 
 func init() {

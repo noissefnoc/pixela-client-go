@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/noissefnoc/pixela/util"
+	"github.com/noissefnoc/pixela-client-go/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -27,8 +27,8 @@ func Record(cmd *cobra.Command, args []string) {
 	}
 
 	// TODO: arguments format validation
-	graphId  := args[0]
-	date     := args[1]
+	graphId := args[0]
+	date := args[1]
 	quantity := args[2]
 
 	username := viper.GetString("username")

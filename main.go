@@ -1,6 +1,6 @@
 package main
 
-import "github.com/noissefnoc/pixela/cmd"
+import "github.com/noissefnoc/pixela-client-go/cmd"
 
 var (
 	// Version is build version
