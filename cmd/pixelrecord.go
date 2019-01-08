@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/noissefnoc/pixela-client-go/pixel"
+	"github.com/noissefnoc/pixela-client-go/pixela/pixel"
 
 	"github.com/spf13/cobra"
 )
