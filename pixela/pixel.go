@@ -39,7 +39,5 @@ func (pixela *Pixela) PixelRecord(graphId string, date string, quantity string) 
 		return errors.Wrap(err, "error pixel create http request failed.")
 	}
 
-	// TODO: check response body `isSuccess` field is `true`
-
 	return nil
 }
