@@ -7,14 +7,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-// TODO: add OptionalData later
 type RecordPayload struct {
-	Date     string `json:"date"`
-	Quantity string `json:"quantity"`
+	Date         string `json:"date"`
+	Quantity     string `json:"quantity"`
+	OptionalData string `json:"optionalData,omitempty"`
 }
 
 // record quantity
-func (pixela *Pixela) PixelRecord(graphId string, date string, quantity string) error {
+func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) error {
 	// create payload
 	pl := RecordPayload{
 		Date:     date,
@@ -24,7 +24,7 @@ func (pixela *Pixela) PixelRecord(graphId string, date string, quantity string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return errors.Wrap(err, "error can not marshal request payload.")
+		return errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -36,7 +36,7 @@ func (pixela *Pixela) PixelRecord(graphId string, date string, quantity string) 
 	err = pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return errors.Wrap(err, "error pixel create http request failed.")
+		return errors.Wrap(err, "error `pixel create`:http request failed.")
 	}
 
 	return nil

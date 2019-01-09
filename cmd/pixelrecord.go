@@ -31,7 +31,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 			Debug: true,
 		}
 
-		err := client.PixelRecord(args[0], args[1], args[2])
+		err := client.RecordPixel(args[0], args[1], args[2])
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "pixela request error:\n%v\n", err)

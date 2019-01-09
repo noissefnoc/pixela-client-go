@@ -19,8 +19,9 @@ type Pixela struct {
 }
 
 type ResponseBody struct {
-	Message   string `json:"message"`
-	IsSuccess bool   `json:"isSuccess"`
+	Message     string `json:"message"`
+	IsSuccess   bool   `json:"isSuccess"`
+	WebhookHash string `json:"webhookHash,omitempty"`
 }
 
 func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
