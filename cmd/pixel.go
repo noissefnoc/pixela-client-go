@@ -9,7 +9,7 @@ import (
 // pixelCmd represents the pixel command
 var pixelCmd = &cobra.Command{
 	Use:   "pixel",
-	Short: "handle pixel sub-command",
+	Short: "handle pixel subcommands",
 	Long: `record, get, update, increment, decrement and delete pixel
 
 see official document (https://docs.pixe.la) for more detail`,
