@@ -1,17 +1,43 @@
 package cmd
 
 import (
-	"github.com/noissefnoc/pixela-client-go/pixela/pixel"
-
+	"fmt"
+	"github.com/noissefnoc/pixela-client-go/pixela"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"os"
 )
 
 // pixelrecordCmd represents the pixelrecord command
 var pixelrecordCmd = &cobra.Command{
 	Use:   "record",
 	Short: "record quantity to graph.",
-	Long:  `record quantity to graph.`,
-	Run:   pixel.Record,
+	Long:  `record quantity to graph. Usage:
+
+$ pixela pixel record <graph id> <date> <quantity>
+
+see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
+	Run:   func(cmd *cobra.Command, args []string) {
+		// check arguments
+		if len(args) != 3 {
+			fmt.Fprintf(os.Stderr, "argument error: `pixel record` requires 3 arguments give %d arguments.\n", len(args))
+			os.Exit(1)
+		}
+
+		// rdo request
+		client := pixela.Pixela{
+			Username: viper.GetString("username"),
+			Token: viper.GetString("token"),
+			Debug: true,
+		}
+
+		err := client.PixelRecord(args[0], args[1], args[2])
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pixela request error:\n%v\n", err)
+			os.Exit(1)
+		}
+	},
 }
 
 func init() {

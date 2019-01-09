@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-var BaseUrl string = "https://pixe.la"
+var BaseUrl = "https://pixe.la"
 
 // Pixela is application for pixe.la
 type Pixela struct {
-	Url      string
+	Username string
 	Token    string
 	Debug    bool
 }
@@ -22,9 +22,9 @@ type ResponseBody struct {
 	IsSuccess bool   `json:"isSuccess"`
 }
 
-func (pixela *Pixela) DoAPI(method string, url string, payload *bytes.Buffer) error {
-	// Create Request
-	request, err := http.NewRequest(method, url, payload)
+func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
+	// create Request
+	request, err := http.NewRequest(http.MethodPost, url, payload)
 
 	if err != nil {
 		return errors.Wrap(err, "can not make request")
@@ -33,14 +33,14 @@ func (pixela *Pixela) DoAPI(method string, url string, payload *bytes.Buffer) er
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("X-USER-TOKEN", pixela.Token)
 
-	// Get response from pixe.la
+	// get response from pixe.la
 	response, err := http.DefaultClient.Do(request)
 
 	if err != nil {
 		return errors.Wrap(err, "pixel record http request failed")
 	}
 
-	// Parse response
+	// parse response
 	defer response.Body.Close()
 
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
