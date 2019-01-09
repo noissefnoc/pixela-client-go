@@ -3,6 +3,7 @@ package pixela
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
@@ -54,6 +55,11 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
 
 	if err != nil {
 		return errors.Wrap(err, "response body parse failed.")
+	}
+
+	// check response body if request success
+	if !responseBody.IsSuccess {
+		return errors.Wrap(err, fmt.Sprintf("request failed: %s", responseBody.Message))
 	}
 
 	return nil
