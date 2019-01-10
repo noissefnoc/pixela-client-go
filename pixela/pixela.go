@@ -65,3 +65,32 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
 
 	return nil
 }
+
+func (pixela *Pixela) get(url string) ([]byte, error) {
+	// create Request
+	request, err := http.NewRequest(http.MethodGet, url,nil)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "can not make request")
+	}
+
+	request.Header.Set("X-USER-TOKEN", pixela.Token)
+
+	// get response from pixe.la
+	response, err := http.DefaultClient.Do(request)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "pixel record http request failed")
+	}
+
+	// parse response
+	defer response.Body.Close()
+
+	responseBodyJSON, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "response read failed.")
+	}
+
+	return responseBodyJSON, nil
+}

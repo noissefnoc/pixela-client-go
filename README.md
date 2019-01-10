@@ -28,7 +28,7 @@ pixela-client-go now implement following feature.
 |---------------|--------|--------|--------|--------|
 |create         |**done**|**done**|**done**|not yet |
 |get(definition)|N/A     |not yet |N/A     |N/A     |
-|get(data)      |N/A     |not yet |not yet |not yet |
+|get(data)      |N/A     |not yet |**done**|not yet |
 |update         |not yet |not yet |not yet |N/A     |
 |update(inc)    |N/A     |N/A     |not yet |N/A     |
 |update(dec)    |N/A     |N/A     |not yet |N/A     |
