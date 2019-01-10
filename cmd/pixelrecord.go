@@ -24,7 +24,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 			os.Exit(1)
 		}
 
-		// rdo request
+		// do request
 		client := pixela.Pixela{
 			Username: viper.GetString("username"),
 			Token: viper.GetString("token"),
