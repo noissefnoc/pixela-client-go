@@ -13,13 +13,13 @@ type RecordPayload struct {
 	OptionalData string `json:"optionalData,omitempty"`
 }
 
-type GetPixelResponse struct {
+type GetPixelResponseBody struct {
 	Quantity     string `json:"quantity"`
 	OptionalData string `json:"optionalData,omitempty"`
 }
 
 // record quantity
-func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) error {
+func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) (PostResponseBody, error) {
 	// create payload
 	pl := RecordPayload{
 		Date:     date,
@@ -29,7 +29,7 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
+		return PostResponseBody{}, errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -38,16 +38,19 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 		"%s/v1/users/%s/graphs/%s", BaseUrl, pixela.Username, graphId)
 
 	// do request
-	err = pixela.post(requestURL, bytes.NewBuffer(plJSON))
+	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return errors.Wrap(err, "error `pixel create`:http request failed.")
+		return PostResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
 	}
 
-	return nil
+	postResponseBody := PostResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	return postResponseBody, nil
 }
 
-func (pixela *Pixela) GetPixel(graphId string, date string) ([]byte, error) {
+func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
@@ -57,8 +60,15 @@ func (pixela *Pixela) GetPixel(graphId string, date string) ([]byte, error) {
 	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "error `pixel get`:http request failed.")
+		return GetPixelResponseBody{}, errors.Wrap(err, "error `pixel get`:http request failed.")
 	}
 
-	return responseBody, nil
+	getPixelResponseBody := GetPixelResponseBody{}
+	err = json.Unmarshal(responseBody, &getPixelResponseBody)
+
+	if err != nil {
+		return GetPixelResponseBody{}, errors.Wrap(err, "error `pixel get`:http response parse failed.")
+	}
+
+	return getPixelResponseBody, nil
 }

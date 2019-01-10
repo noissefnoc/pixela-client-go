@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/noissefnoc/pixela-client-go/pixela"
 	"github.com/spf13/cobra"
@@ -39,12 +40,22 @@ see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 			timeZone = ""
 		}
 
-		err := client.CreateGraph(args[0], args[1], args[2], args[3], args[4], timeZone)
+		response, err := client.CreateGraph(args[0], args[1], args[2], args[3], args[4], timeZone)
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "pixela request error:\n%v\n", err)
 			os.Exit(1)
 		}
+
+		responseJSON, err := json.Marshal(response)
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pixela response parse error:\n%v\n", err)
+			os.Exit(1)
+		}
+
+		// print result
+		fmt.Printf("%s\n", responseJSON)
 	},
 }
 

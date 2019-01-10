@@ -15,7 +15,7 @@ type CreateUserPayload struct {
 }
 
 // create user
-func (pixela *Pixela) CreateUser() error {
+func (pixela *Pixela) CreateUser() (PostResponseBody, error) {
 	// create payload
 	pl := CreateUserPayload{
 		Username:            pixela.Username,
@@ -27,7 +27,7 @@ func (pixela *Pixela) CreateUser() error {
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return errors.Wrap(err, "error `user create`: can not marshal request payload.")
+		return PostResponseBody{}, errors.Wrap(err, "error `user create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -35,11 +35,18 @@ func (pixela *Pixela) CreateUser() error {
 	requestURL := fmt.Sprintf("%s/v1/users", BaseUrl)
 
 	// do request
-	err = pixela.post(requestURL, bytes.NewBuffer(plJSON))
+	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return errors.Wrap(err, "error `user create`:http request failed.")
+		return PostResponseBody{}, errors.Wrap(err, "error `user create`:http request failed.")
 	}
 
-	return nil
+	postResponseBody := PostResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	if err != nil {
+		return PostResponseBody{}, errors.Wrap(err, "error `user create`:http response parse failed.")
+	}
+
+	return postResponseBody, nil
 }

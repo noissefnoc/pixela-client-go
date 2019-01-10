@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"github.com/noissefnoc/pixela-client-go/pixela"
@@ -38,12 +39,22 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 			Debug:    true,
 		}
 
-		err := client.CreateUser()
+		response, err := client.CreateUser()
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "pixela request error:\n%v\n", err)
 			os.Exit(1)
 		}
+
+		responseJSON, err := json.Marshal(response)
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pixela response parse error:\n%v\n", err)
+			os.Exit(1)
+		}
+
+		// print result
+		fmt.Printf("%s\n", responseJSON)
 
 		// save authentications into file
 		configFilePath := viper.GetString("config")

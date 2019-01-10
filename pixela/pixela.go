@@ -18,18 +18,18 @@ type Pixela struct {
 	Debug    bool
 }
 
-type ResponseBody struct {
+type PostResponseBody struct {
 	Message     string `json:"message"`
 	IsSuccess   bool   `json:"isSuccess"`
 	WebhookHash string `json:"webhookHash,omitempty"`
 }
 
-func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
+func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	// create Request
 	request, err := http.NewRequest(http.MethodPost, url, payload)
 
 	if err != nil {
-		return errors.Wrap(err, "can not make request")
+		return nil, errors.Wrap(err, "can not make request")
 	}
 
 	request.Header.Set("Content-Type", "application/json")
@@ -39,7 +39,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
 	response, err := http.DefaultClient.Do(request)
 
 	if err != nil {
-		return errors.Wrap(err, "pixel record http request failed")
+		return nil, errors.Wrap(err, "pixel record http request failed")
 	}
 
 	// parse response
@@ -48,22 +48,22 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) error {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return errors.Wrap(err, "response read failed.")
+		return nil, errors.Wrap(err, "response read failed.")
 	}
 
-	responseBody := ResponseBody{}
+	responseBody := PostResponseBody{}
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return errors.Wrap(err, "response body parse failed.")
+		return nil, errors.Wrap(err, "response body parse failed.")
 	}
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return errors.Wrap(err, fmt.Sprintf("request failed: %s", responseBody.Message))
+		return nil, errors.Wrap(err, fmt.Sprintf("request failed: %s", responseBody.Message))
 	}
 
-	return nil
+	return responseBodyJSON, nil
 }
 
 func (pixela *Pixela) get(url string) ([]byte, error) {

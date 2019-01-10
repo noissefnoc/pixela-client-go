@@ -16,7 +16,7 @@ type CreateGraphPayload struct {
 	Timezone string `json:"timezone,omitempty"`
 }
 
-func (pixela *Pixela) CreateGraph(id string, name string, unit string, numType string, color string, timezone string) error {
+func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone string) (PostResponseBody, error) {
 	// create payload
 	pl := CreateGraphPayload{
 		Id: id,
@@ -33,7 +33,7 @@ func (pixela *Pixela) CreateGraph(id string, name string, unit string, numType s
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return errors.Wrap(err, "error `graph create`: can not marshal request payload.")
+		return PostResponseBody{}, errors.Wrap(err, "error `graph create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -41,11 +41,18 @@ func (pixela *Pixela) CreateGraph(id string, name string, unit string, numType s
 	requestURL := fmt.Sprintf("%s/v1/users/%s/graphs", BaseUrl, pixela.Username)
 
 	// do request
-	err = pixela.post(requestURL, bytes.NewBuffer(plJSON))
+	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return errors.Wrap(err, "error `graph create`:http request failed.")
+		return PostResponseBody{}, errors.Wrap(err, "error `graph create`:http request failed.")
 	}
 
-	return nil
+	postResponseBody := PostResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	if err != nil {
+		return PostResponseBody{}, errors.Wrap(err, "error `graph create`:http response parse failed.")
+	}
+
+	return postResponseBody, nil
 }
