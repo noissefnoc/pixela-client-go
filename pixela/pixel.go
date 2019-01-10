@@ -47,25 +47,18 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 	return nil
 }
 
-func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponse, error) {
+func (pixela *Pixela) GetPixel(graphId string, date string) ([]byte, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
 		"%s/v1/users/%s/graphs/%s/%s", BaseUrl, pixela.Username, graphId, date)
 
 	// do request
-	responseBodyBuf, err := pixela.get(requestURL)
+	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return GetPixelResponse{}, errors.Wrap(err, "error `pixel get`:http request failed.")
+		return nil, errors.Wrap(err, "error `pixel get`:http request failed.")
 	}
 
-	response := GetPixelResponse{}
-	err = json.Unmarshal(responseBodyBuf, &response)
-
-	if err != nil {
-		return GetPixelResponse{}, errors.Wrap(err, "error `pixel get`:http response parse failed.")
-	}
-
-	return response, nil
+	return responseBody, nil
 }

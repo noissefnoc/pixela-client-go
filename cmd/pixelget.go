@@ -39,7 +39,7 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 		}
 
 		// print result
-		fmt.Printf("%+v\n", response)
+		fmt.Printf("%s\n", response)
 	},
 }
 
