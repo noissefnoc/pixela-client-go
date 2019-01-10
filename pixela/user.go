@@ -27,7 +27,7 @@ func (pixela *Pixela) CreateUser() error {
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return errors.Wrap(err, "error `userl create`: can not marshal request payload.")
+		return errors.Wrap(err, "error `user create`: can not marshal request payload.")
 	}
 
 	// build request url
