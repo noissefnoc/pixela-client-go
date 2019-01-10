@@ -45,6 +45,7 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 			os.Exit(1)
 		}
 
+		// save authentications into file
 		configFilePath := viper.GetString("config")
 
 		if !existFile(configFilePath) && !existFile(getDefaultFilePath()) {
