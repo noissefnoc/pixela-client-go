@@ -92,3 +92,20 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 
 	return graphDefinitions, nil
 }
+
+// get graph svg html tag
+func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s", BaseUrl, pixela.Username, graphId)
+
+	// do request
+	responseBody, err := pixela.get(requestURL)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "error `graph svg`:http request failed.")
+	}
+
+	return responseBody, nil
+}
