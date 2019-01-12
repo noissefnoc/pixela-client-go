@@ -26,23 +26,24 @@ see official document (https://docs.pixe.la/#/increment-pixel) for more detail.`
 		}
 
 		// do request
-		client := pixela.Pixela{
-			Username: viper.GetString("username"),
-			Token: viper.GetString("token"),
-			Debug: true,
+		client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), false)
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", err)
+			os.Exit(1)
 		}
 
 		response, err := client.IncPixel(args[0])
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pixela request error:\n%v\n", err)
+			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pixela response parse error:\n%v\n", err)
+			fmt.Fprintf(os.Stderr, "response parse error:\n%v\n", err)
 			os.Exit(1)
 		}
 

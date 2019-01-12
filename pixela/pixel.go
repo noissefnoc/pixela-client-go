@@ -35,7 +35,7 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s", BaseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
@@ -50,11 +50,12 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 	return postResponseBody, nil
 }
 
+// get pixel data
 func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/%s", BaseUrl, pixela.Username, graphId, date)
+		"%s/v1/users/%s/graphs/%s/%s", baseUrl, pixela.Username, graphId, date)
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
@@ -73,11 +74,12 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	return getPixelResponseBody, nil
 }
 
+// increment today's pixel quantity
 func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/increment", BaseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s/increment", baseUrl, pixela.Username, graphId)
 
 	// do request
 	responseBody, err := pixela.put(requestURL, nil)

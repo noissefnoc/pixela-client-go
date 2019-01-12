@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"github.com/noissefnoc/pixela-client-go/pixela"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"io/ioutil"
@@ -33,23 +34,24 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 		token := args[1]
 
 		// do request
-		client := pixela.Pixela{
-			Username: username,
-			Token:    token,
-			Debug:    true,
+		client, err := pixela.New(username, token, false)
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", err)
+			os.Exit(1)
 		}
 
 		response, err := client.CreateUser()
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pixela request error:\n%v\n", err)
+			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pixela response parse error:\n%v\n", err)
+			fmt.Fprintf(os.Stderr, "response parse error:\n%v\n", err)
 			os.Exit(1)
 		}
 
@@ -58,28 +60,11 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 
 		// save authentications into file
 		configFilePath := viper.GetString("config")
+		err = saveConfigFile(configFilePath, username, token)
 
-		if !existFile(configFilePath) && !existFile(getDefaultFilePath()) {
-			saveConfigFilePath := configFilePath
-
-			if saveConfigFilePath == "" {
-				saveConfigFilePath = getDefaultFilePath()
-			}
-
-			// TODO: apply yaml package
-			settings := fmt.Sprintf("username: %s\ntoken: %s\n", username, token)
-
-			err := ioutil.WriteFile(saveConfigFilePath, []byte(settings), 0644)
-
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "write config error:\n%+v\n", err)
-				os.Exit(1)
-			}
-		} else {
-			fmt.Fprintf(os.Stderr, "`pixel create` successd but there are aleady config file at %s\n", configFilePath)
-			fmt.Fprintf(os.Stderr, "You should take a note following settings(save to yaml file).\n")
-			fmt.Fprintf(os.Stderr, "username: %s\n", username)
-			fmt.Fprintf(os.Stderr, "token: %s\n", token)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "save configfile error:\n%v\n", err)
+			os.Exit(1)
 		}
 	},
 }
@@ -110,13 +95,47 @@ func existFile(checkFilePath string) bool {
 }
 
 // default config file path
-func getDefaultFilePath() string {
+func getDefaultFilePath() (string, error) {
 	homeDirPath, err := homedir.Dir()
 
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return "", errors.Wrap(err, "cannot find home directory path.")
 	}
 
-	return filepath.Join(homeDirPath, ".pixela.yaml")
+	return filepath.Join(homeDirPath, ".pixela.yaml"), nil
+}
+
+// save username and token to file
+func saveConfigFile(path, username, token string) error {
+	defaultPath, err := getDefaultFilePath()
+
+	if err != nil {
+		return err
+	}
+
+	if existFile(path) && existFile(defaultPath) {
+		fmt.Fprintf(os.Stderr, "`pixel create` successd but there are aleady config file at %s\n", path)
+		fmt.Fprintf(os.Stderr, "You should take a note following settings(save to yaml file).\n")
+		fmt.Fprintf(os.Stderr, "username: %s\n", username)
+		fmt.Fprintf(os.Stderr, "token: %s\n", token)
+
+		return fmt.Errorf("cannot save configs.\n")
+	}
+
+	saveConfigFilePath := path
+
+	if saveConfigFilePath == "" {
+		saveConfigFilePath = defaultPath
+	}
+
+	// TODO: apply yaml package
+	settings := fmt.Sprintf("username: %s\ntoken: %s\n", username, token)
+
+	err = ioutil.WriteFile(saveConfigFilePath, []byte(settings), 0644)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

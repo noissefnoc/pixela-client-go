@@ -32,7 +32,7 @@ func (pixela *Pixela) CreateUser() (NoneGetResponseBody, error) {
 
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users", BaseUrl)
+	requestURL := fmt.Sprintf("%s/v1/users", baseUrl)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))

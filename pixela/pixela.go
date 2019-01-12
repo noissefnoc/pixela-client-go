@@ -7,23 +7,45 @@ import (
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
-var BaseUrl = "https://pixe.la"
+var baseUrl = "https://pixe.la"
 
 // Pixela is application for pixe.la
 type Pixela struct {
-	Username string
-	Token    string
-	Debug    bool
+	HTTPClient http.Client
+	URL        string
+	Username   string
+	Token      string
+	Debug      bool
 }
 
+// pixe.la response body that post, put and delete method requested
 type NoneGetResponseBody struct {
 	Message     string `json:"message"`
 	IsSuccess   bool   `json:"isSuccess"`
 	WebhookHash string `json:"webhookHash,omitempty"`
 }
 
+
+func New(username, token string, debug bool) (*Pixela, error) {
+	if username == "" || token == "" {
+		return nil, fmt.Errorf("initialization error: username and token required\n")
+	}
+
+	return &Pixela{
+		HTTPClient: http.Client{
+			Timeout: time.Duration(10) * time.Second,
+		},
+		URL: baseUrl,
+		Username: username,
+		Token: token,
+		Debug: debug,
+	}, nil
+}
+
+// post request
 func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	// create Request
 	request, err := http.NewRequest(http.MethodPost, url, payload)
@@ -36,7 +58,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	request.Header.Set("X-USER-TOKEN", pixela.Token)
 
 	// get response from pixe.la
-	response, err := http.DefaultClient.Do(request)
+	response, err := pixela.HTTPClient.Do(request)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "pixel record http request failed")
@@ -66,6 +88,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	return responseBodyJSON, nil
 }
 
+// get request
 func (pixela *Pixela) get(url string) ([]byte, error) {
 	// create Request
 	request, err := http.NewRequest(http.MethodGet, url,nil)
@@ -77,7 +100,7 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 	request.Header.Set("X-USER-TOKEN", pixela.Token)
 
 	// get response from pixe.la
-	response, err := http.DefaultClient.Do(request)
+	response, err := pixela.HTTPClient.Do(request)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "pixel record http request failed")
@@ -95,6 +118,7 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 	return responseBodyJSON, nil
 }
 
+// put request
 func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	request := &http.Request{}
 	var err error
@@ -119,7 +143,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	}
 
 	// get response from pixe.la
-	response, err := http.DefaultClient.Do(request)
+	response, err := pixela.HTTPClient.Do(request)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "http request failed")

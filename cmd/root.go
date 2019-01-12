@@ -49,8 +49,8 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
-	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	_ = viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
+	_ = viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 }
 
 // initConfig reads in config file and ENV variables if set.

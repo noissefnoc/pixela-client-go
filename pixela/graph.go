@@ -28,6 +28,7 @@ type GraphDefinitions struct {
 	} `json:"graphs"`
 }
 
+// create graph
 func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := CreateGraphPayload{
@@ -50,7 +51,7 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone strin
 
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s/graphs", BaseUrl, pixela.Username)
+	requestURL := fmt.Sprintf("%s/v1/users/%s/graphs", baseUrl, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
@@ -74,7 +75,7 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs", BaseUrl, pixela.Username)
+		"%s/v1/users/%s/graphs", baseUrl, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
@@ -98,7 +99,7 @@ func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s", BaseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
