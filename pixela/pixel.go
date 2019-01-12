@@ -93,3 +93,23 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 
 	return postResponseBody, nil
 }
+
+// decrement today's pixel quantity
+func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s/decrement", baseUrl, pixela.Username, graphId)
+
+	// do request
+	responseBody, err := pixela.put(requestURL, nil)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel dec`:http request failed.")
+	}
+
+	postResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	return postResponseBody, nil
+}
