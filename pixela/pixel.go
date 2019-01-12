@@ -19,7 +19,7 @@ type GetPixelResponseBody struct {
 }
 
 // record quantity
-func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) (PostResponseBody, error) {
+func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := RecordPayload{
 		Date:     date,
@@ -29,7 +29,7 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return PostResponseBody{}, errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -41,10 +41,10 @@ func (pixela *Pixela) RecordPixel(graphId string, date string, quantity string) 
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return PostResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
 	}
 
-	postResponseBody := PostResponseBody{}
+	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	return postResponseBody, nil
@@ -71,4 +71,23 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	}
 
 	return getPixelResponseBody, nil
+}
+
+func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s/increment", BaseUrl, pixela.Username, graphId)
+
+	// do request
+	responseBody, err := pixela.put(requestURL, nil)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
+	}
+
+	postResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	return postResponseBody, nil
 }
