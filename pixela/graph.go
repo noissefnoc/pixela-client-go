@@ -110,3 +110,27 @@ func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
 
 	return responseBody, nil
 }
+
+// delete graph
+func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
+
+	// do request
+	responseBody, err := pixela.delete(requestURL)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `graph delete`:http request failed.")
+	}
+
+	postResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `graph delete`:http response parse failed.")
+	}
+
+	return postResponseBody, nil
+}
