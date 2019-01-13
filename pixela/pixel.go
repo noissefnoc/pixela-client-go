@@ -74,6 +74,37 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	return getPixelResponseBody, nil
 }
 
+// record quantity
+func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
+	// create payload
+	pl := RecordPayload{
+		Quantity: quantity,
+	}
+
+	plJSON, err := json.Marshal(pl)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel update`: can not marshal request payload.")
+	}
+
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s/%s", baseUrl, pixela.Username, graphId, date)
+
+	// do request
+	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel update`:http request failed.")
+	}
+
+	postResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	return postResponseBody, nil
+}
+
 // increment today's pixel quantity
 func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	// build request url
