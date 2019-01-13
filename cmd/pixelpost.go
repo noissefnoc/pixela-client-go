@@ -9,19 +9,19 @@ import (
 	"os"
 )
 
-// pixelrecordCmd represents the pixelrecord command
-var pixelrecordCmd = &cobra.Command{
-	Use:   "record",
-	Short: "record quantity to graph.",
-	Long:  `record quantity to graph. Usage:
+// pixelpostCmd represents the pixelrecord command
+var pixelpostCmd = &cobra.Command{
+	Use:   "post",
+	Short: "post quantity to graph.",
+	Long:  `post quantity to graph. Usage:
 
-$ pixela pixel record <graph id> <date> <quantity>
+$ pixela pixel post <graph id> <date> <quantity>
 
 see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 	Run:   func(cmd *cobra.Command, args []string) {
 		// check arguments
 		if len(args) != 3 {
-			fmt.Fprintf(os.Stderr, "argument error: `pixel record` requires 3 arguments give %d arguments.\n", len(args))
+			fmt.Fprintf(os.Stderr, "argument error: `pixel post` requires 3 arguments give %d arguments.\n", len(args))
 			os.Exit(1)
 		}
 
@@ -33,7 +33,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 			os.Exit(1)
 		}
 
-		response, err := client.RecordPixel(args[0], args[1], args[2])
+		response, err := client.PostPixel(args[0], args[1], args[2])
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
@@ -53,15 +53,15 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 }
 
 func init() {
-	pixelCmd.AddCommand(pixelrecordCmd)
+	pixelCmd.AddCommand(pixelpostCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// pixelrecordCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// pixelpostCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// pixelrecordCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// pixelpostCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
