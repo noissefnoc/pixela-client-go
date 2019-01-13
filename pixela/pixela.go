@@ -28,7 +28,6 @@ type NoneGetResponseBody struct {
 	WebhookHash string `json:"webhookHash,omitempty"`
 }
 
-
 func New(username, token string, debug bool) (*Pixela, error) {
 	if username == "" || token == "" {
 		return nil, fmt.Errorf("initialization error: username and token required\n")
@@ -38,10 +37,10 @@ func New(username, token string, debug bool) (*Pixela, error) {
 		HTTPClient: http.Client{
 			Timeout: time.Duration(10) * time.Second,
 		},
-		URL: baseUrl,
+		URL:      baseUrl,
 		Username: username,
-		Token: token,
-		Debug: debug,
+		Token:    token,
+		Debug:    debug,
 	}, nil
 }
 
@@ -82,7 +81,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return nil, errors.Wrap(err, fmt.Sprintf("request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil
@@ -91,7 +90,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 // get request
 func (pixela *Pixela) get(url string) ([]byte, error) {
 	// create Request
-	request, err := http.NewRequest(http.MethodGet, url,nil)
+	request, err := http.NewRequest(http.MethodGet, url, nil)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "can not make request")
@@ -167,7 +166,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return nil, errors.Wrap(err, fmt.Sprintf("request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil
@@ -209,7 +208,7 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return nil, errors.Wrap(err, fmt.Sprintf("request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil
