@@ -88,3 +88,26 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 
 	return postResponseBody, nil
 }
+
+// delete user
+func (pixela *Pixela) DeleteUser() (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf("%s/v1/users/%s", baseUrl, pixela.Username)
+
+	// do request
+	responseBody, err := pixela.delete(requestURL)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `user delete`:http request failed.")
+	}
+
+	deleteResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &deleteResponseBody)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `user delete`:http response parse failed.")
+	}
+
+	return deleteResponseBody, nil
+}
