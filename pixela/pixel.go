@@ -144,3 +144,23 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 
 	return postResponseBody, nil
 }
+
+// delete pixel
+func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s/%s", baseUrl, pixela.Username, graphId, date)
+
+	// do request
+	responseBody, err := pixela.delete(requestURL)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel delete`:http request failed.")
+	}
+
+	deleteResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &deleteResponseBody)
+
+	return deleteResponseBody, nil
+}
