@@ -99,3 +99,25 @@ func (pixela *Pixela) InvokeWebhooks(webhookHash string) (NoneGetResponseBody, e
 
 	return postResponseBody, nil
 }
+
+func (pixela *Pixela) DeleteWebhook(webhookHash string) (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseUrl, pixela.Username, webhookHash)
+
+	// do request
+	responseBody, err := pixela.delete(requestURL)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `webhook delete`:http request failed.")
+	}
+
+	deleteResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &deleteResponseBody)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `webhook delete`:http response parse failed.")
+	}
+
+	return deleteResponseBody, nil
+}
