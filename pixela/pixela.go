@@ -47,7 +47,15 @@ func New(username, token string, debug bool) (*Pixela, error) {
 // post request
 func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	// create Request
-	request, err := http.NewRequest(http.MethodPost, url, payload)
+	request := &http.Request{}
+	var err error
+
+	if payload == nil {
+		request, err = http.NewRequest(http.MethodPost, url, nil)
+		request.Header.Set("Content-Length", "0")
+	} else {
+		request, err = http.NewRequest(http.MethodPost, url, payload)
+	}
 
 	if err != nil {
 		return nil, errors.Wrap(err, "can not make request")
@@ -125,6 +133,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	// create Request
 	if payload == nil {
 		request, err = http.NewRequest(http.MethodPut, url, nil)
+		request.Header.Set("Content-Length", "0")
 	} else {
 		request, err = http.NewRequest(http.MethodPut, url, payload)
 	}
@@ -135,11 +144,6 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("X-USER-TOKEN", pixela.Token)
-
-	// for `pixel increment` or `pixel decrement`
-	if payload == nil {
-		request.Header.Set("Content-Length", "0")
-	}
 
 	// get response from pixe.la
 	response, err := pixela.HTTPClient.Do(request)

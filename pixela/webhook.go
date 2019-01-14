@@ -77,3 +77,25 @@ func (pixela *Pixela) GetWebhookDefinitions() (WebhookDefinitions, error) {
 
 	return getResponseBody, nil
 }
+
+func (pixela *Pixela) InvokeWebhooks(webhookHash string) (NoneGetResponseBody, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseUrl, pixela.Username, webhookHash)
+
+	// do request
+	responseBody, err := pixela.post(requestURL, nil)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `webhook invoke`:http request failed.")
+	}
+
+	postResponseBody := NoneGetResponseBody{}
+	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `webhook invoke`:http response parse failed.")
+	}
+
+	return postResponseBody, nil
+}
