@@ -33,7 +33,7 @@ pixela-client-go now implement following feature.
 |update(inc)    |N/A     |N/A     |**done**|N/A     |
 |update(dec)    |N/A     |N/A     |**done**|N/A     |
 |delete         |**done**|**done**|**done**|not yet |
-|invoke         |N/A     |N/A     |N/A     |not yet |
+|invoke         |N/A     |N/A     |N/A     |**done**|
 
 
 ## Author
