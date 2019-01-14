@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-type RecordPayload struct {
+type CreatePixelPayload struct {
 	Date         string `json:"date"`
 	Quantity     string `json:"quantity"`
 	OptionalData string `json:"optionalData,omitempty"`
@@ -19,9 +19,9 @@ type GetPixelResponseBody struct {
 }
 
 // record quantity
-func (pixela *Pixela) PostPixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
+func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
 	// create payload
-	pl := RecordPayload{
+	pl := CreatePixelPayload{
 		Date:     date,
 		Quantity: quantity,
 	}
@@ -29,7 +29,7 @@ func (pixela *Pixela) PostPixel(graphId string, date string, quantity string) (N
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel post`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -41,7 +41,7 @@ func (pixela *Pixela) PostPixel(graphId string, date string, quantity string) (N
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel post`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -77,7 +77,7 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 // record quantity
 func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
 	// create payload
-	pl := RecordPayload{
+	pl := CreatePixelPayload{
 		Quantity: quantity,
 	}
 

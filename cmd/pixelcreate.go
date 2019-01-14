@@ -11,17 +11,17 @@ import (
 
 // pixelpostCmd represents the pixelrecord command
 var pixelpostCmd = &cobra.Command{
-	Use:   "post",
-	Short: "post quantity to graph.",
-	Long:  `post quantity to graph. Usage:
+	Use:   "create",
+	Short: "create quantity to graph.",
+	Long:  `create quantity to graph. Usage:
 
-$ pixela pixel post <graph id> <date> <quantity>
+$ pixela pixel create <graph id> <date> <quantity>
 
 see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 	Run:   func(cmd *cobra.Command, args []string) {
 		// check arguments
 		if len(args) != 3 {
-			fmt.Fprintf(os.Stderr, "argument error: `pixel post` requires 3 arguments give %d arguments.\n", len(args))
+			fmt.Fprintf(os.Stderr, "argument error: `pixel create` requires 3 arguments give %d arguments.\n", len(args))
 			os.Exit(1)
 		}
 
@@ -33,7 +33,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 			os.Exit(1)
 		}
 
-		response, err := client.PostPixel(args[0], args[1], args[2])
+		response, err := client.CreatePixel(args[0], args[1], args[2])
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
