@@ -23,7 +23,7 @@ see official document (https://docs.pixe.la/#/post-webhook) for more detail.`,
 		// check arguments
 		// TODO: add timezone option later
 		if len(args) != 2 {
-			fmt.Fprintf(os.Stderr, "argument error: `graph create` requires 2 arguments give %d arguments.\n", len(args))
+			fmt.Fprintf(os.Stderr, "argument error: `webhook create` requires 2 arguments give %d arguments.\n", len(args))
 			os.Exit(1)
 		}
 
