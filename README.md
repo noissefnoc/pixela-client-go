@@ -27,7 +27,7 @@ pixela-client-go now implement following feature.
 |Target/Methods |User    |Graph   |Pixel   |Webhook |
 |---------------|--------|--------|--------|--------|
 |create         |**done**|**done**|**done**|**done**|
-|get(definition)|N/A     |**done**|N/A     |not yet |
+|get(definition)|N/A     |**done**|N/A     |**done**|
 |get(data)      |N/A     |**done**|**done**|N/A     |
 |update         |**done**|**done**|**done**|N/A     |
 |update(inc)    |N/A     |N/A     |**done**|N/A     |

@@ -12,6 +12,16 @@ type CreateWebhookPayload struct {
 	Type    string `json:"type"`
 }
 
+type WebhookDefinitions struct {
+	Webhooks []Webhook `json:"webhooks"`
+}
+
+type Webhook struct {
+	WebhookHash string `json:"webhookHash"`
+	GraphID     string `json:"graphID"`
+	Type        string `json:"type"`
+}
+
 func (pixela * Pixela) CreateWebhook(graphId, webhookType string) (NoneGetResponseBody, error)  {
 	// create payload
 	pl := CreateWebhookPayload{
@@ -44,4 +54,26 @@ func (pixela * Pixela) CreateWebhook(graphId, webhookType string) (NoneGetRespon
 	}
 
 	return postResponseBody, nil
+}
+
+func (pixela *Pixela) GetWebhookDefinitions() (WebhookDefinitions, error) {
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks", baseUrl, pixela.Username)
+
+	// do request
+	responseBody, err := pixela.get(requestURL)
+
+	if err != nil {
+		return WebhookDefinitions{}, errors.Wrap(err, "error `webhook get`:http request failed.")
+	}
+
+	getResponseBody := WebhookDefinitions{}
+	err = json.Unmarshal(responseBody, &getResponseBody)
+
+	if err != nil {
+		return WebhookDefinitions{}, errors.Wrap(err, "error `webhook get`:http response parse failed.")
+	}
+
+	return getResponseBody, nil
 }
