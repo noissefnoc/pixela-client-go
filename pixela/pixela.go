@@ -71,6 +71,10 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 		return nil, errors.Wrap(err, "pixel record http request failed")
 	}
 
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
+	}
+
 	// parse response
 	defer response.Body.Close()
 
@@ -113,6 +117,10 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 		return nil, errors.Wrap(err, "pixel record http request failed")
 	}
 
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
+	}
+
 	// parse response
 	defer response.Body.Close()
 
@@ -150,6 +158,10 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	if err != nil {
 		return nil, errors.Wrap(err, "http request failed")
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
 	}
 
 	// parse response
@@ -192,6 +204,10 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 
 	if err != nil {
 		return nil, errors.Wrap(err, "http delete request failed")
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
 	}
 
 	// parse response
