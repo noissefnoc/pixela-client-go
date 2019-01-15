@@ -30,7 +30,7 @@ type NoneGetResponseBody struct {
 
 func New(username, token string, debug bool) (*Pixela, error) {
 	if username == "" || token == "" {
-		return nil, fmt.Errorf("initialization error: username and token required\n")
+		return nil, errors.New("initialization error: username and token required\n")
 	}
 
 	return &Pixela{
@@ -89,7 +89,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return nil, fmt.Errorf("request failed: %s", responseBody.Message)
+		return nil, errors.New(fmt.Sprintf("request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil
@@ -170,7 +170,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return nil, fmt.Errorf("request failed: %s", responseBody.Message)
+		return nil, errors.New(fmt.Sprintf("request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil
@@ -212,7 +212,7 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 
 	// check response body if request success
 	if !responseBody.IsSuccess {
-		return nil, fmt.Errorf("request failed: %s", responseBody.Message)
+		return nil, errors.New(fmt.Sprintf("request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil
