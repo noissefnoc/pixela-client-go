@@ -2,3 +2,4 @@ vendor
 .idea
 bin
 dist
+.DS_Store
