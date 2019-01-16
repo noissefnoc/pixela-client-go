@@ -2,38 +2,94 @@
 
 THIS IS VERY ALPHA VERSION. API COULD CHANGE.
 
-Unofficial [pixe.la](https://pixe.la) API client & CLI by golang.
+[pixela-client-go](https://github.com/noissefnoc/pixela-client-go) is unofficial [pixe.la](https://pixe.la) API client & CLI written by golang.
+
+This program build and check with Go 1.11.
 
 
-## Synopsys
+## Synopsis
+
+### Create user (just one time)
+
+First, create pixe.la user.
 
 ```
-# create user (authentication data stores $HOME/.pixela.yaml by default)
-$ pixela user create <username> <token>
+$ pixela user create USERNAME TOKEN
+```
 
-# create graph (default timezone is 'UTC')
-$ pixela graph create <graph id> <graph name> <unit> <type> <color> [timezone]
+NOTE: pixe.la does not have user page nor get user info API. I recommend to take a note `USERNAME` and `TOKEN`.
 
-# record quantity
-$ pixela pixel record <graph id> <date> <quantity>
+
+### Create graph (just one time)
+
+Second, create graph.
+
+```
+$ pixela graph create GRAPH_ID GRAPH_NAME UNIT TYPE COLOR [TIMEZONE]
+```
+
+NOTE: some arguments are limited following values.
+
+* `TYPE` : `int` or `float`
+* `COLOR` : `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`
+* `TIMEZONE` : default is `UTC`
+
+
+### Record quantity to graph
+
+```
+$ pixela pixel update GRAPH_ID DATE QUANTYTY
+```
+
+NOTE: `DATE` format is `yyyyMMdd`
+
+
+## Usage
+
+```
+NAME:
+    pixela - pixe.la client
+
+USAGE:
+    pixela [global options] command [command options] [arguments...]
+
+VERSION:
+    0.0.1
+    
+AUTHOR:
+    noissefnoc <noissefnoc@gmail.com>
+    
+COMMANDS:
+    user    Create, Update token, Delete user
+    graph   Create, Get definition, Get SVG data, Update definition, Delete graph
+    pixel   Create, Get, Increment, Decrement, Update, Delete pixel
+    webhook Create, Get, Invoke, Delete webhook
+    
+GLOBAL OPTIONS:
+    --help, -h  show help
 ```
 
 
-## Feature implement matrix
+## Installation
 
-pixela-client-go now implement following feature.
+### From Github release resource
+
+Get from [Github release page](https://github.com/noissefnoc/pixela-client-go/releases).
+
+### From homebrew (for macOS user)
+
+homebrew is currently being prepared.
+
+### From source code
+
+```
+$ go get github.com/noissefnoc/pixela-client-go
+```
 
 
-|Target/Methods |User    |Graph   |Pixel   |Webhook |
-|---------------|--------|--------|--------|--------|
-|create         |**done**|**done**|**done**|**done**|
-|get(definition)|N/A     |**done**|N/A     |**done**|
-|get(data)      |N/A     |**done**|**done**|N/A     |
-|update         |**done**|**done**|**done**|N/A     |
-|update(inc)    |N/A     |N/A     |**done**|N/A     |
-|update(dec)    |N/A     |N/A     |**done**|N/A     |
-|delete         |**done**|**done**|**done**|**done**|
-|invoke         |N/A     |N/A     |N/A     |**done**|
+## License
+
+This program is distributed under the MIT License. see LICENSE for more information.
 
 
 ## Author
