@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-type GrapupdateOptions struct {
+type GraphUpdateOptions struct {
 	Name string
 	Unit string
 	Color string
@@ -18,7 +18,7 @@ type GrapupdateOptions struct {
 }
 
 var (
-	guOptions = &GrapupdateOptions{}
+	guOptions = &GraphUpdateOptions{}
 )
 
 // graphupdateCmd represents the graphupdate command
@@ -76,15 +76,6 @@ see official document (https://docs.pixe.la/#/put-graph) for more detail.`,
 func init() {
 	graphCmd.AddCommand(graphupdateCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// graphupdateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// graphupdateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	graphupdateCmd.Flags().StringVarP(&guOptions.Name, "name", "n", "", "graph name")
 	graphupdateCmd.Flags().StringVarP(&guOptions.Unit, "unit", "u", "", "graph unit")
 	graphupdateCmd.Flags().StringVarP(&guOptions.Color, "color", "c", "", "graph color (shibafu/momiji/sora/ichou/ajisai/kuro)")
