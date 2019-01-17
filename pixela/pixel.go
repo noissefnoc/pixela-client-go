@@ -116,7 +116,7 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel inc`:http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
