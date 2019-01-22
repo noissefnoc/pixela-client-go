@@ -1,5 +1,12 @@
+# go dep vendor directory
 vendor
+
+# ide setting directory
 .idea
+
+# directories for release
 bin
 dist
+
+# macOS preview file
 .DS_Store
