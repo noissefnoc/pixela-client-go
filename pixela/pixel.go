@@ -18,7 +18,7 @@ type GetPixelResponseBody struct {
 	OptionalData string `json:"optionalData,omitempty"`
 }
 
-// record quantity
+// record quantity (insert)
 func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := CreatePixelPayload{
@@ -74,7 +74,7 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	return getPixelResponseBody, nil
 }
 
-// record quantity
+// record quantity (upsert)
 func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := CreatePixelPayload{
