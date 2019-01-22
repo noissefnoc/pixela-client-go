@@ -9,19 +9,26 @@ import (
 	"os"
 )
 
+type GraphCreateOptions struct {
+	Timezone string
+}
+
+var (
+	gcOptions = &GraphCreateOptions{}
+)
+
 // graphcreateCmd represents the graphcreate command
 var graphcreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create pixe.la graph.",
 	Long: `create pixe.la graph. Usage:
 
-$ pixela graph create <graph id> <graph name> <unit> <type> <color> [timezone]
+$ pixela graph create <graph id> <graph name> <unit> <type> <color> [--timezone timezone]
 
 see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// check arguments
-		// TODO: add timezone option later
-		if len(args) != 5 && len(args) != 6 {
+		if len(args) != 5 {
 			fmt.Fprintf(os.Stderr, "argument error: `graph create` requires 5 arguments give %d arguments.\n", len(args))
 			os.Exit(1)
 		}
@@ -34,14 +41,7 @@ see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 			os.Exit(1)
 		}
 
-		// optional timezone settings
-		var timeZone string
-
-		if len(args) == 5 {
-			timeZone = ""
-		}
-
-		response, err := client.CreateGraph(args[0], args[1], args[2], args[3], args[4], timeZone)
+		response, err := client.CreateGraph(args[0], args[1], args[2], args[3], args[4], gcOptions.Timezone)
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
@@ -63,13 +63,5 @@ see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 func init() {
 	graphCmd.AddCommand(graphcreateCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// graphcreateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// graphcreateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	graphcreateCmd.Flags().StringVarP(&gcOptions.Timezone, "timezone", "t", "", "timezone")
 }
