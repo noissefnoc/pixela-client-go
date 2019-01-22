@@ -37,6 +37,10 @@ NOTE: some arguments are limited following values.
 
 ### Record quantity to graph
 
+And last, this is daily work for recording quantity to graph.
+
+You can also modify quantity same command. (because `pixel/update` API create pixel when pixel has not create yet.)
+
 ```
 $ pixela pixel update GRAPH_ID DATE QUANTYTY
 ```
