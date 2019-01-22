@@ -17,6 +17,7 @@ type Pixela struct {
 	HTTPClient http.Client
 	URL        string
 	Username   string
+	Validator  Validator
 	Token      string
 	Debug      bool
 }
@@ -29,18 +30,29 @@ type NoneGetResponseBody struct {
 }
 
 func New(username, token string, debug bool) (*Pixela, error) {
-	if username == "" || token == "" {
-		return nil, errors.New("initialization error: username and token required\n")
+	// validate arguments
+	vf := validateField{
+		Username: username,
+		Token: token,
 	}
 
+	validate := newValidator()
+	err := validate.Validate(vf)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "initialization error.")
+	}
+
+	// create instance
 	return &Pixela{
 		HTTPClient: http.Client{
 			Timeout: time.Duration(10) * time.Second,
 		},
-		URL:      baseUrl,
-		Username: username,
-		Token:    token,
-		Debug:    debug,
+		URL:       baseUrl,
+		Username:  username,
+		Token:     token,
+		Validator: validate,
+		Debug:     debug,
 	}, nil
 }
 

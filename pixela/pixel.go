@@ -76,6 +76,19 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 
 // record quantity (upsert)
 func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+		Date: date,
+		Quantity: quantity,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel update`: wrong arguments")
+	}
+
 	// create payload
 	pl := CreatePixelPayload{
 		Quantity: quantity,
