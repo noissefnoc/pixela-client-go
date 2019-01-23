@@ -91,7 +91,7 @@ func usernameValidation(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	return false;
+	return false
 }
 
 // token validator
@@ -102,7 +102,7 @@ func tokenValidation(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	return false;
+	return false
 }
 
 // graphId validator
@@ -113,7 +113,7 @@ func graphIdValidator(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	return false;
+	return false
 }
 
 // date validator
@@ -124,7 +124,7 @@ func dateValidator(fl validator.FieldLevel) bool {
 		return false
 	}
 
-	return true;
+	return true
 }
 
 // quantity validator
@@ -135,5 +135,5 @@ func quantityValidator(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	return false;
+	return false
 }
