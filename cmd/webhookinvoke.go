@@ -12,7 +12,7 @@ import (
 // webhookinvokeCmd represents the webhookinvoke command
 var webhookinvokeCmd = &cobra.Command{
 	Use:   "invoke",
-	Short: "invoke webhook registered in advance.",
+	Short: "invoke webhook registered in advance",
 	Long: `invoke webhook registered in advance. Usage:
 
 $ pixela webhook invoke <webhook hash>
@@ -55,14 +55,4 @@ see official document (https://docs.pixe.la/#/invoke-webhook) for more detail.`,
 
 func init() {
 	webhookCmd.AddCommand(webhookinvokeCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// webhookinvokeCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// webhookinvokeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

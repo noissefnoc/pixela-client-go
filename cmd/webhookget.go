@@ -12,7 +12,7 @@ import (
 // webhookgetCmd represents the webhookget command
 var webhookgetCmd = &cobra.Command{
 	Use:   "get",
-	Short: "get user's webhook definitions.",
+	Short: "get user's webhook definitions",
 	Long: `get user's webhook definitions'. Usage:
 
 $ pixela webhook get
@@ -55,14 +55,4 @@ see official document (https://docs.pixe.la/#/get-webhook) for more detail.`,
 
 func init() {
 	webhookCmd.AddCommand(webhookgetCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// webhookgetCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// webhookgetCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

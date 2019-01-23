@@ -12,7 +12,7 @@ import (
 // pixelgetCmd represents the pixelget command
 var pixelgetCmd = &cobra.Command{
 	Use:   "get",
-	Short: "get pixel value.",
+	Short: "get pixel value",
 	Long: `get pixel value. Usage:
 
 $ pixela pixel get <graph id> <date>
@@ -54,14 +54,4 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 
 func init() {
 	pixelCmd.AddCommand(pixelgetCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pixelgetCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pixelgetCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

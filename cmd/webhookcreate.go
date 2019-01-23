@@ -13,7 +13,7 @@ import (
 // webhookcreateCmd represents the webhookcreate command
 var webhookcreateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create webhook.",
+	Short: "create webhook",
 	Long: `create webhook. Usage:
 
 $ pixela webhook create <graph id> <type>
@@ -56,14 +56,4 @@ see official document (https://docs.pixe.la/#/post-webhook) for more detail.`,
 
 func init() {
 	webhookCmd.AddCommand(webhookcreateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// webhookcreateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// webhookcreateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

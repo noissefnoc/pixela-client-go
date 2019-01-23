@@ -25,7 +25,7 @@ var (
 // usercreateCmd represents the usercreate command
 var usercreateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create pixe.la user.",
+	Short: "create pixe.la user",
 	Long: `create pixe.la user. Usage:
 
 $ pixela user create <username> <token> [--agreeTermsOfService yes/no(default:yes)] [--notMinor yes/no(default:yes)]

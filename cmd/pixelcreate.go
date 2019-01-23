@@ -12,8 +12,8 @@ import (
 // pixelpostCmd represents the pixelrecord command
 var pixelpostCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create quantity to graph.",
-	Long:  `create quantity to graph. Usage:
+	Short: "create pixel",
+	Long:  `create pixel. Usage:
 
 $ pixela pixel create <graph id> <date> <quantity>
 
@@ -54,14 +54,4 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 
 func init() {
 	pixelCmd.AddCommand(pixelpostCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pixelpostCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pixelpostCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

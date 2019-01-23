@@ -12,7 +12,7 @@ import (
 // pixeldecCmd represents the pixeldec command
 var pixeldecCmd = &cobra.Command{
 	Use:   "dec",
-	Short: "decrement pixel quantity.",
+	Short: "decrement today's pixel quantity",
 	Long: `decrement today's pixel quantity. Usage:
 
 $ pixela pixel dec <graph id>
@@ -54,14 +54,4 @@ see official document (https://docs.pixe.la/#/decrement-pixel) for more detail.`
 
 func init() {
 	pixelCmd.AddCommand(pixeldecCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pixeldecCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pixeldecCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -16,14 +16,8 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "pixela",
 	Short: "Simple API Client for pixela (https://pixe.la/)",
-	Long: `Simple API Client for pixela (https://pixe.la/)
-It can handle user, graph, pixel and webhook via API. For example:
-
-$ pixela pixel record <graph id> <date> <quantity>  # record quantity to graph
-`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Long: `Simple API Client for pixela (https://pixe.la/).
+This command can handle user, graph, pixel and webhook via API.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -38,19 +32,15 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	// global flags
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pixela.yaml)")
-	rootCmd.PersistentFlags().StringP("username", "", "", "username string")
-	rootCmd.PersistentFlags().StringP("token", "", "", "token string")
+	rootCmd.PersistentFlags().StringP("username", "u", "", "pixe.la username")
+	rootCmd.PersistentFlags().StringP("token", "t", "", "pixe.la user token")
+	rootCmd.PersistentFlags().BoolP("verbose", "n", false, "verbose mode")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	_ = viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
-	_ = viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
+	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 }
 
 // initConfig reads in config file and ENV variables if set.

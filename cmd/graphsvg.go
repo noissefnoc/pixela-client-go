@@ -11,7 +11,7 @@ import (
 // graphsvgCmd represents the graphsvg command
 var graphsvgCmd = &cobra.Command{
 	Use:   "svg",
-	Short: "get graph SVG HTML tag.",
+	Short: "get graph SVG HTML tag",
 	Long: `get graph SVG HTML tag. Usage:
 
 $ pixela graph svg <graph id>
@@ -46,14 +46,4 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 
 func init() {
 	graphCmd.AddCommand(graphsvgCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// graphsvgCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// graphsvgCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

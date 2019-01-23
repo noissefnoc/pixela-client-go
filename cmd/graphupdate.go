@@ -24,7 +24,7 @@ var (
 // graphupdateCmd represents the graphupdate command
 var graphupdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update graph definition.",
+	Short: "update graph definition",
 	Long: `update graph definition. Usage:
 
 $ pixela graph update <graph id> [--name graph_name] [--unit graph_unit] [--color color_name] [--timezone timezone] [--purgeCacheURLs [url1, url2, ...]]

@@ -11,7 +11,7 @@ import (
 // userdeleteCmd represents the userdelete command
 var userdeleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "delete pixe.la user.",
+	Short: "delete pixe.la user",
 	Long: `delete pixe.la user. Usage:
 
 $ pixela user delete <username> <token>
@@ -54,14 +54,4 @@ see official document (https://docs.pixe.la/#/delete-user) for more detail.`,
 
 func init() {
 	userCmd.AddCommand(userdeleteCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// userdeleteCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// userdeleteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

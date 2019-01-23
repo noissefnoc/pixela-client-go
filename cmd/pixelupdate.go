@@ -12,8 +12,8 @@ import (
 // pixelupdateCmd represents the pixelupdate command
 var pixelupdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update quantity.",
-	Long: `update quantity. Usage:
+	Short: "update pixel",
+	Long: `update pixel. Usage:
 
 $ pixela pixel update <graph id> <date> <quantity>
 
@@ -54,14 +54,4 @@ see official document (https://docs.pixe.la/#/put-pixel) for more detail.`,
 
 func init() {
 	pixelCmd.AddCommand(pixelupdateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pixelupdateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pixelupdateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

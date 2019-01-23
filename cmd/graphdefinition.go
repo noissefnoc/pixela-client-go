@@ -12,7 +12,7 @@ import (
 // graphdefinitionCmd represents the graphdefinition command
 var graphdefinitionCmd = &cobra.Command{
 	Use:   "def",
-	Short: "get graph definitions.",
+	Short: "get graph definitions",
 	Long: `get graph definitions. Usage:
 
 $ pixela graph def
@@ -54,14 +54,4 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 
 func init() {
 	graphCmd.AddCommand(graphdefinitionCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// graphdefinitionCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// graphdefinitionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

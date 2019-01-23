@@ -12,7 +12,7 @@ import (
 // userupdateCmd represents the userupdate command
 var userupdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update user token.",
+	Short: "update user token",
 	Long: `update pixe.la user token. Usage:
 
 $ pixela user update <newToken>
@@ -55,14 +55,4 @@ see official document (https://docs.pixe.la/#/put-user) for more detail.`,
 
 func init() {
 	userCmd.AddCommand(userupdateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// userupdateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// userupdateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
