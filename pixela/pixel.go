@@ -20,6 +20,19 @@ type GetPixelResponseBody struct {
 
 // record quantity (insert)
 func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+		Date: date,
+		Quantity: quantity,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`: wrong arguments")
+	}
+
 	// create payload
 	pl := CreatePixelPayload{
 		Date:     date,
@@ -52,6 +65,18 @@ func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) 
 
 // get pixel data
 func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+		Date: date,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return GetPixelResponseBody{}, errors.Wrap(err, "error `pixel get`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
@@ -120,6 +145,17 @@ func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) 
 
 // increment today's pixel quantity
 func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel inc`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
@@ -140,6 +176,17 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 
 // decrement today's pixel quantity
 func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel dec`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
@@ -160,6 +207,18 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 
 // delete pixel
 func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+		Date: date,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel delete`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
