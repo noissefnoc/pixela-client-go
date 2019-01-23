@@ -23,6 +23,18 @@ type Webhook struct {
 }
 
 func (pixela * Pixela) CreateWebhook(graphId, webhookType string) (NoneGetResponseBody, error)  {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+		WebhookType: webhookType,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `webhook create`: wrong arguments")
+	}
+
 	// create payload
 	pl := CreateWebhookPayload{
 		GraphId: graphId,
