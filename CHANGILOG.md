@@ -5,6 +5,7 @@
 ### Added
 
 * User input validation according to official document validation rule.
+* `graph create` subcommand now detect timezone as flag option
 
 
 ## [0.0.1] - 2019-01-14
