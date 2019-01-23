@@ -13,13 +13,22 @@ import (
 	"path/filepath"
 )
 
+type UserCreateOptions struct {
+	AgreeTermsOfService string
+	NotMinor            string
+}
+
+var (
+	ucOptions = &UserCreateOptions{}
+)
+
 // usercreateCmd represents the usercreate command
 var usercreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create pixe.la user.",
 	Long: `create pixe.la user. Usage:
 
-$ pixela user create <username> <token>
+$ pixela user create <username> <token> [--agreeTermsOfService yes/no(default:yes)] [--notMinor yes/no(default:yes)]
 
 see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -41,7 +50,7 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 			os.Exit(1)
 		}
 
-		response, err := client.CreateUser()
+		response, err := client.CreateUser(ucOptions.AgreeTermsOfService, ucOptions.NotMinor)
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
@@ -72,15 +81,8 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 func init() {
 	userCmd.AddCommand(usercreateCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// usercreateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// usercreateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	usercreateCmd.Flags().StringVarP(&ucOptions.AgreeTermsOfService, "agreeTermsOfService", "a", "yes", "agree terms of service. (default: yes)")
+	usercreateCmd.Flags().StringVarP(&ucOptions.NotMinor, "notMinor", "n", "yes", "usage is not minor. (default: yes)")
 }
 
 // check if file exists

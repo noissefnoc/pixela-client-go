@@ -19,13 +19,25 @@ type UpdateUserPayload struct {
 }
 
 // create user
-func (pixela *Pixela) CreateUser() (NoneGetResponseBody, error) {
+func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		AgreeTermsOfService: agreeTermsOfService,
+		NotMinor: notMinor,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `user create`: wrong arguments")
+	}
+
 	// create payload
 	pl := CreateUserPayload{
 		Username:            pixela.Username,
 		Token:               pixela.Token,
-		AgreeTermsOfService: "yes",
-		NotMinor:            "yes",
+		AgreeTermsOfService: agreeTermsOfService,
+		NotMinor:            notMinor,
 	}
 
 	plJSON, err := json.Marshal(pl)
