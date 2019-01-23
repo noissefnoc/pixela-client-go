@@ -81,8 +81,8 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 func init() {
 	userCmd.AddCommand(usercreateCmd)
 
-	usercreateCmd.Flags().StringVarP(&ucOptions.AgreeTermsOfService, "agreeTermsOfService", "a", "yes", "agree terms of service. (default: yes)")
-	usercreateCmd.Flags().StringVarP(&ucOptions.NotMinor, "notMinor", "n", "yes", "usage is not minor. (default: yes)")
+	usercreateCmd.Flags().StringVarP(&ucOptions.AgreeTermsOfService, "agreeTermsOfService", "", "yes", "agree terms of service. (default: yes)")
+	usercreateCmd.Flags().StringVarP(&ucOptions.NotMinor, "notMinor", "", "yes", "usage is not minor. (default: yes)")
 }
 
 // check if file exists
