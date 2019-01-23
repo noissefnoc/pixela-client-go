@@ -69,6 +69,17 @@ func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetR
 
 // update user token
 func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		NewToken: newToken,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `user update`: wrong arguments")
+	}
+
 	// create payload
 	pl := UpdateUserPayload{
 		NewToken: newToken,
@@ -77,7 +88,7 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user create`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `user update`: can not marshal request payload.")
 	}
 
 	// build request url
