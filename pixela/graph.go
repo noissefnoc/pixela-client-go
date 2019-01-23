@@ -38,6 +38,19 @@ type UpdateGraphPayload struct {
 
 // create graph
 func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: id,
+		UnitType: numType,
+		Color: color,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `graph create`: wrong arguments")
+	}
+
 	// create payload
 	pl := CreateGraphPayload{
 		Id: id,
@@ -104,6 +117,17 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 
 // get graph svg html tag
 func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "error `graph svg`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
@@ -121,6 +145,17 @@ func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
 
 // update graph
 func (pixela *Pixela) UpdateGraph(graphId string, payload UpdateGraphPayload) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `graph update`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
@@ -151,6 +186,17 @@ func (pixela *Pixela) UpdateGraph(graphId string, payload UpdateGraphPayload) (N
 
 // delete graph
 func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "error `graph delete`: wrong arguments")
+	}
+
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
