@@ -47,10 +47,9 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 			os.Exit(1)
 		}
 
-		// print result in verbose mode
-		if viper.GetBool("verbose") {
-			cmd.Printf("%s\n", responseJSON)
-		}
+		// print result
+		cmd.SetOutput(os.Stdout)
+		cmd.Printf("%s\n", responseJSON)
 	},
 }
 

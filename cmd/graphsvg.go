@@ -39,10 +39,8 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 			os.Exit(1)
 		}
 
-		// print result in verbose mode
-		if viper.GetBool("verbose") {
-			cmd.Printf("%s\n", response)
-		}
+		// print result
+		cmd.Printf("%s\n", response)
 	},
 }
 
