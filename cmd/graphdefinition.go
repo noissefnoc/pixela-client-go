@@ -21,6 +21,7 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 		// check arguments
 		if len(args) != 0 {
 			cmd.Printf("argument error: `graph def` does not accept any argument.\n\n")
+			cmd.Help()
 			os.Exit(1)
 		}
 
