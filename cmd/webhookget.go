@@ -49,6 +49,7 @@ see official document (https://docs.pixe.la/#/get-webhook) for more detail.`,
 		}
 
 		// print result
+		cmd.SetOutput(os.Stdout)
 		cmd.Printf("%s\n", responseJSON)
 	},
 }

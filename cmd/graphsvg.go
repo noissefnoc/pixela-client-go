@@ -40,6 +40,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 		}
 
 		// print result
+		cmd.SetOutput(os.Stdout)
 		cmd.Printf("%s\n", response)
 	},
 }

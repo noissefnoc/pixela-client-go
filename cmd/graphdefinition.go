@@ -47,6 +47,7 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 		}
 
 		// print result
+		cmd.SetOutput(os.Stdout)
 		cmd.Printf("%s\n", responseJSON)
 	},
 }
