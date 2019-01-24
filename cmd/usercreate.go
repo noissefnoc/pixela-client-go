@@ -43,7 +43,7 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 		token := args[1]
 
 		// do request
-		client, err := pixela.New(username, token, false)
+		client, err := pixela.New(username, token, viper.GetBool("verbose"))
 
 		if err != nil {
 			cmd.Printf("%v\n", err)
@@ -64,8 +64,10 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 			os.Exit(1)
 		}
 
-		// print result
-		cmd.Printf("%s\n", responseJSON)
+		// print result in verbose mode
+		if viper.GetBool("verbose") {
+			cmd.Printf("%s\n", responseJSON)
+		}
 
 		// save authentications into file
 		configFilePath := viper.GetString("config")

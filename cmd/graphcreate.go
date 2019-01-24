@@ -34,7 +34,7 @@ see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 		}
 
 		// do request
-		client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), false)
+		client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), viper.GetBool("verbose"))
 
 		if err != nil {
 			cmd.Printf("%v\n", err)
@@ -55,8 +55,10 @@ see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 			os.Exit(1)
 		}
 
-		// print result
-		cmd.Printf("%s\n", responseJSON)
+		// print result in verbose mode
+		if viper.GetBool("verbose") {
+			cmd.Printf("%s\n", responseJSON)
+		}
 	},
 }
 
