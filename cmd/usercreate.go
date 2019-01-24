@@ -34,8 +34,8 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// check arguments
 		if len(args) != 2 {
-			fmt.Fprintf(
-				os.Stderr,"argument error: `user create` requires 2 arguments give %d arguments.\n", len(args))
+			cmd.Printf("argument error: `user create` requires 2 arguments give %d arguments.\n\n", len(args))
+			cmd.Help()
 			os.Exit(1)
 		}
 
@@ -46,33 +46,33 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 		client, err := pixela.New(username, token, false)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			cmd.Printf("%v\n", err)
 			os.Exit(1)
 		}
 
 		response, err := client.CreateUser(ucOptions.AgreeTermsOfService, ucOptions.NotMinor)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
+			cmd.Printf("request error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "response parse error:\n%v\n", err)
+			cmd.Printf("response parse error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		// print result
-		fmt.Printf("%s\n", responseJSON)
+		cmd.Printf("%s\n", responseJSON)
 
 		// save authentications into file
 		configFilePath := viper.GetString("config")
 		err = saveConfigFile(configFilePath, username, token)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "save configfile error:\n%v\n", err)
+			cmd.Printf("save configfile error:\n%v\n", err)
 			os.Exit(1)
 		}
 	},

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/noissefnoc/pixela-client-go/pixela"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -20,7 +19,8 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// check arguments
 		if len(args) != 1 {
-			fmt.Fprintf(os.Stderr, "argument error: `pixel record` requires 1 arguments give %d arguments.\n", len(args))
+			cmd.Printf("argument error: `pixel record` requires 1 arguments give %d arguments.\n\n", len(args))
+			cmd.Help()
 			os.Exit(1)
 		}
 
@@ -28,19 +28,19 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 		client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), false)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			cmd.Printf("%v\n", err)
 			os.Exit(1)
 		}
 
 		response, err := client.GetGraphSvg(args[0])
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
+			cmd.Printf("request error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		// print result
-		fmt.Printf("%s\n", response)
+		cmd.Printf("%s\n", response)
 	},
 }
 

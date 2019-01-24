@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 )
 
 // variable for configuration file name
@@ -24,7 +22,7 @@ This command can handle user, graph, pixel and webhook via API.`,
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		rootCmd.Println(err)
 		os.Exit(1)
 	}
 }
@@ -52,7 +50,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println(err)
+			rootCmd.Println(err)
 			os.Exit(1)
 		}
 
@@ -65,6 +63,6 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		rootCmd.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }

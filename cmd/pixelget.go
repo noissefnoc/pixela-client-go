@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/noissefnoc/pixela-client-go/pixela"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,7 +20,8 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// check arguments
 		if len(args) != 2 {
-			fmt.Fprintf(os.Stderr, "argument error: `pixel record` requires 2 arguments give %d arguments.\n", len(args))
+			cmd.Printf("argument error: `pixel record` requires 2 arguments give %d arguments.\n\n", len(args))
+			cmd.Help()
 			os.Exit(1)
 		}
 
@@ -29,26 +29,26 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 		client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), false)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			cmd.Printf("%v\n", err)
 			os.Exit(1)
 		}
 
 		response, err := client.GetPixel(args[0], args[1])
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "request error:\n%v\n", err)
+			cmd.Printf("request error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "response parse error:\n%v\n", err)
+			cmd.Printf("response parse error:\n%v\n", err)
 			os.Exit(1)
 		}
 
 		// print result
-		fmt.Printf("%s\n", responseJSON)
+		cmd.Printf("%s\n", responseJSON)
 	},
 }
 
