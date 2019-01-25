@@ -35,7 +35,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 		response, err := client.GetGraphSvg(args[0])
 
 		if err != nil {
-			cmd.Printf("request error:\n%v\n", err)
+			cmd.Printf("request error: %v\n", err)
 			os.Exit(1)
 		}
 

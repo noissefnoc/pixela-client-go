@@ -30,7 +30,7 @@ func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) 
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: wrong arguments")
 	}
 
 	// create payload
@@ -42,7 +42,7 @@ func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -54,7 +54,7 @@ func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) 
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel create`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -74,7 +74,7 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return GetPixelResponseBody{}, errors.Wrap(err, "error `pixel get`: wrong arguments")
+		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: wrong arguments")
 	}
 
 	// build request url
@@ -86,14 +86,14 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return GetPixelResponseBody{}, errors.Wrap(err, "error `pixel get`:http request failed.")
+		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: http request failed.")
 	}
 
 	getPixelResponseBody := GetPixelResponseBody{}
 	err = json.Unmarshal(responseBody, &getPixelResponseBody)
 
 	if err != nil {
-		return GetPixelResponseBody{}, errors.Wrap(err, "error `pixel get`:http response parse failed.")
+		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: http response parse failed.")
 	}
 
 	return getPixelResponseBody, nil
@@ -111,7 +111,7 @@ func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) 
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel update`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: wrong arguments")
 	}
 
 	// create payload
@@ -122,7 +122,7 @@ func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel update`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -134,7 +134,7 @@ func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) 
 	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel update`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -153,7 +153,7 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel inc`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: wrong arguments")
 	}
 
 	// build request url
@@ -165,7 +165,7 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel inc`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -184,7 +184,7 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel dec`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: wrong arguments")
 	}
 
 	// build request url
@@ -196,7 +196,7 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel dec`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -216,7 +216,7 @@ func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, er
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel delete`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel delete`: wrong arguments")
 	}
 
 	// build request url
@@ -228,7 +228,7 @@ func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, er
 	responseBody, err := pixela.delete(requestURL)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `pixel delete`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel delete`: http request failed.")
 	}
 
 	deleteResponseBody := NoneGetResponseBody{}

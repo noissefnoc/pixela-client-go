@@ -29,7 +29,7 @@ func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetR
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user create`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user create`: wrong arguments")
 	}
 
 	// create payload
@@ -43,7 +43,7 @@ func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetR
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user create`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user create`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -54,14 +54,14 @@ func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetR
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user create`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user create`: http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user create`:http response parse failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user create`: http response parse failed.")
 	}
 
 	return postResponseBody, nil
@@ -77,7 +77,7 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user update`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user update`: wrong arguments")
 	}
 
 	// create payload
@@ -88,7 +88,7 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user update`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user update`: can not marshal request payload.")
 	}
 
 	// build request url
@@ -99,14 +99,14 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user update`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user update`: http request failed.")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user update`:http response parse failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user update`: http response parse failed.")
 	}
 
 	return postResponseBody, nil
@@ -122,14 +122,14 @@ func (pixela *Pixela) DeleteUser() (NoneGetResponseBody, error) {
 	responseBody, err := pixela.delete(requestURL)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user delete`:http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user delete`: http request failed.")
 	}
 
 	deleteResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &deleteResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "error `user delete`:http response parse failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`user delete`: http response parse failed.")
 	}
 
 	return deleteResponseBody, nil

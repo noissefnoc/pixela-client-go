@@ -36,14 +36,14 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 		response, err := client.GetGraphDefinition()
 
 		if err != nil {
-			cmd.Printf("request error:\n%v\n", err)
+			cmd.Printf("request error: %v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			cmd.Printf("pixela response parse error:\n%v\n", err)
+			cmd.Printf("pixela response parse error: %v\n", err)
 			os.Exit(1)
 		}
 

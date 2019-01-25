@@ -36,14 +36,14 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 		response, err := client.GetPixel(args[0], args[1])
 
 		if err != nil {
-			cmd.Printf("request error:\n%v\n", err)
+			cmd.Printf("request error: %v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			cmd.Printf("response parse error:\n%v\n", err)
+			cmd.Printf("response parse error: %v\n", err)
 			os.Exit(1)
 		}
 

@@ -38,19 +38,20 @@ see official document (https://docs.pixe.la/#/post-webhook) for more detail.`,
 		response, err := client.CreateWebhook(args[0], args[1])
 
 		if err != nil {
-			cmd.Printf("request error:\n%v\n", err)
+			cmd.Printf("request error: %v\n", err)
 			os.Exit(1)
 		}
 
 		responseJSON, err := json.Marshal(response)
 
 		if err != nil {
-			cmd.Printf("response parse error:\n%v\n", err)
+			cmd.Printf("response parse error: %v\n", err)
 			os.Exit(1)
 		}
 
 		// print result in verbose mode
 		if viper.GetBool("verbose") {
+			cmd.SetOutput(os.Stdout)
 			cmd.Printf("%s\n", responseJSON)
 		}
 	},
