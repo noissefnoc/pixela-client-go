@@ -19,12 +19,13 @@ type GetPixelResponseBody struct {
 }
 
 // record quantity (insert)
-func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
+func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
 		GraphId: graphId,
 		Date: date,
 		Quantity: quantity,
+		OptionalData: optionalData,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -37,6 +38,11 @@ func (pixela *Pixela) CreatePixel(graphId string, date string, quantity string) 
 	pl := CreatePixelPayload{
 		Date:     date,
 		Quantity: quantity,
+	}
+
+	// set optionalData
+	if len(optionalData) != 0 {
+		pl.OptionalData = optionalData
 	}
 
 	plJSON, err := json.Marshal(pl)
@@ -100,12 +106,13 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 }
 
 // record quantity (upsert)
-func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) (NoneGetResponseBody, error) {
+func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
 		GraphId: graphId,
 		Date: date,
 		Quantity: quantity,
+		OptionalData: optionalData,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -117,6 +124,11 @@ func (pixela *Pixela) UpdatePixel(graphId string, date string, quantity string) 
 	// create payload
 	pl := CreatePixelPayload{
 		Quantity: quantity,
+	}
+
+	// set optionalData
+	if len(optionalData) != 0 {
+		pl.OptionalData = optionalData
 	}
 
 	plJSON, err := json.Marshal(pl)

@@ -9,7 +9,7 @@ import (
 )
 
 // pixelpostCmd represents the pixelrecord command
-var pixelpostCmd = &cobra.Command{
+var pixelcreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create pixel",
 	Long:  `create pixel. Usage:
@@ -33,7 +33,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 			os.Exit(1)
 		}
 
-		response, err := client.CreatePixel(args[0], args[1], args[2])
+		response, err := client.CreatePixel(args[0], args[1], args[2], optionalData)
 
 		if err != nil {
 			cmd.Printf("request error: %v\n", err)
@@ -56,5 +56,6 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 }
 
 func init() {
-	pixelCmd.AddCommand(pixelpostCmd)
+	pixelCmd.AddCommand(pixelcreateCmd)
+	pixelcreateCmd.Flags().StringVarP(&optionalData, "optionalData", "", "", "optionalData (JSON format)")
 }

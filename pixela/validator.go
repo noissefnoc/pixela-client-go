@@ -1,6 +1,7 @@
 package pixela
 
 import (
+	"encoding/json"
 	"github.com/pkg/errors"
 	"gopkg.in/go-playground/validator.v9"
 	"regexp"
@@ -20,6 +21,7 @@ type validateField struct {
 	Date                string `validate:"omitempty,date"`
 	Quantity            string `validate:"omitempty,quantity"`
 	WebhookType         string `validate:"omitempty,oneof=increment decrement"`
+	OptionalData        string `validate:"omitempty,optionaldata"`
 }
 
 type Validator struct {
@@ -34,6 +36,7 @@ func newValidator() Validator {
 	validate.RegisterValidation("graphid", graphIdValidator)
 	validate.RegisterValidation("date", dateValidator)
 	validate.RegisterValidation("quantity", quantityValidator)
+	validate.RegisterValidation("optionaldata", optionalDataValidator)
 
 	return Validator{validator: validate}
 }
@@ -71,6 +74,8 @@ func (pv *Validator) Validate(i interface{}) error {
 				errorMessage = "`quantity` allows value of int or float."
 			case "WebhookType":
 				errorMessage = "`type` allows `increment` or `decrement`."
+			case "OptionalData":
+				errorMessage = "`optionalData` is under 10k JSON string."
 			default:
 				return errors.New("uncaught type error.")
 			}
@@ -136,4 +141,20 @@ func quantityValidator(fl validator.FieldLevel) bool {
 	}
 
 	return false
+}
+
+// optionalData validator
+func optionalDataValidator(fl validator.FieldLevel) bool {
+	optionalData := fl.Field().String()
+
+	// empty string
+	if len(optionalData) == 0 {
+		return true
+	}
+
+	if len(optionalData) > 10240 || !json.Valid([]byte(optionalData)) {
+		return false
+	}
+
+	return true
 }

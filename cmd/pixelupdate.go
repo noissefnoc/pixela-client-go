@@ -33,7 +33,7 @@ see official document (https://docs.pixe.la/#/put-pixel) for more detail.`,
 			os.Exit(1)
 		}
 
-		response, err := client.UpdatePixel(args[0], args[1], args[2])
+		response, err := client.UpdatePixel(args[0], args[1], args[2], optionalData)
 
 		if err != nil {
 			cmd.Printf("request error: %v\n", err)
@@ -57,4 +57,5 @@ see official document (https://docs.pixe.la/#/put-pixel) for more detail.`,
 
 func init() {
 	pixelCmd.AddCommand(pixelupdateCmd)
+	pixelupdateCmd.Flags().StringVarP(&optionalData, "optionalData", "", "", "optionalData (JSON format)")
 }

@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var optionalData string
+
 // pixelCmd represents the pixel command
 var pixelCmd = &cobra.Command{
 	Use:   "pixel",
