@@ -7,6 +7,13 @@ import (
 	"os"
 )
 
+type graphSvgOptions struct {
+	Date string
+	Mode string
+}
+
+var gsOptions = &graphSvgOptions{}
+
 // graphsvgCmd represents the graphsvg command
 var graphsvgCmd = &cobra.Command{
 	Use:   "svg",
@@ -19,7 +26,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// check arguments
 		if len(args) != 1 {
-			cmd.Printf("argument error: `pixel record` requires 1 arguments give %d arguments.\n\n", len(args))
+			cmd.Printf("argument error: `graph svg` requires 1 arguments give %d arguments.\n\n", len(args))
 			cmd.Help()
 			os.Exit(1)
 		}
@@ -32,7 +39,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 			os.Exit(1)
 		}
 
-		response, err := client.GetGraphSvg(args[0])
+		response, err := client.GetGraphSvg(args[0], gsOptions.Date, gsOptions.Mode)
 
 		if err != nil {
 			cmd.Printf("request error: %v\n", err)
@@ -47,4 +54,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 
 func init() {
 	graphCmd.AddCommand(graphsvgCmd)
+
+	graphsvgCmd.Flags().StringVarP(&gsOptions.Date, "date", "", "", "date")
+	graphsvgCmd.Flags().StringVarP(&gsOptions.Mode, "mode", "", "", "mode")
 }

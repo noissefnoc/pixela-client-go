@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
+	"net/url"
+	"path"
 )
 
 type CreateGraphPayload struct {
@@ -116,7 +118,7 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 }
 
 // get graph svg html tag
-func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
+func (pixela *Pixela) GetGraphSvg(graphId, date, mode string) ([]byte, error) {
 	// argument validation
 	vf := validateField{
 		GraphId: graphId,
@@ -129,9 +131,24 @@ func (pixela *Pixela) GetGraphSvg(graphId string) ([]byte, error) {
 	}
 
 	// build request url
-	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
+	u, _ := url.Parse(baseUrl)
+	u.Path = path.Join(u.Path, "v1", "users", pixela.Username, "graphs", graphId)
+
+	// set query
+	if len(date) != 0 || len(mode) != 0 {
+		q := u.Query()
+
+		if len(date) != 0 {
+			q.Set("date", date)
+		}
+
+		if len(mode) != 0 {
+			q.Set("mode", mode)
+		}
+		u.RawQuery = q.Encode()
+	}
+
+	requestURL := u.String()
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
