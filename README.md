@@ -42,10 +42,13 @@ And last, this is daily work for recording quantity to graph.
 You can also modify quantity same command. (because `pixel/update` API create pixel when pixel has not create yet.)
 
 ```
-$ pixela pixel update GRAPH_ID DATE QUANTYTY
+$ pixela pixel update GRAPH_ID DATE QUANTYTY --optionalData='{"key":"value", ...}'
 ```
 
-NOTE: `DATE` format is `yyyyMMdd`
+NOTE:
+
+* `DATE` format is `yyyyMMdd`
+* `--optionalData` format is json up to 10KB
 
 
 ## Usage
