@@ -41,6 +41,21 @@ func newValidator() Validator {
 	return Validator{validator: validate}
 }
 
+var validationErrorMessages = map[string]string{
+	"Username": "`username` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 32 length.",
+	"Token": "`token` allows 8 to 128 length.",
+	"AgreeTermsOfService": "`agreeTermsOfService` allows `yes` or `no`.",
+	"NotMinor": "`notMinor` allows `yes` or `no`.",
+	"NewToken": "`newToken` allows 8 to 128 length.",
+	"GraphId": "`graphId` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 16 length.",
+	"UnitType": "`unit` allows `int` or `float`.",
+	"Color": "`color` allows `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`.",
+	"Date": "`date` format is `yyyyMMdd`.",
+	"Quantity": "`quantity` allows value of int or float.",
+	"WebhookType": "`type` allows `increment` or `decrement`.",
+	"OptionalData": "`optionalData` is under 10k JSON string.",
+}
+
 func (pv *Validator) Validate(i interface{}) error {
 	err := pv.validator.Struct(i)
 
@@ -48,38 +63,7 @@ func (pv *Validator) Validate(i interface{}) error {
 
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors){
-			var errorMessage string
-			fieldName := err.Field()
-
-			switch fieldName {
-			case "Username":
-				errorMessage = "`username` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 32 length."
-			case "Token":
-				errorMessage = "`token` allows 8 to 128 length."
-			case "AgreeTermsOfService":
-				errorMessage = "`agreeTermsOfService` allows `yes` or `no`."
-			case "NotMinor":
-				errorMessage = "`notMinor` allows `yes` or `no`."
-			case "NewToken":
-				errorMessage = "`newToken` allows 8 to 128 length."
-			case "GraphId":
-				errorMessage = "`graphId` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 16 length."
-			case "UnitType":
-				errorMessage = "`unit` allows `int` or `float`."
-			case "Color":
-				errorMessage = "`color` allows `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`."
-			case "Date":
-				errorMessage = "`date` format is `yyyyMMdd`."
-			case "Quantity":
-				errorMessage = "`quantity` allows value of int or float."
-			case "WebhookType":
-				errorMessage = "`type` allows `increment` or `decrement`."
-			case "OptionalData":
-				errorMessage = "`optionalData` is under 10k JSON string."
-			default:
-				return errors.New("uncaught type error.")
-			}
-			errorMessages = append(errorMessages, errorMessage)
+			errorMessages = append(errorMessages, validationErrorMessages[err.Field()])
 		}
 
 		return errors.New(strings.Join(errorMessages, " and "))
