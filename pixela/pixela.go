@@ -14,12 +14,22 @@ var baseUrl = "https://pixe.la"
 
 // Pixela is application for pixe.la
 type Pixela struct {
-	HTTPClient http.Client
+	HTTPClient *http.Client
 	URL        string
 	Username   string
 	Validator  Validator
 	Token      string
 	Debug      bool
+}
+
+// Option is customize Pixela properties function
+type Option func(*Pixela)
+
+// OptionHTTPClient - provide a custom http client to the HTTPClient
+func OptionHTTPClient(c *http.Client) Option {
+	return func(pixela *Pixela) {
+		pixela.HTTPClient = c
+	}
 }
 
 // pixe.la response body that post, put and delete method requested
@@ -29,7 +39,7 @@ type NoneGetResponseBody struct {
 	WebhookHash string `json:"webhookHash,omitempty"`
 }
 
-func New(username, token string, debug bool) (*Pixela, error) {
+func New(username, token string, debug bool, opts ...Option) (*Pixela, error) {
 	// validate arguments
 	vf := validateField{
 		Username: username,
@@ -44,8 +54,8 @@ func New(username, token string, debug bool) (*Pixela, error) {
 	}
 
 	// create instance
-	return &Pixela{
-		HTTPClient: http.Client{
+	pixela := &Pixela{
+		HTTPClient: &http.Client{
 			Timeout: time.Duration(10) * time.Second,
 		},
 		URL:       baseUrl,
@@ -53,7 +63,13 @@ func New(username, token string, debug bool) (*Pixela, error) {
 		Token:     token,
 		Validator: validate,
 		Debug:     debug,
-	}, nil
+	}
+
+	for _, opt := range opts {
+		opt(pixela)
+	}
+
+	return pixela, nil
 }
 
 // post request
