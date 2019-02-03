@@ -9,6 +9,7 @@
 * `user create` subcommand now detect `agreeTermsOfService` and `notMinor` as flag option.
 * `pixel create` and `pixel update` accept `optionalData` flag.
 * `graph svg` accept `date` and `mode` flag.
+* `graph create` accept `selfSufficient` flag.
 
 
 ## [0.0.1] - 2019-01-14

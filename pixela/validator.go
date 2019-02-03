@@ -22,6 +22,7 @@ type validateField struct {
 	Quantity            string `validate:"omitempty,quantity"`
 	WebhookType         string `validate:"omitempty,oneof=increment decrement"`
 	OptionalData        string `validate:"omitempty,optionaldata"`
+	SelfSufficient      string `validate:"omitempty,oneof=none increment decrement"`
 }
 
 type Validator struct {
@@ -54,6 +55,7 @@ var validationErrorMessages = map[string]string{
 	"Quantity": "`quantity` allows value of int or float.",
 	"WebhookType": "`type` allows `increment` or `decrement`.",
 	"OptionalData": "`optionalData` is under 10k JSON string.",
+	"SelfSufficient": "`selfSufficient` allows `increment` or `decrement`.",
 }
 
 func (pv *Validator) Validate(i interface{}) error {

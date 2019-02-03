@@ -10,12 +10,13 @@ import (
 )
 
 type CreateGraphPayload struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Unit     string `json:"unit"`
-	NumType  string `json:"type"`
-	Color    string `json:"color"`
-	Timezone string `json:"timezone,omitempty"`
+	Id             string `json:"id"`
+	Name           string `json:"name"`
+	Unit           string `json:"unit"`
+	NumType        string `json:"type"`
+	Color          string `json:"color"`
+	Timezone       string `json:"timezone,omitempty"`
+	SelfSufficient string `json:"selfSufficient,omitempty"`
 }
 
 type GraphDefinitions struct {
@@ -39,20 +40,7 @@ type UpdateGraphPayload struct {
 }
 
 // create graph
-func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone string) (NoneGetResponseBody, error) {
-	// argument validation
-	vf := validateField{
-		GraphId: id,
-		UnitType: numType,
-		Color: color,
-	}
-
-	err := pixela.Validator.Validate(vf)
-
-	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: wrong arguments")
-	}
-
+func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, selfSufficient string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := CreateGraphPayload{
 		Id: id,
@@ -62,8 +50,26 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone strin
 		Color: color,
 	}
 
-	if timezone != "" {
+	// argument validation
+	vf := validateField{
+		GraphId: id,
+		UnitType: numType,
+		Color: color,
+	}
+
+	if len(timezone) != 0 {
 		pl.Timezone = timezone
+	}
+
+	if len(selfSufficient) != 0 {
+		pl.SelfSufficient = selfSufficient
+		vf.SelfSufficient = selfSufficient
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: wrong arguments")
 	}
 
 	plJSON, err := json.Marshal(pl)
