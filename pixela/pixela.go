@@ -41,7 +41,7 @@ type NoneGetResponseBody struct {
 
 func New(username, token string, debug bool, opts ...Option) (*Pixela, error) {
 	// validate arguments
-	vf := validateField{
+	vf := newInstanceValidateField{
 		Username: username,
 		Token: token,
 	}

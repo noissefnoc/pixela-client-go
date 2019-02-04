@@ -9,9 +9,12 @@ import (
 	"time"
 )
 
+type newInstanceValidateField struct {
+	Username            string `validate:"username"`
+	Token               string `validate:"token"`
+}
+
 type validateField struct {
-	Username            string `validate:"omitempty,username"`
-	Token               string `validate:"omitempty,token"`
 	AgreeTermsOfService string `validate:"omitempty,oneof=yes no"`
 	NotMinor            string `validate:"omitempty,oneof=yes no"`
 	NewToken            string `validate:"omitempty,token"`
