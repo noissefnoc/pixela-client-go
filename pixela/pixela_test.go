@@ -1,7 +1,10 @@
 package pixela
 
 import (
+	"bytes"
 	"github.com/pkg/errors"
+	"io/ioutil"
+	"net/http"
 	"strings"
 	"testing"
 )
@@ -35,5 +38,31 @@ func TestNew(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestPixela_post(t *testing.T) {
+	client := NewTestClient(func(req *http.Request) *http.Response {
+		return &http.Response {
+			StatusCode: 200,
+			Body: ioutil.NopCloser(bytes.NewBufferString(`{"message":"success", "isSuccess": true}`)),
+			Header: make(http.Header),
+		}
+	})
+
+	pixela, err := New("testuser", "testtoken", false, OptionHTTPClient(client))
+
+	if err != nil {
+		t.Fatalf("got error when test http client created %#v", err)
+	}
+
+	got, err := pixela.post("https://examples.com/posttest", bytes.NewBufferString(`{"key": "value"}`))
+
+	if err != nil {
+		t.Fatalf("got error when test http client created %#v", err)
+	}
+
+	if got == nil {
+		t.Fatalf("but %#v", got)
 	}
 }
