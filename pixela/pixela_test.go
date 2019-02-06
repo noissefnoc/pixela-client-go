@@ -2,6 +2,7 @@ package pixela
 
 import (
 	"bytes"
+	"encoding/json"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
@@ -42,27 +43,69 @@ func TestNew(t *testing.T) {
 }
 
 func TestPixela_post(t *testing.T) {
-	client := NewTestClient(func(req *http.Request) *http.Response {
-		return &http.Response {
-			StatusCode: 200,
-			Body: ioutil.NopCloser(bytes.NewBufferString(`{"message":"success", "isSuccess": true}`)),
-			Header: make(http.Header),
-		}
-	})
+	url := "https://examples.com/post"
+	username := "testuser"
+	token := "testtoken"
+	debug := false
+	contentType := "application/json"
+	contentZeroLen := "0"
+	scResp, _ := json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
+	errResp, _ := json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
 
-	pixela, err := New("testuser", "testtoken", false, OptionHTTPClient(client))
 
-	if err != nil {
-		t.Fatalf("got error when test http client created %#v", err)
+	tests := []struct {
+		name       string
+		payload    *bytes.Buffer
+		statusCode int
+		response   *bytes.Buffer
+		wantErr    error
+	} {
+		{"normal case without payload",nil, 200, bytes.NewBuffer(scResp), nil},
+		{"normal case with payload", bytes.NewBufferString(`{"key": "value"}`), 200, bytes.NewBuffer(scResp), nil},
+		{"some error occured", nil, 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
+		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
+		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("response body parse failed.: invalid character 'e' looking for beginning of value")},
 	}
 
-	got, err := pixela.post("https://examples.com/posttest", bytes.NewBufferString(`{"key": "value"}`))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resp := &http.Response {
+				StatusCode: tt.statusCode,
+				Body: ioutil.NopCloser(tt.response),
+				Header: make(http.Header),
+			}
 
-	if err != nil {
-		t.Fatalf("got error when test http client created %#v", err)
-	}
+			srClient := NewTestClient(func (req *http.Request) *http.Response {
+				if tt.payload == nil {
+					if req.Header.Get("Content-Length") != contentZeroLen {
+						t.Fatalf("want %#v, but %#v", contentZeroLen, req.Header.Get("Content-Length"))
+					}
+				}
 
-	if got == nil {
-		t.Fatalf("but %#v", got)
+				if req.Header.Get("Content-Type") != contentType {
+					t.Fatalf("want %#v, but %#v", contentType, req.Header.Get("Content-Type"))
+				}
+
+				if req.Header.Get("X-USER-TOKEN") != token {
+					t.Fatalf("want %#v, but %#v", token, req.Header.Get("X-USER-TOKEN"))
+				}
+
+				return resp
+			})
+
+			pixela, err := New(username, token, debug, OptionHTTPClient(srClient))
+
+			if err != nil {
+				t.Fatalf("got error when http client created %#v", err)
+			}
+
+			_, err = pixela.post(url, tt.payload)
+
+			if err != nil {
+				if err.Error() != tt.wantErr.Error() {
+					t.Fatalf("want %#v, but %#v", tt.wantErr, err)
+				}
+			}
+		})
 	}
 }
