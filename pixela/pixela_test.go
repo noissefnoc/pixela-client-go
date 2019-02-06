@@ -20,7 +20,7 @@ func TestNew(t *testing.T) {
 		token    string
 		debug    bool
 		wantErr  error
-	} {
+	}{
 		{"normal case", "testuser", "testtoken", false, nil},
 		{"username empty", "", "testtoken", false, usernameErr},
 		{"username invalid", "123", "testtoken", false, usernameErr},
@@ -52,30 +52,29 @@ func TestPixela_post(t *testing.T) {
 	scResp, _ := json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
 	errResp, _ := json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
 
-
 	tests := []struct {
 		name       string
 		payload    *bytes.Buffer
 		statusCode int
 		response   *bytes.Buffer
 		wantErr    error
-	} {
-		{"normal case without payload",nil, 200, bytes.NewBuffer(scResp), nil},
+	}{
+		{"normal case without payload", nil, 200, bytes.NewBuffer(scResp), nil},
 		{"normal case with payload", bytes.NewBufferString(`{"key": "value"}`), 200, bytes.NewBuffer(scResp), nil},
-		{"some error occured", nil, 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
+		{"some error occurred", nil, 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
 		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
 		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("response body parse failed.: invalid character 'e' looking for beginning of value")},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			resp := &http.Response {
+			resp := &http.Response{
 				StatusCode: tt.statusCode,
-				Body: ioutil.NopCloser(tt.response),
-				Header: make(http.Header),
+				Body:       ioutil.NopCloser(tt.response),
+				Header:     make(http.Header),
 			}
 
-			srClient := NewTestClient(func (req *http.Request) *http.Response {
+			srClient := NewTestClient(func(req *http.Request) *http.Response {
 				if tt.payload == nil {
 					if req.Header.Get("Content-Length") != contentZeroLen {
 						t.Fatalf("want %#v, but %#v", contentZeroLen, req.Header.Get("Content-Length"))
