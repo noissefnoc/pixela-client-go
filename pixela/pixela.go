@@ -100,7 +100,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
 	}
 
 	// parse response
@@ -146,7 +146,7 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
 	}
 
 	// parse response
@@ -189,7 +189,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
 	}
 
 	// parse response
@@ -235,7 +235,7 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %s", response.Status))
+		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
 	}
 
 	// parse response
