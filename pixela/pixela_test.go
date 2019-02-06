@@ -10,6 +10,7 @@ import (
 	"testing"
 )
 
+// test for pixela.New
 func TestNew(t *testing.T) {
 	usernameErr := errors.New("initialization error.: " + validationErrorMessages["Username"])
 	tokenErr := errors.New("initialization error.: " + validationErrorMessages["Token"])
@@ -42,16 +43,18 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestPixela_post(t *testing.T) {
-	url := "https://examples.com/post"
-	username := "testuser"
-	token := "testtoken"
-	debug := false
-	contentType := "application/json"
-	contentZeroLen := "0"
-	scResp, _ := json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
-	errResp, _ := json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
+// common values on following tests
+var url = "https://examples.com/"
+var username = "testuser"
+var token = "testtoken"
+var debug = false
+var contentType = "application/json"
+var contentZeroLen = "0"
+var scResp, _ = json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
+var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
 
+// test for pixela.post
+func TestPixela_post(t *testing.T) {
 	tests := []struct {
 		name       string
 		payload    *bytes.Buffer
