@@ -77,7 +77,11 @@ func TestPixela_post(t *testing.T) {
 				Header:     make(http.Header),
 			}
 
-			srClient := NewTestClient(func(req *http.Request) *http.Response {
+			c := NewTestClient(func(req *http.Request) *http.Response {
+				if req.Method != http.MethodPost {
+					t.Fatalf("want %#v, but %#v", http.MethodPost, req.Method)
+				}
+
 				if tt.payload == nil {
 					if req.Header.Get("Content-Length") != contentZeroLen {
 						t.Fatalf("want %#v, but %#v", contentZeroLen, req.Header.Get("Content-Length"))
@@ -95,7 +99,7 @@ func TestPixela_post(t *testing.T) {
 				return resp
 			})
 
-			pixela, err := New(username, token, debug, OptionHTTPClient(srClient))
+			pixela, err := New(username, token, debug, OptionHTTPClient(c))
 
 			if err != nil {
 				t.Fatalf("got error when http client created %#v", err)
@@ -132,7 +136,11 @@ func TestPixela_get(t *testing.T) {
 				Header:     make(http.Header),
 			}
 
-			srClient := NewTestClient(func(req *http.Request) *http.Response {
+			c := NewTestClient(func(req *http.Request) *http.Response {
+				if req.Method != http.MethodGet {
+					t.Fatalf("want %#v, but %#v", http.MethodGet, req.Method)
+				}
+
 				if req.Header.Get("X-USER-TOKEN") != token {
 					t.Fatalf("want %#v, but %#v", token, req.Header.Get("X-USER-TOKEN"))
 				}
@@ -140,7 +148,7 @@ func TestPixela_get(t *testing.T) {
 				return resp
 			})
 
-			pixela, err := New(username, token, debug, OptionHTTPClient(srClient))
+			pixela, err := New(username, token, debug, OptionHTTPClient(c))
 
 			if err != nil {
 				t.Fatalf("got error when http client created %#v", err)
