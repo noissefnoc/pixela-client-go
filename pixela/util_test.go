@@ -15,12 +15,19 @@ var graphId = "testgraphid"
 var dateStr = "20000102"
 var quantityStr = "100"
 
+// urls
 var pixelCreateUrl = fmt.Sprintf("%s/v1/users/%s/graphs/%s", urlStr, username, graphId)
+var pixelGetUrl = fmt.Sprintf("%s/v1/users/%s/graphs/%s/%s", urlStr, username, graphId, dateStr)
 
+// request
 var contentType = "application/json"
 var contentZeroLen = "0"
+
+// response
 var scResp, _ = json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
 var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
+var pixelRespWOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr, OptionalData: `{"key": "value"}`})
+var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
 
 // RoundTripFunc
 type RoundTripFunc func(req *http.Request) *http.Response
