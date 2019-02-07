@@ -2,7 +2,6 @@ package pixela
 
 import (
 	"bytes"
-	"encoding/json"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
@@ -42,16 +41,6 @@ func TestNew(t *testing.T) {
 		})
 	}
 }
-
-// common values on following tests
-var urlStr = "https://examples.com/"
-var username = "testuser"
-var token = "testtoken"
-var debug = false
-var contentType = "application/json"
-var contentZeroLen = "0"
-var scResp, _ = json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
-var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
 
 // test for pixela.post
 func TestPixela_post(t *testing.T) {
