@@ -1,34 +1,34 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/spiegel-im-spiegel/gocli/exitcode"
+	"github.com/spiegel-im-spiegel/gocli/rwi"
 	"os"
+	"runtime"
 )
 
 // variable for configuration file name
-var cfgFile string
+var (
+	cui     = rwi.New() // CUI instance
+	cfgFile string
+)
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "pixela",
-	Short: "Simple API Client for pixela (https://pixe.la/)",
-	Long: `Simple API Client for pixela (https://pixe.la/).
+func newRootCmd(ui *rwi.RWI, args []string) *cobra.Command {
+	cui = ui
+
+	rootCmd := &cobra.Command{
+		Use:   "pixela",
+		Short: "Simple API Client for pixela (https://pixe.la/)",
+		Long: `Simple API Client for pixela (https://pixe.la/).
 This command can handle user, graph, pixel and webhook via API.`,
-}
-
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		rootCmd.Println(err)
-		os.Exit(1)
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
 	}
-}
-
-func init() {
-	cobra.OnInitialize(initConfig)
 
 	// global flags
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pixela.yaml)")
@@ -39,6 +39,45 @@ func init() {
 	viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+
+	rootCmd.SetArgs(args)
+	rootCmd.SetOutput(ui.ErrorWriter())
+
+	cobra.OnInitialize(initConfig)
+
+	rootCmd.AddCommand(newPixelCmd())
+	rootCmd.AddCommand(newGraphCmd())
+	rootCmd.AddCommand(newUserCmd())
+	rootCmd.AddCommand(newWebhookCmd())
+
+	return rootCmd
+}
+
+func Execute(cui *rwi.RWI, args []string) (exit exitcode.ExitCode) {
+	defer func() {
+		// panic handling
+		if r := recover(); r != nil {
+			cui.OutputErrln("Panic:", r)
+			for depth := 0; ; depth++ {
+				pc, src, line, ok := runtime.Caller(depth)
+
+				if !ok {
+					break
+				}
+				cui.OutputErrln(" ->", depth, ":", runtime.FuncForPC(pc).Name(), ":", src, ":", line)
+			}
+			exit = exitcode.Abnormal
+		}
+	}()
+
+	// execution
+	exit = exitcode.Normal
+
+	if err := newRootCmd(cui, args).Execute(); err != nil {
+		exit = exitcode.Abnormal
+	}
+
+	return
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -50,7 +89,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			rootCmd.Println(err)
+			fmt.Println(err)
 			os.Exit(1)
 		}
 
@@ -63,11 +102,11 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		rootCmd.Println(err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	if viper.GetBool("verbose") {
-		rootCmd.Println("Using config file:", viper.ConfigFileUsed())
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }

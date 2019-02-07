@@ -1,6 +1,10 @@
 package main
 
-import "github.com/noissefnoc/pixela-client-go/cmd"
+import (
+	"github.com/noissefnoc/pixela-client-go/cmd"
+	"github.com/spiegel-im-spiegel/gocli/rwi"
+	"os"
+)
 
 var (
 	// Version is build version
@@ -10,5 +14,12 @@ var (
 )
 
 func main() {
-	cmd.Execute()
+	cmd.Execute(
+		rwi.New(
+			rwi.WithReader(os.Stdin),
+			rwi.WithWriter(os.Stdout),
+			rwi.WithErrorWriter(os.Stderr),
+		),
+		os.Args[1:],
+	).Exit()
 }

@@ -155,6 +155,17 @@
   version = "v1.3.1"
 
 [[projects]]
+  digest = "1:374298b72b970c13b5ce691321f74f89342ed3643ab126c2f70d36d0e931d0b9"
+  name = "github.com/spiegel-im-spiegel/gocli"
+  packages = [
+    "exitcode",
+    "rwi",
+  ]
+  pruneopts = "UT"
+  revision = "8f9d93b6efd828259ebdea7509b66d7370e5a0f9"
+  version = "v0.8.1"
+
+[[projects]]
   branch = "master"
   digest = "1:ab01052262e2ef935fdec4632b4029e56e7efbc96a569feebdcdc67fd84a9b5b"
   name = "golang.org/x/sys"
@@ -201,6 +212,8 @@
     "github.com/pkg/errors",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
+    "github.com/spiegel-im-spiegel/gocli/exitcode",
+    "github.com/spiegel-im-spiegel/gocli/rwi",
     "gopkg.in/go-playground/validator.v9",
   ]
   solver-name = "gps-cdcl"
