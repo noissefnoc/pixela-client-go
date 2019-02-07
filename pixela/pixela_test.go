@@ -164,3 +164,117 @@ func TestPixela_get(t *testing.T) {
 		})
 	}
 }
+
+// test for pixela.put
+func TestPixela_put(t *testing.T) {
+	tests := []struct {
+		name       string
+		payload    *bytes.Buffer
+		statusCode int
+		response   *bytes.Buffer
+		wantErr    error
+	}{
+		{"normal case without payload", nil, 200, bytes.NewBuffer(scResp), nil},
+		{"normal case with payload", bytes.NewBufferString(`{"key": "value"}`), 200, bytes.NewBuffer(scResp), nil},
+		{"some error occurred", nil, 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
+		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
+		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("response body parse failed.: invalid character 'e' looking for beginning of value")},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resp := &http.Response{
+				StatusCode: tt.statusCode,
+				Body:       ioutil.NopCloser(tt.response),
+				Header:     make(http.Header),
+			}
+
+			c := NewTestClient(func(req *http.Request) *http.Response {
+				if req.Method != http.MethodPut {
+					t.Fatalf("want %#v, but %#v", http.MethodPut, req.Method)
+				}
+
+				if tt.payload == nil {
+					if req.Header.Get("Content-Length") != contentZeroLen {
+						t.Fatalf("want %#v, but %#v", contentZeroLen, req.Header.Get("Content-Length"))
+					}
+				}
+
+				if req.Header.Get("Content-Type") != contentType {
+					t.Fatalf("want %#v, but %#v", contentType, req.Header.Get("Content-Type"))
+				}
+
+				if req.Header.Get("X-USER-TOKEN") != token {
+					t.Fatalf("want %#v, but %#v", token, req.Header.Get("X-USER-TOKEN"))
+				}
+
+				return resp
+			})
+
+			pixela, err := New(username, token, debug, OptionHTTPClient(c))
+
+			if err != nil {
+				t.Fatalf("got error when http client created %#v", err)
+			}
+
+			_, err = pixela.put(urlStr, tt.payload)
+
+			if err != nil {
+				if err.Error() != tt.wantErr.Error() {
+					t.Fatalf("want %#v, but %#v", tt.wantErr, err)
+				}
+			}
+		})
+	}
+}
+
+// test for pixela.delete
+func TestPixela_delete(t *testing.T) {
+	tests := []struct {
+		name       string
+		statusCode int
+		response   *bytes.Buffer
+		wantErr    error
+	}{
+		{"normal case", 200, bytes.NewBuffer(scResp), nil},
+		{"some error occurred", 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
+		{"response status not ok", 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
+		{"server return invalid response", 200, bytes.NewBufferString("error"), errors.New("response body parse failed.: invalid character 'e' looking for beginning of value")},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resp := &http.Response{
+				StatusCode: tt.statusCode,
+				Body:       ioutil.NopCloser(tt.response),
+				Header:     make(http.Header),
+			}
+
+			c := NewTestClient(func(req *http.Request) *http.Response {
+				if req.Method != http.MethodDelete {
+					t.Fatalf("want %#v, but %#v", http.MethodDelete, req.Method)
+				}
+
+				if req.Header.Get("X-USER-TOKEN") != token {
+					t.Fatalf("want %#v, but %#v", token, req.Header.Get("X-USER-TOKEN"))
+				}
+
+				return resp
+			})
+
+			pixela, err := New(username, token, debug, OptionHTTPClient(c))
+
+			if err != nil {
+				t.Fatalf("got error when http client created %#v", err)
+			}
+
+			_, err = pixela.delete(urlStr)
+
+			if err != nil {
+				if err.Error() != tt.wantErr.Error() {
+					t.Fatalf("want %#v, but %#v", tt.wantErr, err)
+				}
+			}
+		})
+	}
+}
