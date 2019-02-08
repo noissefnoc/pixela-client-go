@@ -89,7 +89,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println(err)
+			cui.OutputErrln(err)
 			os.Exit(1)
 		}
 
@@ -102,11 +102,11 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println(err)
+		cui.OutputErrln(err)
 		os.Exit(1)
 	}
 
 	if viper.GetBool("verbose") {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		cui.Outputln(fmt.Sprintf("Using config file: %s", viper.ConfigFileUsed()))
 	}
 }
