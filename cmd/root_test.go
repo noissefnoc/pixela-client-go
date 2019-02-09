@@ -7,12 +7,14 @@ import (
 	"testing"
 )
 
-func TestRootNormal(t *testing.T) {
+func TestRootCmd(t *testing.T) {
 	tests := []struct {
+		name string
 		args []string
 		want string
-	} {
-		{args: []string{""}, want: ""},
+	}{
+		{"without option", []string{""}, ""},
+		{"verbose option", []string{"--verbose"}, ""},
 	}
 
 	for _, tt := range tests {
@@ -24,18 +26,21 @@ func TestRootNormal(t *testing.T) {
 			rwi.WithErrorWriter(errOut),
 		)
 
-		exit := Execute(ui, tt.args)
+		t.Run(tt.name, func(t *testing.T) {
+			exit := Execute(ui, tt.args)
 
-		if exit != exitcode.Normal {
-			t.Errorf("Execute() err = \"%v\", want \"%v\".", exit, exitcode.Normal)
-		}
+			if exit != exitcode.Normal {
+				t.Errorf("Execute() err = \"%v\", want \"%v\".", exit, exitcode.Normal)
+			}
 
-		if out.String() != tt.want {
-			t.Errorf("Execute() Stdout = \"%v\", want \"%v\".", out.String(), tt.want)
-		}
+			if out.String() != tt.want {
+				t.Errorf("Execute() Stdout = \"%v\", want \"%v\".", out.String(), tt.want)
+			}
 
-		if errOut.String() != "" {
-			t.Errorf("Execute() Stderr = \"%v\", want \"%v\".", errOut.String(), "")
-		}
+			if errOut.String() != "" {
+				t.Errorf("Execute() Stderr = \"%v\", want \"%v\".", errOut.String(), "")
+			}
+		})
+
 	}
 }
