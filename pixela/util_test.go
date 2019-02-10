@@ -7,7 +7,6 @@ import (
 )
 
 // common values on following tests
-var urlStr = "https://examples.com/"
 var username = "testuser"
 var token = "testtoken"
 var debug = false
@@ -16,8 +15,8 @@ var dateStr = "20000102"
 var quantityStr = "100"
 
 // urls
-var pixelCreateUrl = fmt.Sprintf("%s/v1/users/%s/graphs/%s", urlStr, username, graphId)
-var pixelGetUrl = fmt.Sprintf("%s/v1/users/%s/graphs/%s/%s", urlStr, username, graphId, dateStr)
+var pixelCreateUrl = fmt.Sprintf("%s/v1/users/%s/graphs/%s", baseUrl, username, graphId)
+var pixelGetUrl = fmt.Sprintf("%s/v1/users/%s/graphs/%s/%s", baseUrl, username, graphId, dateStr)
 
 // request
 var contentType = "application/json"

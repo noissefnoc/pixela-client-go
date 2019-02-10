@@ -94,7 +94,7 @@ func TestPixela_post(t *testing.T) {
 				t.Fatalf("got error when http client created %#v", err)
 			}
 
-			_, err = pixela.post(urlStr, tt.payload)
+			_, err = pixela.post(baseUrl, tt.payload)
 
 			if err != nil {
 				if err.Error() != tt.wantErr.Error() {
@@ -143,7 +143,7 @@ func TestPixela_get(t *testing.T) {
 				t.Fatalf("got error when http client created %#v", err)
 			}
 
-			_, err = pixela.get(urlStr)
+			_, err = pixela.get(baseUrl)
 
 			if err != nil {
 				if err.Error() != tt.wantErr.Error() {
@@ -206,7 +206,7 @@ func TestPixela_put(t *testing.T) {
 				t.Fatalf("got error when http client created %#v", err)
 			}
 
-			_, err = pixela.put(urlStr, tt.payload)
+			_, err = pixela.put(baseUrl, tt.payload)
 
 			if err != nil {
 				if err.Error() != tt.wantErr.Error() {
@@ -257,7 +257,7 @@ func TestPixela_delete(t *testing.T) {
 				t.Fatalf("got error when http client created %#v", err)
 			}
 
-			_, err = pixela.delete(urlStr)
+			_, err = pixela.delete(baseUrl)
 
 			if err != nil {
 				if err.Error() != tt.wantErr.Error() {

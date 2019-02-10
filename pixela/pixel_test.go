@@ -43,7 +43,7 @@ func TestPixela_CreatePixel(t *testing.T) {
 			}
 
 			c := NewTestClient(func(req *http.Request) *http.Response {
-				if req.URL.String() == pixelCreateUrl {
+				if req.URL.String() != pixelCreateUrl {
 					t.Fatalf("want %#v, but got %#v", pixelCreateUrl, req.URL.String())
 				}
 
@@ -93,8 +93,8 @@ func TestPixela_GetPixel(t *testing.T) {
 			}
 
 			c := NewTestClient(func(req *http.Request) *http.Response {
-				if req.URL.String() == pixelCreateUrl {
-					t.Fatalf("want %#v, but got %#v", pixelCreateUrl, req.URL.String())
+				if req.URL.String() != pixelGetUrl {
+					t.Fatalf("want %#v, but got %#v", pixelGetUrl, req.URL.String())
 				}
 
 				return resp
