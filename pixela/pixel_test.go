@@ -238,3 +238,58 @@ func TestPixela_DecPixel(t *testing.T) {
 		})
 	}
 }
+
+func TestPixela_DeletePixel(t *testing.T) {
+	pixelDeleteUrl := fmt.Sprintf("%s/v1/users/%s/graphs/%s/%s", baseUrl, username, graphId, dateStr)
+
+	ivGraphIdErr := errors.New("`pixel delete`: wrong arguments: " + validationErrorMessages["GraphId"])
+	ivDateErr := errors.New("`pixel delete`: wrong arguments: " + validationErrorMessages["Date"])
+	respErr := errors.New("`pixel delete`: http request failed.: returns none success status code: 400")
+
+	tests := []struct {
+		name       string
+		graphId    string
+		date       string
+		statusCode int
+		response   *bytes.Buffer
+		wantErr    error
+	}{
+		{"normal case", graphId, dateStr, http.StatusOK, bytes.NewBuffer(scResp), nil},
+		{"invalid graphId", "0000", dateStr, 0, nil, ivGraphIdErr},
+		{"invalid date", graphId, "000A00", 0, nil, ivDateErr},
+		{"return error response", graphId, dateStr, http.StatusBadRequest, bytes.NewBuffer(errResp), respErr},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resp := &http.Response{
+				StatusCode: tt.statusCode,
+				Body:       ioutil.NopCloser(tt.response),
+				Header:     make(http.Header),
+			}
+
+			c := NewTestClient(func(req *http.Request) *http.Response {
+				if req.URL.String() != pixelDeleteUrl {
+					t.Fatalf("want %#v, but got %#v", pixelDeleteUrl, req.URL.String())
+				}
+
+				if req.Header.Get(tokenHeader) != token {
+					t.Fatalf("want %#v, but got %#v", token, req.Header.Get(tokenHeader))
+				}
+
+				return resp
+			})
+
+			// skip checking instance creation error
+			pixela, _ := New(username, token, debug, OptionHTTPClient(c))
+
+			_, err := pixela.DeletePixel(tt.graphId, tt.date)
+
+			if err != nil {
+				if err.Error() != tt.wantErr.Error() {
+					t.Fatalf("want %#v, but got %#v", tt.wantErr.Error(), err.Error())
+				}
+			}
+		})
+	}
+}
