@@ -10,6 +10,10 @@ var username = "testuser"
 var token = "testtoken"
 var debug = false
 var graphId = "testgraphid"
+var graphName = "testgraphname"
+var graphUnit = "testunit"
+var numType = "int"
+var validColor = "shibafu"
 var dateStr = "20000102"
 var quantityStr = "100"
 
