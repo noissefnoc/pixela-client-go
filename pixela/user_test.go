@@ -24,6 +24,7 @@ func TestPixela_CreateUser(t *testing.T) {
 		response            *bytes.Buffer
 		wantErr             error
 	}{
+		{"normal case", username, token, "yes", "yes", http.StatusOK, bytes.NewBuffer(scResp), nil},
 		{"return error response", username, token, "yes", "yes", http.StatusBadRequest, bytes.NewBuffer(errResp), respErr},
 	}
 
