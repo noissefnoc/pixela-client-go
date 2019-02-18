@@ -43,14 +43,14 @@ func New(username, token string, debug bool, opts ...Option) (*Pixela, error) {
 	// validate arguments
 	vf := newInstanceValidateField{
 		Username: username,
-		Token: token,
+		Token:    token,
 	}
 
 	validate := newValidator()
 	err := validate.Validate(vf)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "initialization error.")
+		return nil, errors.Wrap(err, "initialization error")
 	}
 
 	// create instance
@@ -109,14 +109,14 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response read failed.")
+		return nil, errors.Wrap(err, "response read failed")
 	}
 
 	responseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response body parse failed.")
+		return nil, errors.Wrap(err, "response body parse failed")
 	}
 
 	// check response body if request success
@@ -155,7 +155,7 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response read failed.")
+		return nil, errors.Wrap(err, "response read failed")
 	}
 
 	return responseBodyJSON, nil
@@ -198,14 +198,14 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response read failed.")
+		return nil, errors.Wrap(err, "response read failed")
 	}
 
 	responseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response body parse failed.")
+		return nil, errors.Wrap(err, "response body parse failed")
 	}
 
 	// check response body if request success
@@ -244,14 +244,14 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "delete response read failed.")
+		return nil, errors.Wrap(err, "delete response read failed")
 	}
 
 	responseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response body parse failed.")
+		return nil, errors.Wrap(err, "response body parse failed")
 	}
 
 	// check response body if request success

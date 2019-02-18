@@ -22,9 +22,9 @@ type GetPixelResponseBody struct {
 func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
-		Date: date,
-		Quantity: quantity,
+		GraphId:      graphId,
+		Date:         date,
+		Quantity:     quantity,
 		OptionalData: optionalData,
 	}
 
@@ -48,7 +48,7 @@ func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: can not marshal request payload")
 	}
 
 	// build request url
@@ -60,7 +60,7 @@ func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) 
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -74,7 +74,7 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	// argument validation
 	vf := validateField{
 		GraphId: graphId,
-		Date: date,
+		Date:    date,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -92,14 +92,14 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: http request failed.")
+		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: http request failed")
 	}
 
 	getPixelResponseBody := GetPixelResponseBody{}
 	err = json.Unmarshal(responseBody, &getPixelResponseBody)
 
 	if err != nil {
-		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: http response parse failed.")
+		return GetPixelResponseBody{}, errors.Wrap(err, "`pixel get`: http response parse failed")
 	}
 
 	return getPixelResponseBody, nil
@@ -109,9 +109,9 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
-		Date: date,
-		Quantity: quantity,
+		GraphId:      graphId,
+		Date:         date,
+		Quantity:     quantity,
 		OptionalData: optionalData,
 	}
 
@@ -134,7 +134,7 @@ func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: can not marshal request payload")
 	}
 
 	// build request url
@@ -146,7 +146,7 @@ func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) 
 	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -177,7 +177,7 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -208,7 +208,7 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
@@ -222,7 +222,7 @@ func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, er
 	// argument validation
 	vf := validateField{
 		GraphId: graphId,
-		Date: date,
+		Date:    date,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -240,7 +240,7 @@ func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, er
 	responseBody, err := pixela.delete(requestURL)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel delete`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel delete`: http request failed")
 	}
 
 	deleteResponseBody := NoneGetResponseBody{}

@@ -32,10 +32,10 @@ type GraphDefinitions struct {
 }
 
 type UpdateGraphPayload struct {
-	Name           string `json:"name,omitempty"`
-	Unit           string `json:"unit,omitempty"`
-	Color          string `json:"color,omitempty"`
-	Timezone       string `json:"timezone,omitempty"`
+	Name           string   `json:"name,omitempty"`
+	Unit           string   `json:"unit,omitempty"`
+	Color          string   `json:"color,omitempty"`
+	Timezone       string   `json:"timezone,omitempty"`
 	PurgeCacheURLs []string `json:"purgeCacheURLs,omitempty"`
 }
 
@@ -43,18 +43,18 @@ type UpdateGraphPayload struct {
 func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, selfSufficient string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := CreateGraphPayload{
-		Id: id,
-		Name: name,
-		Unit: unit,
+		Id:      id,
+		Name:    name,
+		Unit:    unit,
 		NumType: numType,
-		Color: color,
+		Color:   color,
 	}
 
 	// argument validation
 	vf := validateField{
-		GraphId: id,
+		GraphId:  id,
 		UnitType: numType,
-		Color: color,
+		Color:    color,
 	}
 
 	if len(timezone) != 0 {
@@ -75,7 +75,7 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, self
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: can not marshal request payload")
 	}
 
 	// build request url
@@ -86,14 +86,14 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, self
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: http response parse failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph create`: http response parse failed")
 	}
 
 	return postResponseBody, nil
@@ -110,14 +110,14 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return GraphDefinitions{}, errors.Wrap(err, "`graph def`: http request failed.")
+		return GraphDefinitions{}, errors.Wrap(err, "`graph def`: http request failed")
 	}
 
 	graphDefinitions := GraphDefinitions{}
 	err = json.Unmarshal(responseBody, &graphDefinitions)
 
 	if err != nil {
-		return GraphDefinitions{}, errors.Wrap(err, "`graph def`: http response parse failed.")
+		return GraphDefinitions{}, errors.Wrap(err, "`graph def`: http response parse failed")
 	}
 
 	return graphDefinitions, nil
@@ -160,7 +160,7 @@ func (pixela *Pixela) GetGraphSvg(graphId, date, mode string) ([]byte, error) {
 	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "`graph svg`: http request failed.")
+		return nil, errors.Wrap(err, "`graph svg`: http request failed")
 	}
 
 	return responseBody, nil
@@ -187,21 +187,21 @@ func (pixela *Pixela) UpdateGraph(graphId string, payload UpdateGraphPayload) (N
 	plJSON, err := json.Marshal(payload)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph update`: can not marshal request payload.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph update`: can not marshal request payload")
 	}
 
 	// do request
 	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph update`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph update`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph update`: http response parse failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph update`: http response parse failed")
 	}
 
 	return postResponseBody, nil
@@ -229,14 +229,14 @@ func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.delete(requestURL)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph delete`: http request failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph delete`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`graph delete`: http response parse failed.")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`graph delete`: http response parse failed")
 	}
 
 	return postResponseBody, nil
