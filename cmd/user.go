@@ -43,7 +43,7 @@ func newUserCreateCmd() *cobra.Command {
 		Short: "create pixe.la user",
 		Long: `create pixe.la user. Usage:
 
-$ pixela user create <username> <token> [--agreeTermsOfService yes/no(default:yes)] [--notMinor yes/no(default:yes)]
+$ pixela user create <username> <token> [--agreeTermsOfService yes/no (default:yes)] [--notMinor yes/no (default:yes)]
 
 see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -68,13 +68,13 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 			response, err := client.CreateUser(agreeTermsOfService, notMinor)
 
 			if err != nil {
-				return errors.Wrap(err, "request error: ")
+				return errors.Wrap(err, "request error")
 			}
 
 			responseJSON, err := json.Marshal(response)
 
 			if err != nil {
-				return errors.Wrap(err, "response parse error: ")
+				return errors.Wrap(err, "response parse error")
 			}
 
 			// print result in verbose mode
@@ -87,15 +87,15 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 			err = saveConfigFile(configFilePath, username, token)
 
 			if err != nil {
-				return errors.Wrap(err, "save config file error: ")
+				return errors.Wrap(err, "save config file error")
 			}
 
 			return nil
 		},
 	}
 
-	userCreateCmd.Flags().StringP("agreeTermsOfService", "", "yes", "agree terms of service. (default: yes)")
-	userCreateCmd.Flags().StringP("notMinor", "", "yes", "usage is not minor. (default: yes)")
+	userCreateCmd.Flags().StringP("agreeTermsOfService", "", "yes", "agree terms of service.")
+	userCreateCmd.Flags().StringP("notMinor", "", "yes", "usage is not minor.")
 
 	return userCreateCmd
 }
@@ -125,13 +125,13 @@ see official document (https://docs.pixe.la/#/put-user) for more detail.`,
 			response, err := client.UpdateUser(args[0])
 
 			if err != nil {
-				return errors.Wrap(err, "request error: ")
+				return errors.Wrap(err, "request error")
 			}
 
 			responseJSON, err := json.Marshal(response)
 
 			if err != nil {
-				return errors.Wrap(err, "response parse error: ")
+				return errors.Wrap(err, "response parse error")
 			}
 
 			// print result in verbose mode
@@ -171,13 +171,13 @@ see official document (https://docs.pixe.la/#/delete-user) for more detail.`,
 			response, err := client.DeleteUser()
 
 			if err != nil {
-				return errors.Wrap(err, "request error: ")
+				return errors.Wrap(err, "request error")
 			}
 
 			responseJSON, err := json.Marshal(response)
 
 			if err != nil {
-				return errors.Wrap(err, "response parse error: ")
+				return errors.Wrap(err, "response parse error")
 			}
 
 			// print result in verbose mode
