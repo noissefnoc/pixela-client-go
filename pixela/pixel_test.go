@@ -16,7 +16,7 @@ func TestPixela_CreatePixel(t *testing.T) {
 	ivDateErr := errors.New("`pixel create`: wrong arguments: " + validationErrorMessages["Date"])
 	ivQuantityErr := errors.New("`pixel create`: wrong arguments: " + validationErrorMessages["Quantity"])
 	ivOptionalDataErr := errors.New("`pixel create`: wrong arguments: " + validationErrorMessages["OptionalData"])
-	respErr := errors.New("`pixel create`: http request failed.: returns none success status code: 400")
+	respErr := errors.New("`pixel create`: http request failed: returns none success status code: 400")
 
 	tests := []struct {
 		name         string
@@ -76,7 +76,7 @@ func TestPixela_GetPixel(t *testing.T) {
 
 	ivGraphIdErr := errors.New("`pixel get`: wrong arguments: " + validationErrorMessages["GraphId"])
 	ivDateErr := errors.New("`pixel get`: wrong arguments: " + validationErrorMessages["Date"])
-	respErr := errors.New("`pixel get`: http request failed.: returns none success status code: 400")
+	respErr := errors.New("`pixel get`: http request failed: returns none success status code: 400")
 
 	tests := []struct {
 		name       string
@@ -131,7 +131,7 @@ func TestPixela_IncPixel(t *testing.T) {
 	pixelIncUrl := fmt.Sprintf("%s/v1/users/%s/graphs/%s/increment", baseUrl, username, graphId)
 
 	ivGraphIdErr := errors.New("`pixel inc`: wrong arguments: " + validationErrorMessages["GraphId"])
-	respErr := errors.New("`pixel inc`: http request failed.: returns none success status code: 400")
+	respErr := errors.New("`pixel inc`: http request failed: returns none success status code: 400")
 
 	tests := []struct {
 		name       string
@@ -187,7 +187,7 @@ func TestPixela_DecPixel(t *testing.T) {
 	pixelDecUrl := fmt.Sprintf("%s/v1/users/%s/graphs/%s/decrement", baseUrl, username, graphId)
 
 	ivGraphIdErr := errors.New("`pixel dec`: wrong arguments: " + validationErrorMessages["GraphId"])
-	respErr := errors.New("`pixel dec`: http request failed.: returns none success status code: 400")
+	respErr := errors.New("`pixel dec`: http request failed: returns none success status code: 400")
 
 	tests := []struct {
 		name       string
@@ -244,7 +244,7 @@ func TestPixela_DeletePixel(t *testing.T) {
 
 	ivGraphIdErr := errors.New("`pixel delete`: wrong arguments: " + validationErrorMessages["GraphId"])
 	ivDateErr := errors.New("`pixel delete`: wrong arguments: " + validationErrorMessages["Date"])
-	respErr := errors.New("`pixel delete`: http request failed.: returns none success status code: 400")
+	respErr := errors.New("`pixel delete`: http request failed: returns none success status code: 400")
 
 	tests := []struct {
 		name       string

@@ -16,8 +16,8 @@ func TestPixela_CreateGraph(t *testing.T) {
 	ivNumTypeErr := errors.New("`graph create`: wrong arguments: " + validationErrorMessages["UnitType"])
 	ivColorErr := errors.New("`graph create`: wrong arguments: " + validationErrorMessages["Color"])
 	ivSelfSufficientErr := errors.New("`graph create`: wrong arguments: " + validationErrorMessages["SelfSufficient"])
-	respStatusErr := errors.New("`graph create`: http request failed.: returns none success status code: 400")
-	respDataErr := errors.New("`graph create`: http request failed.: request failed: errorMessage")
+	respStatusErr := errors.New("`graph create`: http request failed: returns none success status code: 400")
+	respDataErr := errors.New("`graph create`: http request failed: request failed: errorMessage")
 
 	tests := []struct {
 		name           string
