@@ -38,6 +38,43 @@ var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuc
 var pixelRespWOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr, OptionalData: `{"key": "value"}`})
 var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
 
+// sub commands
+type subCommand int
+
+const (
+	userCreate subCommand = iota
+	userUpdate
+	userDelete
+	pixelCreate
+	pixelGet
+	pixelInc
+	pixelDec
+	pixelDelete
+)
+
+func (c subCommand) String() string {
+	switch c {
+	case userCreate:
+		return "user create"
+	case userUpdate:
+		return "user update"
+	case userDelete:
+		return "user delete"
+	case pixelCreate:
+		return "pixel create"
+	case pixelGet:
+		return "pixel get"
+	case pixelInc:
+		return "pixel inc"
+	case pixelDec:
+		return "pixel dec"
+	case pixelDelete:
+		return "pixel delete"
+	}
+
+	panic("unknown value")
+}
+
 // RoundTripFunc
 type RoundTripFunc func(req *http.Request) *http.Response
 
@@ -53,7 +90,7 @@ func NewTestClient(fn RoundTripFunc) *http.Client {
 	}
 }
 
-func newCommandError(command, message string) error {
+func newCommandError(command subCommand, message string) error {
 	return errors.New(fmt.Sprintf("`%s`: %s", command, message))
 }
 
@@ -65,9 +102,9 @@ type testCase struct {
 	args       []string
 }
 
-type noneGetTestCases []testCase
+type testCases []testCase
 
-func noneGetRequestHelper(t *testing.T, command string, tests noneGetTestCases, url string) {
+func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url string) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			resp := &http.Response{
@@ -85,21 +122,56 @@ func noneGetRequestHelper(t *testing.T, command string, tests noneGetTestCases, 
 					t.Fatalf("want %#v, but got %#v", token, req.Header.Get(tokenHeader))
 				}
 
+				switch cmd {
+				case pixelGet:
+					if req.Method != http.MethodGet {
+						t.Fatalf("want %#v, but got %#v", "GET", req.Method)
+					}
+				case userCreate, pixelCreate:
+					if req.Method != http.MethodPost {
+						t.Fatalf("want %#v, but got %#v", "POST", req.Method)
+					}
+				case userUpdate, pixelInc, pixelDec:
+					if req.Method != http.MethodPut {
+						t.Fatalf("want %#v, but got %#v", "PUT", req.Method)
+					}
+
+					if cmd == pixelInc || cmd == pixelDec {
+						if req.Header.Get(contentLength) != contentZeroLen {
+							t.Fatalf("want %#v, but got %#v", contentZeroLen, req.Header.Get(contentLength))
+						}
+					}
+				case userDelete, pixelDelete:
+					if req.Method != http.MethodDelete {
+						t.Fatalf("want %#v, but got %#v", "DELETE", req.Method)
+					}
+				}
+
 				return resp
 			})
 
 			// skip checking instance creation error
 			pixela, err := New(username, token, debug, OptionHTTPClient(c))
 
-			switch command {
-			case "user create":
+			switch cmd {
+			case userCreate:
 				_, err = pixela.CreateUser(tt.args[0], tt.args[1])
-			case "user update":
+			case userUpdate:
 				_, err = pixela.UpdateUser(tt.args[0])
-			case "user delete":
+			case userDelete:
 				_, err = pixela.DeleteUser()
+			case pixelCreate:
+				_, err = pixela.CreatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
+			case pixelGet:
+				_, err = pixela.GetPixel(tt.args[0], tt.args[1])
+			case pixelInc:
+				_, err = pixela.IncPixel(tt.args[0])
+			case pixelDec:
+				_, err = pixela.DecPixel(tt.args[0])
+			case pixelDelete:
+				_, err = pixela.DeletePixel(tt.args[0], tt.args[1])
 			default:
-				t.Fatalf("unexpected command %s", command)
+				t.Fatalf("unexpected cmd %s", cmd)
 			}
 
 			if err != nil {
