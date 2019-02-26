@@ -21,6 +21,8 @@ var numType = "int"
 var validColor = "shibafu"
 var dateStr = "20000102"
 var quantityStr = "100"
+var webhookHash = "hash"
+var webhookType = "increment"
 
 // request
 var contentType = "application/json"
@@ -37,6 +39,7 @@ var scResp, _ = json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: 
 var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
 var pixelRespWOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr, OptionalData: `{"key": "value"}`})
 var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
+var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, graphId, webhookType}}})
 
 // sub commands
 type subCommand int
@@ -50,6 +53,10 @@ const (
 	pixelInc
 	pixelDec
 	pixelDelete
+	webhookCreate
+	webhookGet
+	webhookInvoke
+	webhookDelete
 )
 
 func (c subCommand) String() string {
@@ -70,6 +77,14 @@ func (c subCommand) String() string {
 		return "pixel dec"
 	case pixelDelete:
 		return "pixel delete"
+	case webhookCreate:
+		return "webhook create"
+	case webhookGet:
+		return "webhook get"
+	case webhookInvoke:
+		return "webhook invoke"
+	case webhookDelete:
+		return "webhook delete"
 	}
 
 	panic("unknown value")
@@ -123,11 +138,11 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 				}
 
 				switch cmd {
-				case pixelGet:
+				case pixelGet, webhookGet:
 					if req.Method != http.MethodGet {
 						t.Fatalf("want %#v, but got %#v", "GET", req.Method)
 					}
-				case userCreate, pixelCreate:
+				case userCreate, pixelCreate, webhookCreate, webhookInvoke:
 					if req.Method != http.MethodPost {
 						t.Fatalf("want %#v, but got %#v", "POST", req.Method)
 					}
@@ -141,7 +156,7 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 							t.Fatalf("want %#v, but got %#v", contentZeroLen, req.Header.Get(contentLength))
 						}
 					}
-				case userDelete, pixelDelete:
+				case userDelete, pixelDelete, webhookDelete:
 					if req.Method != http.MethodDelete {
 						t.Fatalf("want %#v, but got %#v", "DELETE", req.Method)
 					}
@@ -170,6 +185,14 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 				_, err = pixela.DecPixel(tt.args[0])
 			case pixelDelete:
 				_, err = pixela.DeletePixel(tt.args[0], tt.args[1])
+			case webhookCreate:
+				_, err = pixela.CreateWebhook(tt.args[0], tt.args[1])
+			case webhookGet:
+				_, err = pixela.GetWebhookDefinitions()
+			case webhookInvoke:
+				_, err = pixela.InvokeWebhooks(tt.args[0])
+			case webhookDelete:
+				_, err = pixela.DeleteWebhook(tt.args[0])
 			default:
 				t.Fatalf("unexpected cmd %s", cmd)
 			}
