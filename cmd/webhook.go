@@ -66,7 +66,7 @@ see official document (https://docs.pixe.la/#/post-webhook) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -112,7 +112,7 @@ see official document (https://docs.pixe.la/#/get-webhook) for more detail.`,
 			}
 
 			// print result
-			cui.Outputln(responseJSON)
+			cui.Outputln(string(responseJSON))
 
 			return nil
 		},
@@ -158,7 +158,7 @@ see official document (https://docs.pixe.la/#/invoke-webhook) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -205,7 +205,7 @@ see official document (https://docs.pixe.la/#/delete-webhook) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil

@@ -69,7 +69,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -114,7 +114,7 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 			}
 
 			// print result
-			cui.Outputln(responseJSON)
+			cui.Outputln(string(responseJSON))
 
 			return nil
 		},
@@ -165,7 +165,7 @@ see official document (https://docs.pixe.la/#/put-pixel) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -213,7 +213,7 @@ see official document (https://docs.pixe.la/#/delete-pixel) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -259,7 +259,7 @@ see official document (https://docs.pixe.la/#/increment-pixel) for more detail.`
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -305,7 +305,7 @@ see official document (https://docs.pixe.la/#/decrement-pixel) for more detail.`
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil

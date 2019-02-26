@@ -79,7 +79,7 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			// save authentications into file
@@ -136,7 +136,7 @@ see official document (https://docs.pixe.la/#/put-user) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -182,7 +182,7 @@ see official document (https://docs.pixe.la/#/delete-user) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil

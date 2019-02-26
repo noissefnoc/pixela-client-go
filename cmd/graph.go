@@ -70,7 +70,7 @@ see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -138,7 +138,7 @@ see official document (https://docs.pixe.la/#/put-graph) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -190,7 +190,7 @@ see official document (https://docs.pixe.la/#/delete-graph) for more detail.`,
 
 			// print result in verbose mode
 			if viper.GetBool("verbose") {
-				cui.Outputln(responseJSON)
+				cui.Outputln(string(responseJSON))
 			}
 
 			return nil
@@ -235,7 +235,7 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 			}
 
 			// print result
-			cui.Outputln(responseJSON)
+			cui.Outputln(string(responseJSON))
 
 			return nil
 		},
@@ -276,7 +276,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 			}
 
 			// print result
-			cui.Outputln(response)
+			cui.Outputln(string(response))
 
 			return nil
 		},
