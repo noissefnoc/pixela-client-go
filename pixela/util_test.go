@@ -57,6 +57,7 @@ const (
 	webhookGet
 	webhookInvoke
 	webhookDelete
+	graphCreate
 )
 
 func (c subCommand) String() string {
@@ -85,6 +86,8 @@ func (c subCommand) String() string {
 		return "webhook invoke"
 	case webhookDelete:
 		return "webhook delete"
+	case graphCreate:
+		return "graph create"
 	}
 
 	panic("unknown value")
@@ -142,7 +145,7 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 					if req.Method != http.MethodGet {
 						t.Fatalf("want %#v, but got %#v", "GET", req.Method)
 					}
-				case userCreate, pixelCreate, webhookCreate, webhookInvoke:
+				case userCreate, pixelCreate, webhookCreate, webhookInvoke, graphCreate:
 					if req.Method != http.MethodPost {
 						t.Fatalf("want %#v, but got %#v", "POST", req.Method)
 					}
@@ -193,6 +196,8 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 				_, err = pixela.InvokeWebhooks(tt.args[0])
 			case webhookDelete:
 				_, err = pixela.DeleteWebhook(tt.args[0])
+			case graphCreate:
+				_, err = pixela.CreateGraph(tt.args[0], tt.args[1], tt.args[2], tt.args[3], tt.args[4], tt.args[5], tt.args[6])
 			default:
 				t.Fatalf("unexpected cmd %s", cmd)
 			}
