@@ -39,7 +39,7 @@ func TestPixela_DeleteWebhook(t *testing.T) {
 	webhookDeleteUrl := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseUrl, username, webhookHash)
 
 	tests := testCases{
-		{"normal case", sucStatus, scResp, nil, nil},
+		{"normal case", sucStatus, scResp, nil, []string{webhookHash}},
 	}
 
 	subCommandTestHelper(t, webhookDelete, tests, webhookDeleteUrl)
