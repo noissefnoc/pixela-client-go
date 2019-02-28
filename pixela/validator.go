@@ -10,8 +10,8 @@ import (
 )
 
 type newInstanceValidateField struct {
-	Username            string `validate:"username"`
-	Token               string `validate:"token"`
+	Username string `validate:"username"`
+	Token    string `validate:"token"`
 }
 
 type validateField struct {
@@ -46,19 +46,19 @@ func newValidator() Validator {
 }
 
 var validationErrorMessages = map[string]string{
-	"Username": "`username` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 32 length.",
-	"Token": "`token` allows 8 to 128 length.",
+	"Username":            "`username` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 32 length.",
+	"Token":               "`token` allows 8 to 128 length.",
 	"AgreeTermsOfService": "`agreeTermsOfService` allows `yes` or `no`.",
-	"NotMinor": "`notMinor` allows `yes` or `no`.",
-	"NewToken": "`newToken` allows 8 to 128 length.",
-	"GraphId": "`graphId` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 16 length.",
-	"UnitType": "`unit` allows `int` or `float`.",
-	"Color": "`color` allows `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`.",
-	"Date": "`date` format is `yyyyMMdd`.",
-	"Quantity": "`quantity` allows value of int or float.",
-	"WebhookType": "`type` allows `increment` or `decrement`.",
-	"OptionalData": "`optionalData` is under 10k JSON string.",
-	"SelfSufficient": "`selfSufficient` allows `increment` or `decrement`.",
+	"NotMinor":            "`notMinor` allows `yes` or `no`.",
+	"NewToken":            "`newToken` allows 8 to 128 length.",
+	"GraphId":             "`graphId` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 16 length.",
+	"UnitType":            "`unit` allows `int` or `float`.",
+	"Color":               "`color` allows `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`.",
+	"Date":                "`date` format is `yyyyMMdd`.",
+	"Quantity":            "`quantity` allows value of int or float.",
+	"WebhookType":         "`type` allows `increment` or `decrement`.",
+	"OptionalData":        "`optionalData` is under 10k JSON string.",
+	"SelfSufficient":      "`selfSufficient` allows `increment` or `decrement`.",
 }
 
 func (pv *Validator) Validate(i interface{}) error {
@@ -67,7 +67,7 @@ func (pv *Validator) Validate(i interface{}) error {
 	var errorMessages []string
 
 	if err != nil {
-		for _, err := range err.(validator.ValidationErrors){
+		for _, err := range err.(validator.ValidationErrors) {
 			errorMessages = append(errorMessages, validationErrorMessages[err.Field()])
 		}
 
@@ -135,11 +135,6 @@ func quantityValidator(fl validator.FieldLevel) bool {
 // optionalData validator
 func optionalDataValidator(fl validator.FieldLevel) bool {
 	optionalData := fl.Field().String()
-
-	// empty string
-	if len(optionalData) == 0 {
-		return true
-	}
 
 	if len(optionalData) > 10240 || !json.Valid([]byte(optionalData)) {
 		return false
