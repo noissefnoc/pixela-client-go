@@ -12,6 +12,9 @@ func TestPixela_CreateUser(t *testing.T) {
 	tests := testCases{
 		{"normal case", sucStatus, scResp, nil, []string{"yes", "yes"}},
 		{"status error", errStatus, errResp, respErr, []string{"yes", "yes"}},
+		{"not agree statement", errStatus, errResp, respErr, []string{"no", "yes"}},
+		{"not minor use", errStatus, errResp, respErr, []string{"yes", "no"}},
+		{"entire disagree statement", errStatus, errResp, respErr, []string{"no", "no"}},
 	}
 
 	subCommandTestHelper(t, userCreate, tests, userCreateUrl)
