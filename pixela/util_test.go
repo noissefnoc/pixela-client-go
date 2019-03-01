@@ -37,6 +37,7 @@ var errStatus = http.StatusBadRequest
 // response
 var scResp, _ = json.Marshal(NoneGetResponseBody{Message: "success", IsSuccess: true})
 var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuccess: false})
+var ivResp = []byte("hoge")
 var pixelRespWOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr, OptionalData: `{"key": "value"}`})
 var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
 var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, graphId, webhookType}}})
