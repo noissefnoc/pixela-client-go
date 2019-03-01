@@ -10,3 +10,6 @@ dist
 
 # macOS preview file
 .DS_Store
+
+# coverage files
+cover.*
