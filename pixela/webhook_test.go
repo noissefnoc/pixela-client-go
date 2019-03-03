@@ -8,8 +8,13 @@ import (
 func TestPixela_CreateWebhook(t *testing.T) {
 	webhookCreateUrl := fmt.Sprintf("%s/v1/users/%s/webhooks", baseUrl, username)
 
+	ivGraphIdErr := newCommandError(webhookCreate, "wrong arguments: "+validationErrorMessages["GraphId"])
+	ivWebhookTypeErr := newCommandError(webhookCreate, "wrong arguments: "+validationErrorMessages["WebhookType"])
+
 	tests := testCases{
 		{"normal case", sucStatus, scResp, nil, []string{graphId, "increment"}},
+		{"invalid graph id", 0, nil, ivGraphIdErr, []string{"0000", "increment"}},
+		{"invalid webhook type", 0, nil, ivWebhookTypeErr, []string{graphId, "hoge"}},
 	}
 
 	subCommandTestHelper(t, webhookCreate, tests, webhookCreateUrl)
