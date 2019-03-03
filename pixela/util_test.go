@@ -203,7 +203,14 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 			case graphCreate:
 				_, err = pixela.CreateGraph(tt.args[0], tt.args[1], tt.args[2], tt.args[3], tt.args[4], tt.args[5], tt.args[6])
 			case graphUpdate:
-				_, err = pixela.UpdateGraph(tt.args[0], tt.args[1], tt.args[2], tt.args[3], tt.args[4], tt.args[5], tt.args[6])
+				payload := UpdateGraphPayload{
+					tt.args[1],
+					tt.args[2],
+					tt.args[3],
+					tt.args[4],
+					[]string{tt.args[5]},
+				}
+				_, err = pixela.UpdateGraph(tt.args[0], payload)
 			default:
 				t.Fatalf("unexpected cmd %s", cmd)
 			}
