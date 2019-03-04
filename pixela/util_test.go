@@ -54,6 +54,7 @@ const (
 	pixelInc
 	pixelDec
 	pixelDelete
+	pixelUpdate
 	webhookCreate
 	webhookGet
 	webhookInvoke
@@ -80,6 +81,8 @@ func (c subCommand) String() string {
 		return "pixel dec"
 	case pixelDelete:
 		return "pixel delete"
+	case pixelUpdate:
+		return "pixel update"
 	case webhookCreate:
 		return "webhook create"
 	case webhookGet:
@@ -153,7 +156,7 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 					if req.Method != http.MethodPost {
 						t.Fatalf("want %#v, but got %#v", "POST", req.Method)
 					}
-				case userUpdate, pixelInc, pixelDec, graphUpdate:
+				case userUpdate, pixelInc, pixelDec, pixelUpdate, graphUpdate:
 					if req.Method != http.MethodPut {
 						t.Fatalf("want %#v, but got %#v", "PUT", req.Method)
 					}
@@ -192,6 +195,8 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 				_, err = pixela.DecPixel(tt.args[0])
 			case pixelDelete:
 				_, err = pixela.DeletePixel(tt.args[0], tt.args[1])
+			case pixelUpdate:
+				_, err = pixela.UpdatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
 			case webhookCreate:
 				_, err = pixela.CreateWebhook(tt.args[0], tt.args[1])
 			case webhookGet:

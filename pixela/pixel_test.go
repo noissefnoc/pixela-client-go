@@ -91,3 +91,25 @@ func TestPixela_DeletePixel(t *testing.T) {
 
 	subCommandTestHelper(t, pixelDelete, tests, pixelDeleteUrl)
 }
+
+func TestPixela_UpdatePixel(t *testing.T) {
+	pixelUpdateUrl := fmt.Sprintf("%s/v1/users/%s/graphs/%s/%s", baseUrl, username, graphId, dateStr)
+
+	ivGraphIdErr := newCommandError(pixelUpdate, "wrong arguments: "+validationErrorMessages["GraphId"])
+	ivDateErr := newCommandError(pixelUpdate, "wrong arguments: "+validationErrorMessages["Date"])
+	ivQuantityErr := newCommandError(pixelUpdate, "wrong arguments: "+validationErrorMessages["Quantity"])
+	ivOptionalDataErr := newCommandError(pixelUpdate, "wrong arguments: "+validationErrorMessages["OptionalData"])
+	respErr := newCommandError(pixelUpdate, fmt.Sprintf("http request failed: returns none success status code: %d", errStatus))
+
+	tests := testCases{
+		{"normal case wo optionalData", sucStatus, scResp, nil, []string{graphId, dateStr, quantityStr, ""}},
+		{"normal case w optionalData", sucStatus, scResp, nil, []string{graphId, dateStr, quantityStr, `{"key": "value"}`}},
+		{"invalid graphId", 0, nil, ivGraphIdErr, []string{"0000", dateStr, quantityStr, ""}},
+		{"invalid date", 0, nil, ivDateErr, []string{graphId, "000A00", quantityStr, ""}},
+		{"invalid quantity", 0, nil, ivQuantityErr, []string{graphId, dateStr, "A", ""}},
+		{"invalid optionalData", 0, nil, ivOptionalDataErr, []string{graphId, dateStr, quantityStr, "A"}},
+		{"status error", errStatus, errResp, respErr, []string{graphId, dateStr, quantityStr, ""}},
+	}
+
+	subCommandTestHelper(t, pixelUpdate, tests, pixelUpdateUrl)
+}
