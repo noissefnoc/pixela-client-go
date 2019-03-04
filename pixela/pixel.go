@@ -66,6 +66,10 @@ func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: response parse failed")
+	}
+
 	return postResponseBody, nil
 }
 
@@ -152,6 +156,10 @@ func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel update`: response parse failed")
+	}
+
 	return postResponseBody, nil
 }
 
@@ -182,6 +190,10 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: response parse failed")
+	}
 
 	return postResponseBody, nil
 }
@@ -214,6 +226,10 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: response parse failed")
+	}
+
 	return postResponseBody, nil
 }
 
@@ -245,6 +261,10 @@ func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, er
 
 	deleteResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &deleteResponseBody)
+
+	if err != nil {
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel delete`: response parse failed")
+	}
 
 	return deleteResponseBody, nil
 }
