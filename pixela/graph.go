@@ -20,15 +20,17 @@ type CreateGraphPayload struct {
 }
 
 type GraphDefinitions struct {
-	Graphs []struct {
-		ID             string   `json:"id"`
-		Name           string   `json:"name"`
-		Unit           string   `json:"unit"`
-		Type           string   `json:"type"`
-		Color          string   `json:"color"`
-		Timezone       string   `json:"timezone"`
-		PurgeCacheURLs []string `json:"purgeCacheURLs"`
-	} `json:"graphs"`
+	Graphs []Graph `json:"graphs"`
+}
+
+type Graph struct {
+	ID             string   `json:"id"`
+	Name           string   `json:"name"`
+	Unit           string   `json:"unit"`
+	Type           string   `json:"type"`
+	Color          string   `json:"color"`
+	Timezone       string   `json:"timezone"`
+	PurgeCacheURLs []string `json:"purgeCacheURLs"`
 }
 
 type UpdateGraphPayload struct {

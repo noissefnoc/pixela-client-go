@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -41,6 +42,8 @@ var ivResp = []byte("hoge")
 var pixelRespWOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr, OptionalData: `{"key": "value"}`})
 var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
 var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, graphId, webhookType}}})
+var graphDefResp, _ = json.Marshal(GraphDefinitions{[]Graph{{graphId, graphName, graphUnit, numType, validColor, "Asia/Tokyo", []string{""}}}})
+var graphSvgResp = `<sgv>test</svg>`
 
 // sub commands
 type subCommand int
@@ -61,6 +64,9 @@ const (
 	webhookDelete
 	graphCreate
 	graphUpdate
+	graphDelete
+	graphDef
+	graphSvg
 )
 
 func (c subCommand) String() string {
@@ -95,6 +101,12 @@ func (c subCommand) String() string {
 		return "graph create"
 	case graphUpdate:
 		return "graph update"
+	case graphDelete:
+		return "graph delete"
+	case graphDef:
+		return "graph def"
+	case graphSvg:
+		return "graph svg"
 	}
 
 	panic("unknown value")
@@ -129,7 +141,7 @@ type testCase struct {
 
 type testCases []testCase
 
-func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url string) {
+func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr string) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			resp := &http.Response{
@@ -139,16 +151,38 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 			}
 
 			c := NewTestClient(func(req *http.Request) *http.Response {
-				if req.URL.String() != url {
-					t.Fatalf("want %#v, but got %#v", url, req.URL.String())
-				}
-
 				if req.Header.Get(tokenHeader) != token {
 					t.Fatalf("want %#v, but got %#v", token, req.Header.Get(tokenHeader))
 				}
 
 				switch cmd {
-				case pixelGet, webhookGet:
+				case graphSvg:
+					u, _ := url.Parse(urlStr)
+					date := tt.args[1]
+					mode := tt.args[2]
+
+					if len(date) != 0 || len(mode) != 0 {
+						q := u.Query()
+
+						if len(date) != 0 {
+							q.Set("date", date)
+						}
+
+						if len(mode) != 0 {
+							q.Set("mode", mode)
+						}
+						u.RawQuery = q.Encode()
+					}
+
+					urlStr = u.String()
+				default:
+					if req.URL.String() != urlStr {
+						t.Fatalf("want %#v, but got %#v", urlStr, req.URL.String())
+					}
+				}
+
+				switch cmd {
+				case pixelGet, webhookGet, graphDef, graphSvg:
 					if req.Method != http.MethodGet {
 						t.Fatalf("want %#v, but got %#v", "GET", req.Method)
 					}
@@ -216,6 +250,12 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, url str
 					[]string{tt.args[5]},
 				}
 				_, err = pixela.UpdateGraph(tt.args[0], payload)
+			case graphDelete:
+				_, err = pixela.DeleteGraph(tt.args[0])
+			case graphDef:
+				_, err = pixela.GetGraphDefinition()
+			case graphSvg:
+				_, err = pixela.GetGraphSvg(tt.args[0], tt.args[1], tt.args[2])
 			default:
 				t.Fatalf("unexpected cmd %s", cmd)
 			}
