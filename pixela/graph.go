@@ -7,7 +7,12 @@ import (
 	"github.com/pkg/errors"
 	"net/url"
 	"path"
+	"time"
 )
+
+var timeNowFunc = time.Now
+
+const timeFormat = "20060102"
 
 type CreateGraphPayload struct {
 	Id             string `json:"id"`
@@ -39,6 +44,10 @@ type UpdateGraphPayload struct {
 	Color          string   `json:"color,omitempty"`
 	Timezone       string   `json:"timezone,omitempty"`
 	PurgeCacheURLs []string `json:"purgeCacheURLs,omitempty"`
+}
+
+type PixelsDateList struct {
+	Pixels []string `json:"pixels"`
 }
 
 // create graph
@@ -242,4 +251,69 @@ func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
 	}
 
 	return postResponseBody, nil
+}
+
+// get graph pixels date list
+func (pixela *Pixela) GetGraphPixelsDateList(graphId, from, to string) (PixelsDateList, error) {
+	// argument validation
+	vf := validateField{
+		GraphId: graphId,
+		From:    from,
+		To:      to,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return PixelsDateList{}, errors.Wrap(err, "`graph pixels`: wrong arguments")
+	}
+
+	t := timeNowFunc()
+
+	if len(from) == 0 && len(to) == 0 {
+		from = t.AddDate(0, 0, -364).Format(timeFormat)
+		to = t.Format(timeFormat)
+	} else if len(from) != 0 && len(to) == 0 {
+		fromDate, _ := time.Parse(timeFormat, from) // ignore error because check date format before
+		to = fromDate.AddDate(0, 0, 364).Format(timeFormat)
+	} else if len(from) == 0 && len(to) != 0 {
+		toDate, _ := time.Parse(timeFormat, to) // ignore error because check date format before
+		from = toDate.AddDate(0, 0, -364).Format(timeFormat)
+	}
+
+	// build request url
+	u, _ := url.Parse(baseUrl)
+	u.Path = path.Join(u.Path, "v1", "users", pixela.Username, "graphs", graphId, "pixels")
+
+	// set query
+	if len(from) != 0 || len(to) != 0 {
+		q := u.Query()
+
+		if len(from) != 0 {
+			q.Set("from", from)
+		}
+
+		if len(to) != 0 {
+			q.Set("to", to)
+		}
+		u.RawQuery = q.Encode()
+	}
+
+	requestURL := u.String()
+
+	// do request
+	responseBody, err := pixela.get(requestURL)
+
+	if err != nil {
+		return PixelsDateList{}, errors.Wrap(err, "`graph pixels`: http request failed")
+	}
+
+	pixelsDateList := PixelsDateList{}
+	err = json.Unmarshal(responseBody, &pixelsDateList)
+
+	if err != nil {
+		return PixelsDateList{}, errors.Wrap(err, "`graph delete`: http response parse failed")
+	}
+
+	return pixelsDateList, nil
 }

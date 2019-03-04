@@ -27,6 +27,7 @@ see official document (https://docs.pixe.la) for more detail`,
 	graphCmd.AddCommand(newGraphDeleteCmd())
 	graphCmd.AddCommand(newGraphDefCmd())
 	graphCmd.AddCommand(newGraphSvgCmd())
+	graphCmd.AddCommand(newGraphPixelsDateCmd())
 
 	return graphCmd
 }
@@ -231,7 +232,7 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 			responseJSON, err := json.Marshal(response)
 
 			if err != nil {
-				return errors.Wrap(err, "pixela response parse error: ")
+				return errors.Wrap(err, "response parse error: ")
 			}
 
 			// print result
@@ -286,4 +287,54 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 	graphSvgCmd.Flags().StringP("mode", "", "", "mode")
 
 	return graphSvgCmd
+}
+
+func newGraphPixelsDateCmd() *cobra.Command {
+	graphPixelsDateCmd := &cobra.Command{
+		Use:   "pixels",
+		Short: "get graph pixels list",
+		Long: `get graph pixels list. Usage:
+
+$ pixela graph pixels <graph id> [--from=yyyyMMdd] [--to=yyyyMMdd]
+
+see official document (https://docs.pixe.la/#/get-graph-pixels) for more detail.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			// check arguments
+			if len(args) != 1 {
+				return errors.New(fmt.Sprintf("argument error: `graph pixels` requires 1 argument give %d arguments.", len(args)))
+			}
+
+			// do request
+			client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), viper.GetBool("verbose"))
+
+			if err != nil {
+				return err
+			}
+
+			from, _ := cmd.Flags().GetString("from")
+			to, _ := cmd.Flags().GetString("to")
+
+			response, err := client.GetGraphPixelsDateList(args[0], from, to)
+
+			if err != nil {
+				return errors.Wrap(err, "request error: ")
+			}
+
+			responseJSON, err := json.Marshal(response)
+
+			if err != nil {
+				return errors.Wrap(err, "response parse error: ")
+			}
+
+			// print result
+			cui.Outputln(string(responseJSON))
+
+			return nil
+		},
+	}
+
+	graphPixelsDateCmd.Flags().StringP("from", "", "", "from")
+	graphPixelsDateCmd.Flags().StringP("to", "", "", "to")
+
+	return graphPixelsDateCmd
 }

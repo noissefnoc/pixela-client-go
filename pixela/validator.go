@@ -22,6 +22,8 @@ type validateField struct {
 	UnitType            string `validate:"omitempty,oneof=int float"`
 	Color               string `validate:"omitempty,oneof=shibafu momiji sora ichou ajisai kuro"`
 	Date                string `validate:"omitempty,date"`
+	From                string `validate:"omitempty,date"`
+	To                  string `validate:"omitempty,date"`
 	Quantity            string `validate:"omitempty,quantity"`
 	WebhookType         string `validate:"omitempty,oneof=increment decrement"`
 	OptionalData        string `validate:"omitempty,optionaldata"`
@@ -55,6 +57,8 @@ var validationErrorMessages = map[string]string{
 	"UnitType":            "`unit` allows `int` or `float`.",
 	"Color":               "`color` allows `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`.",
 	"Date":                "`date` format is `yyyyMMdd`.",
+	"From":                "`from` format is `yyyyMMdd`.",
+	"To":                  "`to` format is `yyyyMMdd`.",
 	"Quantity":            "`quantity` allows value of int or float.",
 	"WebhookType":         "`type` allows `increment` or `decrement`.",
 	"OptionalData":        "`optionalData` is under 10k JSON string.",
