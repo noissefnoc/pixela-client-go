@@ -96,11 +96,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	response, err := pixela.HTTPClient.Do(request)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "pixel record http request failed")
-	}
-
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
+		return nil, errors.Wrap(err, "http post request failed")
 	}
 
 	// parse response
@@ -109,19 +105,19 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response read failed")
+		return nil, errors.Wrap(err, "post response read failed")
 	}
 
 	responseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response body parse failed")
+		return nil, errors.Wrap(err, "post response body parse failed")
 	}
 
 	// check response body if request success
-	if !responseBody.IsSuccess {
-		return nil, errors.New(fmt.Sprintf("request failed: %s", responseBody.Message))
+	if response.StatusCode != http.StatusOK && !responseBody.IsSuccess {
+		return nil, errors.New(fmt.Sprintf("post request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil
@@ -142,11 +138,7 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 	response, err := pixela.HTTPClient.Do(request)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "pixel record http request failed")
-	}
-
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
+		return nil, errors.Wrap(err, "http get request failed")
 	}
 
 	// parse response
@@ -155,7 +147,18 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response read failed")
+		return nil, errors.Wrap(err, "get response read failed")
+	}
+
+	if response.StatusCode != http.StatusOK {
+		responseBody := NoneGetResponseBody{}
+		err = json.Unmarshal(responseBodyJSON, &responseBody)
+
+		if err != nil {
+			return nil, errors.Wrap(err, "get response parse failed")
+		}
+
+		return nil, errors.New(fmt.Sprintf("get request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil
@@ -185,11 +188,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	response, err := pixela.HTTPClient.Do(request)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "http request failed")
-	}
-
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
+		return nil, errors.Wrap(err, "http put request failed")
 	}
 
 	// parse response
@@ -198,19 +197,19 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 	responseBodyJSON, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response read failed")
+		return nil, errors.Wrap(err, "put response read failed")
 	}
 
 	responseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response body parse failed")
+		return nil, errors.Wrap(err, "put response body parse failed")
 	}
 
 	// check response body if request success
-	if !responseBody.IsSuccess {
-		return nil, errors.New(fmt.Sprintf("request failed: %s", responseBody.Message))
+	if response.StatusCode != http.StatusOK && !responseBody.IsSuccess {
+		return nil, errors.New(fmt.Sprintf("put request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil
@@ -234,10 +233,6 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 		return nil, errors.Wrap(err, "http delete request failed")
 	}
 
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("returns none success status code: %d", response.StatusCode))
-	}
-
 	// parse response
 	defer response.Body.Close()
 
@@ -251,12 +246,12 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 	err = json.Unmarshal(responseBodyJSON, &responseBody)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "response body parse failed")
+		return nil, errors.Wrap(err, "delete response body parse failed")
 	}
 
 	// check response body if request success
-	if !responseBody.IsSuccess {
-		return nil, errors.New(fmt.Sprintf("request failed: %s", responseBody.Message))
+	if response.StatusCode != http.StatusOK && !responseBody.IsSuccess {
+		return nil, errors.New(fmt.Sprintf("delete request failed: %s", responseBody.Message))
 	}
 
 	return responseBodyJSON, nil

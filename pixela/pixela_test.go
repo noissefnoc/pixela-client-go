@@ -54,8 +54,8 @@ func TestPixela_post(t *testing.T) {
 		{"normal case without payload", nil, 200, bytes.NewBuffer(scResp), nil},
 		{"normal case with payload", bytes.NewBufferString(`{"key": "value"}`), 200, bytes.NewBuffer(scResp), nil},
 		{"some error occurred", nil, 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
-		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
-		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("response body parse failed: invalid character 'e' looking for beginning of value")},
+		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("post request failed: errorMessage")},
+		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("post response body parse failed: invalid character 'e' looking for beginning of value")},
 	}
 
 	for _, tt := range tests {
@@ -114,7 +114,7 @@ func TestPixela_get(t *testing.T) {
 		wantErr    error
 	}{
 		{"normal case", 200, bytes.NewBufferString("success"), nil},
-		{"response status not ok", 403, bytes.NewBufferString("error"), errors.New("returns none success status code: 403")},
+		{"response status not ok", 403, bytes.NewBuffer(errResp), errors.New("get request failed: errorMessage")},
 	}
 
 	for _, tt := range tests {
@@ -166,8 +166,8 @@ func TestPixela_put(t *testing.T) {
 		{"normal case without payload", nil, 200, bytes.NewBuffer(scResp), nil},
 		{"normal case with payload", bytes.NewBufferString(`{"key": "value"}`), 200, bytes.NewBuffer(scResp), nil},
 		{"some error occurred", nil, 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
-		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
-		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("response body parse failed: invalid character 'e' looking for beginning of value")},
+		{"response status not ok", nil, 403, bytes.NewBuffer(errResp), errors.New("put request failed: errorMessage")},
+		{"server return invalid response", nil, 200, bytes.NewBufferString("error"), errors.New("put response body parse failed: invalid character 'e' looking for beginning of value")},
 	}
 
 	for _, tt := range tests {
@@ -227,8 +227,8 @@ func TestPixela_delete(t *testing.T) {
 	}{
 		{"normal case", 200, bytes.NewBuffer(scResp), nil},
 		{"some error occurred", 200, bytes.NewBuffer(errResp), errors.New("request failed: errorMessage")},
-		{"response status not ok", 403, bytes.NewBuffer(errResp), errors.New("returns none success status code: 403")},
-		{"server return invalid response", 200, bytes.NewBufferString("error"), errors.New("response body parse failed: invalid character 'e' looking for beginning of value")},
+		{"response status not ok", 403, bytes.NewBuffer(errResp), errors.New("delete request failed: errorMessage")},
+		{"server return invalid response", 200, bytes.NewBufferString("error"), errors.New("delete response body parse failed: invalid character 'e' looking for beginning of value")},
 	}
 
 	for _, tt := range tests {

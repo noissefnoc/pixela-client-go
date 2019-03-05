@@ -312,7 +312,7 @@ func (pixela *Pixela) GetGraphPixelsDateList(graphId, from, to string) (PixelsDa
 	err = json.Unmarshal(responseBody, &pixelsDateList)
 
 	if err != nil {
-		return PixelsDateList{}, errors.Wrap(err, "`graph delete`: http response parse failed")
+		return PixelsDateList{}, errors.Wrap(err, "`graph pixels`: http response parse failed")
 	}
 
 	return pixelsDateList, nil
