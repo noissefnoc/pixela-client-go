@@ -94,3 +94,20 @@ func TestPixela_GetGraphDefinition(t *testing.T) {
 
 	subCommandTestHelper(t, graphDef, tests, graphDefUrl)
 }
+
+func TestPixela_GetGraphPixelsDateList(t *testing.T) {
+	graphGetPixelsDateUrl := fmt.Sprintf("%s/v1/users/%s/graphs/%s/pixels", baseUrl, username, graphId)
+
+	respDataErr := newCommandError(graphPixels, "http request failed: get request failed: errorMessage")
+
+	tests := testCases{
+		{"normal case w full option", sucStatus, graphPixelsResp, nil, []string{graphId, "20190101", "20190102"}},
+		{"normal case wo from", sucStatus, graphPixelsResp, nil, []string{graphId, "", "20190102"}},
+		{"normal case wo to", sucStatus, graphPixelsResp, nil, []string{graphId, "20190101", ""}},
+		{"normal case wo from and to", sucStatus, graphPixelsResp, nil, []string{graphId, "", ""}},
+		{"invalid response status", errStatus, errResp, respDataErr, []string{graphId, "", ""}},
+		{"invalid response data", sucStatus, errResp, respDataErr, []string{graphId, "", ""}},
+	}
+
+	subCommandTestHelper(t, graphPixels, tests, graphGetPixelsDateUrl)
+}

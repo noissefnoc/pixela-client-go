@@ -44,6 +44,7 @@ var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
 var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, graphId, webhookType}}})
 var graphDefResp, _ = json.Marshal(GraphDefinitions{[]Graph{{graphId, graphName, graphUnit, numType, validColor, "Asia/Tokyo", []string{""}}}})
 var graphSvgResp = `<sgv>test</svg>`
+var graphPixelsResp, _ = json.Marshal(PixelsDateList{[]string{"20190101", "20190102"}})
 
 // sub commands
 type subCommand int
@@ -67,6 +68,7 @@ const (
 	graphDelete
 	graphDef
 	graphSvg
+	graphPixels
 )
 
 func (c subCommand) String() string {
@@ -107,6 +109,8 @@ func (c subCommand) String() string {
 		return "graph def"
 	case graphSvg:
 		return "graph svg"
+	case graphPixels:
+		return "graph pixels"
 	}
 
 	panic("unknown value")
@@ -170,6 +174,25 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 
 						if len(mode) != 0 {
 							q.Set("mode", mode)
+						}
+						u.RawQuery = q.Encode()
+					}
+
+					urlStr = u.String()
+				case graphPixels:
+					u, _ := url.Parse(urlStr)
+					from := tt.args[1]
+					to := tt.args[2]
+
+					if len(from) != 0 || len(to) != 0 {
+						q := u.Query()
+
+						if len(from) != 0 {
+							q.Set("from", from)
+						}
+
+						if len(to) != 0 {
+							q.Set("to", to)
 						}
 						u.RawQuery = q.Encode()
 					}
@@ -256,6 +279,8 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 				_, err = pixela.GetGraphDefinition()
 			case graphSvg:
 				_, err = pixela.GetGraphSvg(tt.args[0], tt.args[1], tt.args[2])
+			case graphPixels:
+				_, err = pixela.GetGraphPixelsDateList(tt.args[0], tt.args[1], tt.args[2])
 			default:
 				t.Fatalf("unexpected cmd %s", cmd)
 			}
