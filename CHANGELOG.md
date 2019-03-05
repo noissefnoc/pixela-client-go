@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.0.2] - 2019-03-06
+
 ### Added
 
 * User input validation according to official document validation rule.
@@ -10,7 +13,8 @@
 * `pixel create` and `pixel update` accept `optionalData` flag.
 * `graph svg` accept `date` and `mode` flag.
 * `graph create` accept `selfSufficient` flag.
- `graph update` accept `selfSufficient` flag.
+* `graph update` accept `selfSufficient` flag.
+* `graph pixels` subcommand
 
 
 ## [0.0.1] - 2019-01-14

@@ -61,14 +61,14 @@ USAGE:
     pixela [global options] command [command options] [arguments...]
 
 VERSION:
-    0.0.1
+    0.0.2
     
 AUTHOR:
     noissefnoc <noissefnoc@gmail.com>
     
 COMMANDS:
     user    Create, Update token, Delete user
-    graph   Create, Get definition, Get SVG data, Update definition, Delete graph
+    graph   Create, Get definition, Get SVG data, Update definition, Delete graph, Get pixels date
     pixel   Create, Get, Increment, Decrement, Update, Delete pixel
     webhook Create, Get, Invoke, Delete webhook
     
