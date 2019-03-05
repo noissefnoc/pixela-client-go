@@ -3,7 +3,16 @@
 ## [Unreleased]
 
 
-## [0.0.2] - 2019-03-06
+## [0.0.3] - 2019-03-06
+
+### Added
+
+* `graph create` accept `selfSufficient` flag.
+* `graph update` accept `selfSufficient` flag.
+* `graph pixels` subcommand
+
+
+## [0.0.2] - 2019-01-28
 
 ### Added
 
@@ -12,9 +21,6 @@
 * `user create` subcommand now detect `agreeTermsOfService` and `notMinor` as flag option.
 * `pixel create` and `pixel update` accept `optionalData` flag.
 * `graph svg` accept `date` and `mode` flag.
-* `graph create` accept `selfSufficient` flag.
-* `graph update` accept `selfSufficient` flag.
-* `graph pixels` subcommand
 
 
 ## [0.0.1] - 2019-01-14
