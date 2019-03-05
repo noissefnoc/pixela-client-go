@@ -85,7 +85,9 @@ Get from [Github release page](https://github.com/noissefnoc/pixela-client-go/re
 
 ### From homebrew (for macOS user)
 
-homebrew is currently being prepared.
+```
+$ brew install noissefnoc/tap/pixela
+```
 
 ### From source code
 
