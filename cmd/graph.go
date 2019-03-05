@@ -295,7 +295,7 @@ func newGraphPixelsDateCmd() *cobra.Command {
 		Short: "get graph pixels list",
 		Long: `get graph pixels list. Usage:
 
-$ pixela graph pixels <graph id> [--from=yyyyMMdd] [--to=yyyyMMdd]
+$ pixela graph pixels <graph id> [--from yyyyMMdd] [--to yyyyMMdd]
 
 see official document (https://docs.pixe.la/#/get-graph-pixels) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
