@@ -10,6 +10,7 @@
 * `graph create` accept `selfSufficient` flag.
 * `graph update` accept `selfSufficient` flag.
 * `graph pixels` subcommand
+*  now install via `homebrew` 
 
 
 ## [0.0.2] - 2019-01-28
