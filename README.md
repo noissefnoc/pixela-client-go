@@ -1,7 +1,5 @@
 # pixela-client-go
 
-THIS IS VERY ALPHA VERSION. API COULD CHANGE.
-
 [pixela-client-go](https://github.com/noissefnoc/pixela-client-go) is unofficial [pixe.la](https://pixe.la) API client & CLI written by golang.
 
 This program build and check with Go 1.11.
