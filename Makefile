@@ -21,6 +21,7 @@ cross-build:
 	for os in darwin linux windows; do \
 		for arch in amd64; do \
 			GOOS=$$os GOARCH=$$arch CGO_ENABLED=0 go build -a -tags netgo -installsuffix netgo $(LDFLAGS) -o dist/$$os-$$arch/$(NAME); \
+			zip dist/$$os-$$arch/$(NAME)_$(VERSION)_$$os_$$arch.zip dist/$$os-$$arch/$(NAME); \
 		done; \
 	done
 
