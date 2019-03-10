@@ -1,5 +1,8 @@
 # pixela-client-go
 
+[![Build Status](https://travis-ci.org/noissefnoc/pixela-client-go.svg?branch=master)](https://travis-ci.org/noissefnoc/pixela-client-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/noissefnoc/pixela-client-go)](https://goreportcard.com/report/github.com/noissefnoc/pixela-client-go)
+
 [pixela-client-go](https://github.com/noissefnoc/pixela-client-go) is unofficial [pixe.la](https://pixe.la) API client & CLI written by golang.
 
 This program build and check with Go 1.11.
