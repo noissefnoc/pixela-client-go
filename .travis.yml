@@ -2,9 +2,6 @@ language: go
 
 go: 1.11.x
 
-install:
-  - make dep
-  - dep ensure
-  - ls -ltr vendor
+install: make deps
 
 script: make test
