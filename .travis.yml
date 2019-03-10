@@ -4,6 +4,6 @@ go: 1.11.x
 
 install:
   - make dep
-  - $GOPATH/bin/dep ensure
+  - dep ensure
 
 script: make test
