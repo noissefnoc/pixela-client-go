@@ -2,8 +2,8 @@ language: go
 
 go: 1.11.x
 
-before_install: export PATH=$HOME/gopath/bin:$PATH
-
-install: make deps
+install:
+  - make dep
+  - $GOPATH/bin/dep ensure
 
 script: make test
