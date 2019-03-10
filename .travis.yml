@@ -2,7 +2,7 @@ language: go
 
 go: 1.11.x
 
-before_script: export PATH=$HOME/gopath/bin:$PATH
+before_install: export PATH=$HOME/gopath/bin:$PATH
 
 install: make deps
 
