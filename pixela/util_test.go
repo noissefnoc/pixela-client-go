@@ -70,46 +70,31 @@ const (
 	graphPixels
 )
 
+var subCommandStringMap = map[subCommand]string{
+	userCreate:    "user create",
+	userUpdate:    "user update",
+	userDelete:    "user delete",
+	pixelCreate:   "pixel create",
+	pixelGet:      "pixel get",
+	pixelInc:      "pixel inc",
+	pixelDec:      "pixel dec",
+	pixelDelete:   "pixel delete",
+	pixelUpdate:   "pixel update",
+	webhookCreate: "webhook create",
+	webhookGet:    "webhook get",
+	webhookInvoke: "webhook invoke",
+	webhookDelete: "webhook delete",
+	graphCreate:   "graph create",
+	graphUpdate:   "graph update",
+	graphDelete:   "graph delete",
+	graphDef:      "graph def",
+	graphSvg:      "graph svg",
+	graphPixels:   "graph pixels",
+}
+
 func (c subCommand) String() string {
-	switch c {
-	case userCreate:
-		return "user create"
-	case userUpdate:
-		return "user update"
-	case userDelete:
-		return "user delete"
-	case pixelCreate:
-		return "pixel create"
-	case pixelGet:
-		return "pixel get"
-	case pixelInc:
-		return "pixel inc"
-	case pixelDec:
-		return "pixel dec"
-	case pixelDelete:
-		return "pixel delete"
-	case pixelUpdate:
-		return "pixel update"
-	case webhookCreate:
-		return "webhook create"
-	case webhookGet:
-		return "webhook get"
-	case webhookInvoke:
-		return "webhook invoke"
-	case webhookDelete:
-		return "webhook delete"
-	case graphCreate:
-		return "graph create"
-	case graphUpdate:
-		return "graph update"
-	case graphDelete:
-		return "graph delete"
-	case graphDef:
-		return "graph def"
-	case graphSvg:
-		return "graph svg"
-	case graphPixels:
-		return "graph pixels"
+	if stringer, ok := subCommandStringMap[c]; ok {
+		return stringer
 	}
 
 	panic("unknown value")
@@ -145,6 +130,8 @@ type testCase struct {
 type testCases []testCase
 
 func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr string) {
+	orgURLStr := urlStr
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			resp := &http.Response{
@@ -153,20 +140,20 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 				Header:     make(http.Header),
 			}
 
+			switch cmd {
+			case graphSvg:
+				urlStr = queryBuilder(orgURLStr, "date", tt.args[1], "mode", tt.args[2])
+			case graphPixels:
+				urlStr = queryBuilder(orgURLStr, "from", tt.args[1], "to", tt.args[2])
+			}
+
 			c := NewTestClient(func(req *http.Request) *http.Response {
 				if req.Header.Get(tokenHeader) != token {
 					t.Fatalf("want %#v, but got %#v", token, req.Header.Get(tokenHeader))
 				}
 
-				switch cmd {
-				case graphSvg:
-					urlStr = queryBuilder(urlStr, "date", tt.args[1], "mode", tt.args[2])
-				case graphPixels:
-					urlStr = queryBuilder(urlStr, "from", tt.args[1], "to", tt.args[2])
-				default:
-					if req.URL.String() != urlStr {
-						t.Fatalf("want %#v, but got %#v", urlStr, req.URL.String())
-					}
+				if req.URL.String() != urlStr {
+					t.Fatalf("want %#v, but got %#v", urlStr, req.URL.String())
 				}
 
 				switch cmd {
@@ -268,6 +255,7 @@ func subCommandMethodCall(pixela *Pixela, tt testCase, cmd subCommand) error {
 
 func queryBuilder(urlStr, key1, value1, key2, value2 string) string {
 	u, _ := url.Parse(urlStr)
+
 	if len(value1) != 0 || len(value2) != 0 {
 		q := u.Query()
 

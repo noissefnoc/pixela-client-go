@@ -7,12 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"net/url"
 	"path"
-	"time"
 )
-
-var timeNowFunc = time.Now
-
-const timeFormat = "20060102"
 
 // CreateGraphPayload is payload for `graph create` subcommand
 type CreateGraphPayload struct {
@@ -271,19 +266,6 @@ func (pixela *Pixela) GetGraphPixelsDateList(graphID, from, to string) (PixelsDa
 
 	if err != nil {
 		return PixelsDateList{}, errors.Wrap(err, "`graph pixels`: wrong arguments")
-	}
-
-	t := timeNowFunc()
-
-	if len(from) == 0 && len(to) == 0 {
-		from = t.AddDate(0, 0, -364).Format(timeFormat)
-		to = t.Format(timeFormat)
-	} else if len(from) != 0 && len(to) == 0 {
-		fromDate, _ := time.Parse(timeFormat, from) // ignore error because check date format before
-		to = fromDate.AddDate(0, 0, 364).Format(timeFormat)
-	} else if len(from) == 0 && len(to) != 0 {
-		toDate, _ := time.Parse(timeFormat, to) // ignore error because check date format before
-		from = toDate.AddDate(0, 0, -364).Format(timeFormat)
 	}
 
 	// build request url
