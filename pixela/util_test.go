@@ -92,6 +92,28 @@ var subCommandStringMap = map[subCommand]string{
 	graphPixels:   "graph pixels",
 }
 
+var subCommandMethodMap = map[subCommand]string{
+	userCreate:    http.MethodPost,
+	userUpdate:    http.MethodPut,
+	userDelete:    http.MethodDelete,
+	pixelCreate:   http.MethodPost,
+	pixelGet:      http.MethodGet,
+	pixelInc:      http.MethodPut,
+	pixelDec:      http.MethodPut,
+	pixelDelete:   http.MethodDelete,
+	pixelUpdate:   http.MethodPut,
+	webhookCreate: http.MethodPost,
+	webhookGet:    http.MethodGet,
+	webhookInvoke: http.MethodPost,
+	webhookDelete: http.MethodDelete,
+	graphCreate:   http.MethodPost,
+	graphUpdate:   http.MethodPut,
+	graphDelete:   http.MethodDelete,
+	graphDef:      http.MethodGet,
+	graphSvg:      http.MethodGet,
+	graphPixels:   http.MethodGet,
+}
+
 func (c subCommand) String() string {
 	if stringer, ok := subCommandStringMap[c]; ok {
 		return stringer
@@ -156,28 +178,15 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 					t.Fatalf("want %#v, but got %#v", urlStr, req.URL.String())
 				}
 
-				switch cmd {
-				case pixelGet, webhookGet, graphDef, graphSvg:
-					if req.Method != http.MethodGet {
-						t.Fatalf("want %#v, but got %#v", "GET", req.Method)
-					}
-				case userCreate, pixelCreate, webhookCreate, webhookInvoke, graphCreate:
-					if req.Method != http.MethodPost {
-						t.Fatalf("want %#v, but got %#v", "POST", req.Method)
-					}
-				case userUpdate, pixelInc, pixelDec, pixelUpdate, graphUpdate:
-					if req.Method != http.MethodPut {
-						t.Fatalf("want %#v, but got %#v", "PUT", req.Method)
+				if method, ok := subCommandMethodMap[cmd]; ok {
+					if req.Method != method {
+						t.Fatalf("want %#v, but got %#v", method, req.Method)
 					}
 
 					if cmd == pixelInc || cmd == pixelDec {
 						if req.Header.Get(contentLength) != contentZeroLen {
 							t.Fatalf("want %#v, but got %#v", contentZeroLen, req.Header.Get(contentLength))
 						}
-					}
-				case userDelete, pixelDelete, webhookDelete:
-					if req.Method != http.MethodDelete {
-						t.Fatalf("want %#v, but got %#v", "DELETE", req.Method)
 					}
 				}
 
