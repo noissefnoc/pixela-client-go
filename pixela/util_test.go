@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -132,7 +131,7 @@ func NewTestClient(fn RoundTripFunc) *http.Client {
 }
 
 func newCommandError(command subCommand, message string) error {
-	return errors.New(fmt.Sprintf("`%s`: %s", command, message))
+	return fmt.Errorf("`%s`: %s", command, message)
 }
 
 type testCase struct {
