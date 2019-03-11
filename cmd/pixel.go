@@ -45,7 +45,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 3 {
-				return errors.New(fmt.Sprintf("argument error: `pixel create` requires 3 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `pixel create` requires 3 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -91,7 +91,7 @@ see official document (https://docs.pixe.la/#/get-pixel) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 2 {
-				return errors.New(fmt.Sprintf("argument error: `pixel record` requires 2 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `pixel record` requires 2 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -135,7 +135,7 @@ see official document (https://docs.pixe.la/#/put-pixel) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 3 {
-				return errors.New(fmt.Sprintf("argument error: `pixel update` requires 3 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `pixel update` requires 3 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -189,7 +189,7 @@ see official document (https://docs.pixe.la/#/delete-pixel) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 2 {
-				return errors.New(fmt.Sprintf("argument error: `pixel delete` requires 2 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `pixel delete` requires 2 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -235,7 +235,7 @@ see official document (https://docs.pixe.la/#/increment-pixel) for more detail.`
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `pixel inc` requires 1 arguments give %d arguments.\n\n", len(args)))
+				return fmt.Errorf("argument error: `pixel inc` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -281,7 +281,7 @@ see official document (https://docs.pixe.la/#/decrement-pixel) for more detail.`
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `pixel dec` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `pixel dec` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request

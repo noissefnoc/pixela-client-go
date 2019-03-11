@@ -42,7 +42,7 @@ see official document (https://docs.pixe.la/#/post-webhook) for more detail.`,
 			// check arguments
 			// TODO: add timezone option later
 			if len(args) != 2 {
-				return errors.New(fmt.Sprintf("argument error: `webhook create` requires 2 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `webhook create` requires 2 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -89,7 +89,7 @@ see official document (https://docs.pixe.la/#/get-webhook) for more detail.`,
 			// check arguments
 			// TODO: add timezone option later
 			if len(args) != 0 {
-				return errors.New(fmt.Sprintf("argument error: `webhook get` requires 0 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `webhook get` requires 0 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -134,7 +134,7 @@ see official document (https://docs.pixe.la/#/invoke-webhook) for more detail.`,
 			// check arguments
 			// TODO: add timezone option later
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `webhook create` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `webhook create` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -181,7 +181,7 @@ see official document (https://docs.pixe.la/#/delete-webhook) for more detail.`,
 			// check arguments
 			// TODO: add timezone option later
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `webhook delete` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `webhook delete` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request

@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// CreateUserPayload is payload for `user create` subcommand
 type CreateUserPayload struct {
 	Username            string `json:"username"`
 	Token               string `json:"token"`
@@ -14,11 +15,12 @@ type CreateUserPayload struct {
 	NotMinor            string `json:"notMinor"`
 }
 
+// UpdateUserPayload is payload for `user update` subcommand
 type UpdateUserPayload struct {
 	NewToken string `json:"newToken"`
 }
 
-// create user
+// CreateUser is method for `user create` subcommand
 func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
@@ -48,7 +50,7 @@ func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetR
 
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users", baseUrl)
+	requestURL := fmt.Sprintf("%s/v1/users", baseURL)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
@@ -67,7 +69,7 @@ func (pixela *Pixela) CreateUser(agreeTermsOfService, notMinor string) (NoneGetR
 	return postResponseBody, nil
 }
 
-// update user token
+// UpdateUser is method for `user update` subcommand
 func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
@@ -93,7 +95,7 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s", baseUrl, pixela.Username)
+	requestURL := fmt.Sprintf("%s/v1/users/%s", baseURL, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
@@ -112,11 +114,11 @@ func (pixela *Pixela) UpdateUser(newToken string) (NoneGetResponseBody, error) {
 	return postResponseBody, nil
 }
 
-// delete user
+// DeleteUser is method for `user delete` subcommand
 func (pixela *Pixela) DeleteUser() (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s", baseUrl, pixela.Username)
+	requestURL := fmt.Sprintf("%s/v1/users/%s", baseURL, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.delete(requestURL)

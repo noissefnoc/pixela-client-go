@@ -53,6 +53,7 @@ This command can handle user, graph, pixel and webhook via API.`,
 	return rootCmd
 }
 
+// Execute is method for wrapping command execution and catch panic
 func Execute(cui *rwi.RWI, args []string) (exit exitcode.ExitCode) {
 	defer func() {
 		// panic handling

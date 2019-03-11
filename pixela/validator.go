@@ -18,7 +18,7 @@ type validateField struct {
 	AgreeTermsOfService string `validate:"omitempty,oneof=yes no"`
 	NotMinor            string `validate:"omitempty,oneof=yes no"`
 	NewToken            string `validate:"omitempty,token"`
-	GraphId             string `validate:"omitempty,graphid"`
+	GraphID             string `validate:"omitempty,graphid"`
 	UnitType            string `validate:"omitempty,oneof=int float"`
 	Color               string `validate:"omitempty,oneof=shibafu momiji sora ichou ajisai kuro"`
 	Date                string `validate:"omitempty,date"`
@@ -30,6 +30,7 @@ type validateField struct {
 	SelfSufficient      string `validate:"omitempty,oneof=none increment decrement"`
 }
 
+// Validator is struct for argument validation
 type Validator struct {
 	validator *validator.Validate
 }
@@ -39,7 +40,7 @@ func newValidator() Validator {
 
 	validate.RegisterValidation("username", usernameValidation)
 	validate.RegisterValidation("token", tokenValidation)
-	validate.RegisterValidation("graphid", graphIdValidator)
+	validate.RegisterValidation("graphid", graphIDValidator)
 	validate.RegisterValidation("date", dateValidator)
 	validate.RegisterValidation("quantity", quantityValidator)
 	validate.RegisterValidation("optionaldata", optionalDataValidator)
@@ -53,7 +54,7 @@ var validationErrorMessages = map[string]string{
 	"AgreeTermsOfService": "`agreeTermsOfService` allows `yes` or `no`.",
 	"NotMinor":            "`notMinor` allows `yes` or `no`.",
 	"NewToken":            "`newToken` allows 8 to 128 length.",
-	"GraphId":             "`graphId` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 16 length.",
+	"GraphID":             "`graphID` allows lowercase alphabet, number and hyphen (NOTE: first letter only allows alphabet.) and 1 to 16 length.",
 	"UnitType":            "`unit` allows `int` or `float`.",
 	"Color":               "`color` allows `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`.",
 	"Date":                "`date` format is `yyyyMMdd`.",
@@ -65,6 +66,7 @@ var validationErrorMessages = map[string]string{
 	"SelfSufficient":      "`selfSufficient` allows `increment` or `decrement`.",
 }
 
+// Validate is method for argument validation
 func (pv *Validator) Validate(i interface{}) error {
 	err := pv.validator.Struct(i)
 
@@ -103,8 +105,8 @@ func tokenValidation(fl validator.FieldLevel) bool {
 	return false
 }
 
-// graphId validator
-func graphIdValidator(fl validator.FieldLevel) bool {
+// graphID validator
+func graphIDValidator(fl validator.FieldLevel) bool {
 	tf, err := regexp.Match(`^[a-z][a-z0-9-]{1,16}$`, []byte(fl.Field().String()))
 
 	if tf && err == nil {

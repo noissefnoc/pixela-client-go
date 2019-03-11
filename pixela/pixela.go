@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var baseUrl = "https://pixe.la"
+var baseURL = "https://pixe.la"
 
 // Pixela is application for pixe.la
 type Pixela struct {
@@ -32,13 +32,14 @@ func OptionHTTPClient(c *http.Client) Option {
 	}
 }
 
-// pixe.la response body that post, put and delete method requested
+// NoneGetResponseBody - pixe.la response body that post, put and delete method requested
 type NoneGetResponseBody struct {
 	Message     string `json:"message"`
 	IsSuccess   bool   `json:"isSuccess"`
 	WebhookHash string `json:"webhookHash,omitempty"`
 }
 
+// New creates pixe.la api client instance
 func New(username, token string, debug bool, opts ...Option) (*Pixela, error) {
 	// validate arguments
 	vf := newInstanceValidateField{
@@ -58,7 +59,7 @@ func New(username, token string, debug bool, opts ...Option) (*Pixela, error) {
 		HTTPClient: &http.Client{
 			Timeout: time.Duration(10) * time.Second,
 		},
-		URL:       baseUrl,
+		URL:       baseURL,
 		Username:  username,
 		Token:     token,
 		Validator: validate,
@@ -117,7 +118,7 @@ func (pixela *Pixela) post(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	// check response body if request success
 	if response.StatusCode != http.StatusOK && !responseBody.IsSuccess {
-		return nil, errors.New(fmt.Sprintf("post request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("post request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil
@@ -158,7 +159,7 @@ func (pixela *Pixela) get(url string) ([]byte, error) {
 			return nil, errors.Wrap(err, "get response parse failed")
 		}
 
-		return nil, errors.New(fmt.Sprintf("get request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("get request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil
@@ -209,7 +210,7 @@ func (pixela *Pixela) put(url string, payload *bytes.Buffer) ([]byte, error) {
 
 	// check response body if request success
 	if response.StatusCode != http.StatusOK && !responseBody.IsSuccess {
-		return nil, errors.New(fmt.Sprintf("put request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("put request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil
@@ -251,7 +252,7 @@ func (pixela *Pixela) delete(url string) ([]byte, error) {
 
 	// check response body if request success
 	if response.StatusCode != http.StatusOK && !responseBody.IsSuccess {
-		return nil, errors.New(fmt.Sprintf("delete request failed: %s", responseBody.Message))
+		return nil, fmt.Errorf("delete request failed: %s", responseBody.Message)
 	}
 
 	return responseBodyJSON, nil

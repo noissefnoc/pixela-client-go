@@ -6,7 +6,7 @@ import (
 )
 
 func TestPixela_CreateUser(t *testing.T) {
-	userCreateUrl := fmt.Sprintf("%s/v1/users", baseUrl)
+	userCreateURL := fmt.Sprintf("%s/v1/users", baseURL)
 
 	ivAToSErr := newCommandError(userCreate, "wrong arguments: "+validationErrorMessages["AgreeTermsOfService"])
 	ivNMErr := newCommandError(userCreate, "wrong arguments: "+validationErrorMessages["NotMinor"])
@@ -22,11 +22,11 @@ func TestPixela_CreateUser(t *testing.T) {
 		{"invalid usage", 0, errResp, ivNMErr, []string{"yes", "hoge"}},
 	}
 
-	subCommandTestHelper(t, userCreate, tests, userCreateUrl)
+	subCommandTestHelper(t, userCreate, tests, userCreateURL)
 }
 
 func TestPixela_UpdateUser(t *testing.T) {
-	userUpdateUrl := fmt.Sprintf("%s/v1/users/%s", baseUrl, username)
+	userUpdateURL := fmt.Sprintf("%s/v1/users/%s", baseURL, username)
 
 	respDataErr := newCommandError(userUpdate, "http request failed: put request failed: errorMessage")
 
@@ -35,11 +35,11 @@ func TestPixela_UpdateUser(t *testing.T) {
 		{"status error", errStatus, errResp, respDataErr, []string{"newToken"}},
 	}
 
-	subCommandTestHelper(t, userUpdate, tests, userUpdateUrl)
+	subCommandTestHelper(t, userUpdate, tests, userUpdateURL)
 }
 
 func TestPixela_DeleteUser(t *testing.T) {
-	userDeleteUrl := fmt.Sprintf("%s/v1/users/%s", baseUrl, username)
+	userDeleteURL := fmt.Sprintf("%s/v1/users/%s", baseURL, username)
 
 	respDataErr := newCommandError(userDelete, "http request failed: delete request failed: errorMessage")
 
@@ -48,5 +48,5 @@ func TestPixela_DeleteUser(t *testing.T) {
 		{"status error", errStatus, errResp, respDataErr, nil},
 	}
 
-	subCommandTestHelper(t, userDelete, tests, userDeleteUrl)
+	subCommandTestHelper(t, userDelete, tests, userDeleteURL)
 }

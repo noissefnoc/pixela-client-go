@@ -14,8 +14,9 @@ var timeNowFunc = time.Now
 
 const timeFormat = "20060102"
 
+// CreateGraphPayload is payload for `graph create` subcommand
 type CreateGraphPayload struct {
-	Id             string `json:"id"`
+	ID             string `json:"id"`
 	Name           string `json:"name"`
 	Unit           string `json:"unit"`
 	NumType        string `json:"type"`
@@ -24,10 +25,12 @@ type CreateGraphPayload struct {
 	SelfSufficient string `json:"selfSufficient,omitempty"`
 }
 
+// GraphDefinitions is response for `graph def` subcommand
 type GraphDefinitions struct {
 	Graphs []Graph `json:"graphs"`
 }
 
+// Graph is part of response for `graph def` subcommand
 type Graph struct {
 	ID             string   `json:"id"`
 	Name           string   `json:"name"`
@@ -38,6 +41,7 @@ type Graph struct {
 	PurgeCacheURLs []string `json:"purgeCacheURLs"`
 }
 
+// UpdateGraphPayload is payload for `graph update` subcommand
 type UpdateGraphPayload struct {
 	Name           string   `json:"name,omitempty"`
 	Unit           string   `json:"unit,omitempty"`
@@ -46,15 +50,16 @@ type UpdateGraphPayload struct {
 	PurgeCacheURLs []string `json:"purgeCacheURLs,omitempty"`
 }
 
+// PixelsDateList is response for `graph pixels` subcommand
 type PixelsDateList struct {
 	Pixels []string `json:"pixels"`
 }
 
-// create graph
+// CreateGraph is method for `graph create` subcommand
 func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, selfSufficient string) (NoneGetResponseBody, error) {
 	// create payload
 	pl := CreateGraphPayload{
-		Id:      id,
+		ID:      id,
 		Name:    name,
 		Unit:    unit,
 		NumType: numType,
@@ -63,7 +68,7 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, self
 
 	// argument validation
 	vf := validateField{
-		GraphId:  id,
+		GraphID:  id,
 		UnitType: numType,
 		Color:    color,
 	}
@@ -91,7 +96,7 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, self
 
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s/graphs", baseUrl, pixela.Username)
+	requestURL := fmt.Sprintf("%s/v1/users/%s/graphs", baseURL, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
@@ -110,12 +115,12 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, self
 	return postResponseBody, nil
 }
 
-// get graph definition
+// GetGraphDefinition is method for `graph def` subcommand
 func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs", baseUrl, pixela.Username)
+		"%s/v1/users/%s/graphs", baseURL, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
@@ -134,11 +139,11 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 	return graphDefinitions, nil
 }
 
-// get graph svg html tag
-func (pixela *Pixela) GetGraphSvg(graphId, date, mode string) ([]byte, error) {
+// GetGraphSvg is method for `graph svg` subcommand
+func (pixela *Pixela) GetGraphSvg(graphID, date, mode string) ([]byte, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -148,8 +153,8 @@ func (pixela *Pixela) GetGraphSvg(graphId, date, mode string) ([]byte, error) {
 	}
 
 	// build request url
-	u, _ := url.Parse(baseUrl)
-	u.Path = path.Join(u.Path, "v1", "users", pixela.Username, "graphs", graphId)
+	u, _ := url.Parse(baseURL)
+	u.Path = path.Join(u.Path, "v1", "users", pixela.Username, "graphs", graphID)
 
 	// set query
 	if len(date) != 0 || len(mode) != 0 {
@@ -177,11 +182,11 @@ func (pixela *Pixela) GetGraphSvg(graphId, date, mode string) ([]byte, error) {
 	return responseBody, nil
 }
 
-// update graph
-func (pixela *Pixela) UpdateGraph(graphId string, payload UpdateGraphPayload) (NoneGetResponseBody, error) {
+// UpdateGraph is method for `graph update` subcommand
+func (pixela *Pixela) UpdateGraph(graphID string, payload UpdateGraphPayload) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -193,7 +198,7 @@ func (pixela *Pixela) UpdateGraph(graphId string, payload UpdateGraphPayload) (N
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s", baseURL, pixela.Username, graphID)
 
 	plJSON, err := json.Marshal(payload)
 
@@ -218,11 +223,11 @@ func (pixela *Pixela) UpdateGraph(graphId string, payload UpdateGraphPayload) (N
 	return postResponseBody, nil
 }
 
-// delete graph
-func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
+// DeleteGraph is method for `graph delete` subcommand
+func (pixela *Pixela) DeleteGraph(graphID string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -234,7 +239,7 @@ func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s", baseURL, pixela.Username, graphID)
 
 	// do request
 	responseBody, err := pixela.delete(requestURL)
@@ -253,11 +258,11 @@ func (pixela *Pixela) DeleteGraph(graphId string) (NoneGetResponseBody, error) {
 	return postResponseBody, nil
 }
 
-// get graph pixels date list
-func (pixela *Pixela) GetGraphPixelsDateList(graphId, from, to string) (PixelsDateList, error) {
+// GetGraphPixelsDateList is method for `graph pixels` subcommand
+func (pixela *Pixela) GetGraphPixelsDateList(graphID, from, to string) (PixelsDateList, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 		From:    from,
 		To:      to,
 	}
@@ -282,8 +287,8 @@ func (pixela *Pixela) GetGraphPixelsDateList(graphId, from, to string) (PixelsDa
 	}
 
 	// build request url
-	u, _ := url.Parse(baseUrl)
-	u.Path = path.Join(u.Path, "v1", "users", pixela.Username, "graphs", graphId, "pixels")
+	u, _ := url.Parse(baseURL)
+	u.Path = path.Join(u.Path, "v1", "users", pixela.Username, "graphs", graphID, "pixels")
 
 	// set query
 	if len(from) != 0 || len(to) != 0 {

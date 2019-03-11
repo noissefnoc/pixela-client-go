@@ -32,9 +32,9 @@ func validateTestHelper(t *testing.T, field string, tests validateTestCases) {
 				}{
 					tt.target,
 				}
-			case "GraphId":
+			case "GraphID":
 				targetValidator = struct {
-					target string `validate:"graphId"`
+					target string `validate:"graphID"`
 				}{
 					tt.target,
 				}
@@ -100,9 +100,9 @@ func TestValidator_tokenValidation(t *testing.T) {
 	validateTestHelper(t, "Token", tests)
 }
 
-// test for graphId validation
+// test for graphID validation
 func TestValidator_graphIdValidation(t *testing.T) {
-	wantError := errors.New(validationErrorMessages["GraphId"])
+	wantError := errors.New(validationErrorMessages["GraphID"])
 
 	tests := validateTestCases{
 		{"Normal case", "testtoken", nil},
@@ -114,7 +114,7 @@ func TestValidator_graphIdValidation(t *testing.T) {
 		{"Too long", strings.Repeat("a", 18), wantError},
 	}
 
-	validateTestHelper(t, "GraphId", tests)
+	validateTestHelper(t, "GraphID", tests)
 }
 
 // test for date validation

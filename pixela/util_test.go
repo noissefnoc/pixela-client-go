@@ -15,7 +15,7 @@ import (
 var username = "testuser"
 var token = "testtoken"
 var debug = false
-var graphId = "testgraphid"
+var graphID = "testgraphid"
 var graphName = "testgraphname"
 var graphUnit = "testunit"
 var numType = "int"
@@ -41,8 +41,8 @@ var errResp, _ = json.Marshal(NoneGetResponseBody{Message: "errorMessage", IsSuc
 var ivResp = []byte("hoge")
 var pixelRespWOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr, OptionalData: `{"key": "value"}`})
 var pixelRespWoOp, _ = json.Marshal(GetPixelResponseBody{Quantity: quantityStr})
-var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, graphId, webhookType}}})
-var graphDefResp, _ = json.Marshal(GraphDefinitions{[]Graph{{graphId, graphName, graphUnit, numType, validColor, "Asia/Tokyo", []string{""}}}})
+var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, graphID, webhookType}}})
+var graphDefResp, _ = json.Marshal(GraphDefinitions{[]Graph{{graphID, graphName, graphUnit, numType, validColor, "Asia/Tokyo", []string{""}}}})
 var graphSvgResp = `<sgv>test</svg>`
 var graphPixelsResp, _ = json.Marshal(PixelsDateList{[]string{"20190101", "20190102"}})
 
@@ -161,43 +161,9 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 
 				switch cmd {
 				case graphSvg:
-					u, _ := url.Parse(urlStr)
-					date := tt.args[1]
-					mode := tt.args[2]
-
-					if len(date) != 0 || len(mode) != 0 {
-						q := u.Query()
-
-						if len(date) != 0 {
-							q.Set("date", date)
-						}
-
-						if len(mode) != 0 {
-							q.Set("mode", mode)
-						}
-						u.RawQuery = q.Encode()
-					}
-
-					urlStr = u.String()
+					urlStr = queryBuilder(urlStr, "date", tt.args[1], "mode", tt.args[2])
 				case graphPixels:
-					u, _ := url.Parse(urlStr)
-					from := tt.args[1]
-					to := tt.args[2]
-
-					if len(from) != 0 || len(to) != 0 {
-						q := u.Query()
-
-						if len(from) != 0 {
-							q.Set("from", from)
-						}
-
-						if len(to) != 0 {
-							q.Set("to", to)
-						}
-						u.RawQuery = q.Encode()
-					}
-
-					urlStr = u.String()
+					urlStr = queryBuilder(urlStr, "from", tt.args[1], "to", tt.args[2])
 				default:
 					if req.URL.String() != urlStr {
 						t.Fatalf("want %#v, but got %#v", urlStr, req.URL.String())
@@ -234,56 +200,7 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 
 			// skip checking instance creation error
 			pixela, err := New(username, token, debug, OptionHTTPClient(c))
-
-			switch cmd {
-			case userCreate:
-				_, err = pixela.CreateUser(tt.args[0], tt.args[1])
-			case userUpdate:
-				_, err = pixela.UpdateUser(tt.args[0])
-			case userDelete:
-				_, err = pixela.DeleteUser()
-			case pixelCreate:
-				_, err = pixela.CreatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
-			case pixelGet:
-				_, err = pixela.GetPixel(tt.args[0], tt.args[1])
-			case pixelInc:
-				_, err = pixela.IncPixel(tt.args[0])
-			case pixelDec:
-				_, err = pixela.DecPixel(tt.args[0])
-			case pixelDelete:
-				_, err = pixela.DeletePixel(tt.args[0], tt.args[1])
-			case pixelUpdate:
-				_, err = pixela.UpdatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
-			case webhookCreate:
-				_, err = pixela.CreateWebhook(tt.args[0], tt.args[1])
-			case webhookGet:
-				_, err = pixela.GetWebhookDefinitions()
-			case webhookInvoke:
-				_, err = pixela.InvokeWebhooks(tt.args[0])
-			case webhookDelete:
-				_, err = pixela.DeleteWebhook(tt.args[0])
-			case graphCreate:
-				_, err = pixela.CreateGraph(tt.args[0], tt.args[1], tt.args[2], tt.args[3], tt.args[4], tt.args[5], tt.args[6])
-			case graphUpdate:
-				payload := UpdateGraphPayload{
-					tt.args[1],
-					tt.args[2],
-					tt.args[3],
-					tt.args[4],
-					[]string{tt.args[5]},
-				}
-				_, err = pixela.UpdateGraph(tt.args[0], payload)
-			case graphDelete:
-				_, err = pixela.DeleteGraph(tt.args[0])
-			case graphDef:
-				_, err = pixela.GetGraphDefinition()
-			case graphSvg:
-				_, err = pixela.GetGraphSvg(tt.args[0], tt.args[1], tt.args[2])
-			case graphPixels:
-				_, err = pixela.GetGraphPixelsDateList(tt.args[0], tt.args[1], tt.args[2])
-			default:
-				t.Fatalf("unexpected cmd %s", cmd)
-			}
+			err = subCommandMethodCall(pixela, tt, cmd)
 
 			if err != nil {
 				if err.Error() != tt.wantErr.Error() {
@@ -292,4 +209,78 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 			}
 		})
 	}
+}
+
+func subCommandMethodCall(pixela *Pixela, tt testCase, cmd subCommand) error {
+	var err error
+
+	switch cmd {
+	case userCreate:
+		_, err = pixela.CreateUser(tt.args[0], tt.args[1])
+	case userUpdate:
+		_, err = pixela.UpdateUser(tt.args[0])
+	case userDelete:
+		_, err = pixela.DeleteUser()
+	case pixelCreate:
+		_, err = pixela.CreatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
+	case pixelGet:
+		_, err = pixela.GetPixel(tt.args[0], tt.args[1])
+	case pixelInc:
+		_, err = pixela.IncPixel(tt.args[0])
+	case pixelDec:
+		_, err = pixela.DecPixel(tt.args[0])
+	case pixelDelete:
+		_, err = pixela.DeletePixel(tt.args[0], tt.args[1])
+	case pixelUpdate:
+		_, err = pixela.UpdatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
+	case webhookCreate:
+		_, err = pixela.CreateWebhook(tt.args[0], tt.args[1])
+	case webhookGet:
+		_, err = pixela.GetWebhookDefinitions()
+	case webhookInvoke:
+		_, err = pixela.InvokeWebhooks(tt.args[0])
+	case webhookDelete:
+		_, err = pixela.DeleteWebhook(tt.args[0])
+	case graphCreate:
+		_, err = pixela.CreateGraph(tt.args[0], tt.args[1], tt.args[2], tt.args[3], tt.args[4], tt.args[5], tt.args[6])
+	case graphUpdate:
+		payload := UpdateGraphPayload{
+			tt.args[1],
+			tt.args[2],
+			tt.args[3],
+			tt.args[4],
+			[]string{tt.args[5]},
+		}
+		_, err = pixela.UpdateGraph(tt.args[0], payload)
+	case graphDelete:
+		_, err = pixela.DeleteGraph(tt.args[0])
+	case graphDef:
+		_, err = pixela.GetGraphDefinition()
+	case graphSvg:
+		_, err = pixela.GetGraphSvg(tt.args[0], tt.args[1], tt.args[2])
+	case graphPixels:
+		_, err = pixela.GetGraphPixelsDateList(tt.args[0], tt.args[1], tt.args[2])
+	default:
+		err = fmt.Errorf("unexpected cmd %s", cmd)
+	}
+
+	return err
+}
+
+func queryBuilder(urlStr, key1, value1, key2, value2 string) string {
+	u, _ := url.Parse(urlStr)
+	if len(value1) != 0 || len(value2) != 0 {
+		q := u.Query()
+
+		if len(value1) != 0 {
+			q.Set(key1, value1)
+		}
+
+		if len(value2) != 0 {
+			q.Set(key2, value2)
+		}
+		u.RawQuery = q.Encode()
+	}
+
+	return u.String()
 }

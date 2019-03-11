@@ -43,7 +43,7 @@ $ pixela graph create <graph id> <graph name> <unit> <type> <color> [--timezone 
 see official document (https://docs.pixe.la/#/post-graph) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 5 {
-				return errors.New(fmt.Sprintf("argument error: `graph create` requires 5 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `graph create` requires 5 arguments give %d arguments", len(args))
 			}
 
 			// make request
@@ -97,7 +97,7 @@ see official document (https://docs.pixe.la/#/put-graph) for more detail.`,
 			// check arguments
 			// TODO: add timezone option later
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `graph update` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `graph update` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -167,7 +167,7 @@ see official document (https://docs.pixe.la/#/delete-graph) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `graph delete` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `graph delete` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -213,7 +213,7 @@ see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 0 {
-				return errors.New("argument error: `graph def` does not accept any argument.")
+				return errors.New("argument error: `graph def` does not accept any argument")
 			}
 
 			// do request
@@ -257,7 +257,7 @@ see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `graph svg` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `graph svg` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -301,7 +301,7 @@ see official document (https://docs.pixe.la/#/get-graph-pixels) for more detail.
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `graph pixels` requires 1 argument give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `graph pixels` requires 1 argument give %d arguments", len(args))
 			}
 
 			// do request

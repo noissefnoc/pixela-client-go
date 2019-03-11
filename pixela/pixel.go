@@ -7,22 +7,24 @@ import (
 	"github.com/pkg/errors"
 )
 
+// CreatePixelPayload is payload for `pixel create` subcommand
 type CreatePixelPayload struct {
 	Date         string `json:"date"`
 	Quantity     string `json:"quantity"`
 	OptionalData string `json:"optionalData,omitempty"`
 }
 
+// GetPixelResponseBody is response for `pixel get` subcommand
 type GetPixelResponseBody struct {
 	Quantity     string `json:"quantity"`
 	OptionalData string `json:"optionalData,omitempty"`
 }
 
-// record quantity (insert)
-func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) (NoneGetResponseBody, error) {
+// CreatePixel is method for `pixel create` subcommand
+func (pixela *Pixela) CreatePixel(graphID, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId:      graphId,
+		GraphID:      graphID,
 		Date:         date,
 		Quantity:     quantity,
 		OptionalData: optionalData,
@@ -54,7 +56,7 @@ func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) 
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s", baseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s", baseURL, pixela.Username, graphID)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
@@ -73,11 +75,11 @@ func (pixela *Pixela) CreatePixel(graphId, date, quantity, optionalData string) 
 	return postResponseBody, nil
 }
 
-// get pixel data
-func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBody, error) {
+// GetPixel is method for `pixel get` subcommand
+func (pixela *Pixela) GetPixel(graphID string, date string) (GetPixelResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 		Date:    date,
 	}
 
@@ -90,7 +92,7 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/%s", baseUrl, pixela.Username, graphId, date)
+		"%s/v1/users/%s/graphs/%s/%s", baseURL, pixela.Username, graphID, date)
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
@@ -109,11 +111,11 @@ func (pixela *Pixela) GetPixel(graphId string, date string) (GetPixelResponseBod
 	return getPixelResponseBody, nil
 }
 
-// record quantity (upsert)
-func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) (NoneGetResponseBody, error) {
+// UpdatePixel is method for `pixel update` subcommand
+func (pixela *Pixela) UpdatePixel(graphID, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId:      graphId,
+		GraphID:      graphID,
 		Date:         date,
 		Quantity:     quantity,
 		OptionalData: optionalData,
@@ -144,7 +146,7 @@ func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) 
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/%s", baseUrl, pixela.Username, graphId, date)
+		"%s/v1/users/%s/graphs/%s/%s", baseURL, pixela.Username, graphID, date)
 
 	// do request
 	responseBody, err := pixela.put(requestURL, bytes.NewBuffer(plJSON))
@@ -163,11 +165,11 @@ func (pixela *Pixela) UpdatePixel(graphId, date, quantity, optionalData string) 
 	return postResponseBody, nil
 }
 
-// increment today's pixel quantity
-func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
+// IncPixel is method for `pixel inc` subcommand
+func (pixela *Pixela) IncPixel(graphID string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -179,7 +181,7 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/increment", baseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s/increment", baseURL, pixela.Username, graphID)
 
 	// do request
 	responseBody, err := pixela.put(requestURL, nil)
@@ -198,11 +200,11 @@ func (pixela *Pixela) IncPixel(graphId string) (NoneGetResponseBody, error) {
 	return postResponseBody, nil
 }
 
-// decrement today's pixel quantity
-func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
+// DecPixel is method for `pixel dec` subcommand
+func (pixela *Pixela) DecPixel(graphID string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 	}
 
 	err := pixela.Validator.Validate(vf)
@@ -214,7 +216,7 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/decrement", baseUrl, pixela.Username, graphId)
+		"%s/v1/users/%s/graphs/%s/decrement", baseURL, pixela.Username, graphID)
 
 	// do request
 	responseBody, err := pixela.put(requestURL, nil)
@@ -233,11 +235,11 @@ func (pixela *Pixela) DecPixel(graphId string) (NoneGetResponseBody, error) {
 	return postResponseBody, nil
 }
 
-// delete pixel
-func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, error) {
+// DeletePixel is method for `pixel delete` subcommand
+func (pixela *Pixela) DeletePixel(graphID, date string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId: graphId,
+		GraphID: graphID,
 		Date:    date,
 	}
 
@@ -250,7 +252,7 @@ func (pixela *Pixela) DeletePixel(graphId, date string) (NoneGetResponseBody, er
 	// build request url
 	// TODO: rewrite by url package
 	requestURL := fmt.Sprintf(
-		"%s/v1/users/%s/graphs/%s/%s", baseUrl, pixela.Username, graphId, date)
+		"%s/v1/users/%s/graphs/%s/%s", baseURL, pixela.Username, graphID, date)
 
 	// do request
 	responseBody, err := pixela.delete(requestURL)

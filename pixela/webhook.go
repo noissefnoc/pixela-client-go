@@ -7,25 +7,29 @@ import (
 	"github.com/pkg/errors"
 )
 
+// CreateWebhookPayload is `webhook create` subcommand payload
 type CreateWebhookPayload struct {
-	GraphId string `json:"graphId"`
+	GraphID string `json:"graphID"`
 	Type    string `json:"type"`
 }
 
+// WebhookDefinitions is `webhook get` response
 type WebhookDefinitions struct {
 	Webhooks []Webhook `json:"webhooks"`
 }
 
+// Webhook is internal part of `webhook get` response
 type Webhook struct {
 	WebhookHash string `json:"webhookHash"`
 	GraphID     string `json:"graphID"`
 	Type        string `json:"type"`
 }
 
-func (pixela *Pixela) CreateWebhook(graphId, webhookType string) (NoneGetResponseBody, error) {
+// CreateWebhook is method for `webhook create` subcommand
+func (pixela *Pixela) CreateWebhook(graphID, webhookType string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
-		GraphId:     graphId,
+		GraphID:     graphID,
 		WebhookType: webhookType,
 	}
 
@@ -37,7 +41,7 @@ func (pixela *Pixela) CreateWebhook(graphId, webhookType string) (NoneGetRespons
 
 	// create payload
 	pl := CreateWebhookPayload{
-		GraphId: graphId,
+		GraphID: graphID,
 		Type:    webhookType,
 	}
 
@@ -49,7 +53,7 @@ func (pixela *Pixela) CreateWebhook(graphId, webhookType string) (NoneGetRespons
 
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks", baseUrl, pixela.Username)
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks", baseURL, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
@@ -68,10 +72,11 @@ func (pixela *Pixela) CreateWebhook(graphId, webhookType string) (NoneGetRespons
 	return postResponseBody, nil
 }
 
+// GetWebhookDefinitions is method for `webhook get` subcommand
 func (pixela *Pixela) GetWebhookDefinitions() (WebhookDefinitions, error) {
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks", baseUrl, pixela.Username)
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks", baseURL, pixela.Username)
 
 	// do request
 	responseBody, err := pixela.get(requestURL)
@@ -90,10 +95,11 @@ func (pixela *Pixela) GetWebhookDefinitions() (WebhookDefinitions, error) {
 	return getResponseBody, nil
 }
 
+// InvokeWebhooks is method for `webhook invoke` subcommand
 func (pixela *Pixela) InvokeWebhooks(webhookHash string) (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseUrl, pixela.Username, webhookHash)
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseURL, pixela.Username, webhookHash)
 
 	// do request
 	responseBody, err := pixela.post(requestURL, nil)
@@ -112,10 +118,11 @@ func (pixela *Pixela) InvokeWebhooks(webhookHash string) (NoneGetResponseBody, e
 	return postResponseBody, nil
 }
 
+// DeleteWebhook is method for `webhook delete` subcommand
 func (pixela *Pixela) DeleteWebhook(webhookHash string) (NoneGetResponseBody, error) {
 	// build request url
 	// TODO: rewrite by url package
-	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseUrl, pixela.Username, webhookHash)
+	requestURL := fmt.Sprintf("%s/v1/users/%s/webhooks/%s", baseURL, pixela.Username, webhookHash)
 
 	// do request
 	responseBody, err := pixela.delete(requestURL)

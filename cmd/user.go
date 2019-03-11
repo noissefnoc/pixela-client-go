@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 )
 
+// UserCreateOptions is struct for `user create` subcommand
 type UserCreateOptions struct {
 	AgreeTermsOfService string
 	NotMinor            string
@@ -49,7 +50,7 @@ see official document (https://docs.pixe.la/#/post-user) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 2 {
-				return errors.New(fmt.Sprintf("argument error: `user create` requires 2 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `user create` requires 2 arguments give %d arguments", len(args))
 			}
 
 			username := args[0]
@@ -112,7 +113,7 @@ see official document (https://docs.pixe.la/#/put-user) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return errors.New(fmt.Sprintf("argument error: `user update` requires 1 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `user update` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -158,7 +159,7 @@ see official document (https://docs.pixe.la/#/delete-user) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 2 {
-				return errors.New(fmt.Sprintf("argument error: `user update` requires 2 arguments give %d arguments.", len(args)))
+				return fmt.Errorf("argument error: `user update` requires 2 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -198,9 +199,9 @@ func existFile(checkFilePath string) bool {
 
 	if err == nil {
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
 // default config file path
@@ -228,7 +229,7 @@ func saveConfigFile(path, username, token string) error {
 		cui.Outputln(fmt.Sprintf("username: %s", username))
 		cui.Outputln(fmt.Sprintf("token: %s", token))
 
-		return errors.New("cannot save configs.")
+		return errors.New("cannot save configs")
 	}
 
 	saveConfigFilePath := path
