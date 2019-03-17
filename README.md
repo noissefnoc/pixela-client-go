@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/noissefnoc/pixela-client-go.svg?branch=master)](https://travis-ci.org/noissefnoc/pixela-client-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/noissefnoc/pixela-client-go)](https://goreportcard.com/report/github.com/noissefnoc/pixela-client-go)
+[![Coverage Status](https://coveralls.io/repos/github/noissefnoc/pixela-client-go/badge.svg?branch=master)](https://coveralls.io/github/noissefnoc/pixela-client-go?branch=master)
 
 [pixela-client-go](https://github.com/noissefnoc/pixela-client-go) is unofficial [pixe.la](https://pixe.la) API client & CLI written by golang.
 
