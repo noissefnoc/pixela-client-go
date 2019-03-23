@@ -36,6 +36,10 @@ NOTE: some arguments are limited following values.
 * `COLOR` : `shibafu`, `momiji`, `sora`, `ichou`, `ajisai` or `kuro`
 * `TIMEZONE` : default is `UTC`
 
+And then you can see graph page.
+
+If your username is `foo` and graph name is `bar` then graph page url will be `https://pixe.la/v1/users/foo/graphs/bar`.
+
 
 ### Record quantity to graph
 
