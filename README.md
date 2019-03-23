@@ -13,13 +13,13 @@ This program build and check with Go 1.11.
 
 ### Create user (just one time)
 
-First, create pixe.la user.
+First, create [pixe.la](https://pixe.la) user.
 
 ```
 $ pixela user create USERNAME TOKEN
 ```
 
-NOTE: pixe.la does not have user page nor get user info API. I recommend to take a note `USERNAME` and `TOKEN`.
+NOTE: pixe.la does not have user page nor user profile API. I recommend to take a note `USERNAME` and `TOKEN`.
 
 
 ### Create graph (just one time)
@@ -55,12 +55,14 @@ NOTE:
 
 ## Usage
 
+
+
 ```
 NAME:
     pixela - pixe.la client
 
 USAGE:
-    pixela [global options] command [command options] [arguments...]
+    pixela [global options] command [command options] subcommand [subcommand options] [arguments...]
 
 VERSION:
     0.0.3
@@ -73,7 +75,32 @@ COMMANDS:
     graph   Create, Get definition, Get SVG data, Update definition, Delete graph, Get pixels date
     pixel   Create, Get, Increment, Decrement, Update, Delete pixel
     webhook Create, Get, Invoke, Delete webhook
-    
+
+SUBCOMMANDS:
+    user
+        create Create user
+        update Update user token
+        delete Delete user
+    graph
+        create Create graph
+        def    Get graph definitions (all graphs you created)
+        svg    Get graph SVG format
+        update Update graph definitions
+        delete Delete graph
+        pixels Get pixel regestored dates in the graph
+    pixel
+        create Create pixel
+        get    Get pixel's quantitiy and optional data
+        inc    Increment pixel quantity
+        dec    Decrement pixel quantity
+        update Update pixel quantity and optionl data
+        delete Delete pixel
+    webhook
+        create Create webhook
+        get    Get webhook
+        invoke Invoke webhook
+        delete Delete webhook
+
 GLOBAL OPTIONS:
     --help, -h  show help
 ```
