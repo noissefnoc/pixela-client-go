@@ -6,6 +6,8 @@
 
 [pixela-client-go](https://github.com/noissefnoc/pixela-client-go) is unofficial [pixe.la](https://pixe.la) API client & CLI written by golang.
 
+[pi](https://github.com/a-know/pi) is official CLI. Please use `pi` for proper usage.
+
 This program build and check with Go 1.11.
 
 
