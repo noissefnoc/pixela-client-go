@@ -29,6 +29,14 @@
   version = "v0.16.0"
 
 [[projects]]
+  digest = "1:b60efdeb75d3c0ceed88783ac2495256aba3491a537d0f31401202579fd62a94"
+  name = "github.com/golang/mock"
+  packages = ["gomock"]
+  pruneopts = "UT"
+  revision = "51421b967af1f557f93a59e0057aaf15ca02e29c"
+  version = "v1.2.0"
+
+[[projects]]
   digest = "1:c0d19ab64b32ce9fe5cf4ddceba78d5bc9807f0016db6b1183599da3dcc24d10"
   name = "github.com/hashicorp/hcl"
   packages = [
@@ -162,8 +170,8 @@
     "rwi",
   ]
   pruneopts = "UT"
-  revision = "374c1cb71f7a8288d70b6f1bed21f38565f4d055"
-  version = "v0.9.3"
+  revision = "3e939b56b665677023383e8a22a9f15079c80a43"
+  version = "v0.9.4"
 
 [[projects]]
   branch = "master"
@@ -208,6 +216,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/golang/mock/gomock",
     "github.com/mitchellh/go-homedir",
     "github.com/pkg/errors",
     "github.com/spf13/cobra",

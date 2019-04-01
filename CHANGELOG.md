@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Added
+
+* `graph detail` subcommand
+
+### Changed
+
+* adjust subcommand to`pi` command (official CLI)
+    * `pixel create` to `pixel post`
+    * `graph def` to `graph get`
+    * `graph inc` to `graph increment`
+    * `graph dec` to `graph decrement`
+
 
 ## [0.0.3] - 2019-03-06
 

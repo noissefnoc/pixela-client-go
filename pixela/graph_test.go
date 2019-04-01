@@ -83,7 +83,7 @@ func TestPixela_GetGraphSvg(t *testing.T) {
 func TestPixela_GetGraphDefinition(t *testing.T) {
 	graphDefURL := fmt.Sprintf("%s/v1/users/%s/graphs", baseURL, username)
 
-	respDataErr := newCommandError(graphDef, "http request failed: get request failed: errorMessage")
+	respDataErr := newCommandError(graphGet, "http request failed: get request failed: errorMessage")
 
 	tests := testCases{
 		{"normal case w full option", sucStatus, graphDefResp, nil, nil},
@@ -92,7 +92,7 @@ func TestPixela_GetGraphDefinition(t *testing.T) {
 		{"invalid response data", sucStatus, errResp, respDataErr, nil},
 	}
 
-	subCommandTestHelper(t, graphDef, tests, graphDefURL)
+	subCommandTestHelper(t, graphGet, tests, graphDefURL)
 }
 
 func TestPixela_GetGraphPixelsDateList(t *testing.T) {
@@ -110,4 +110,16 @@ func TestPixela_GetGraphPixelsDateList(t *testing.T) {
 	}
 
 	subCommandTestHelper(t, graphPixels, tests, graphGetPixelsDateURL)
+}
+
+func TestPixela_GetGraphDetailURL(t *testing.T) {
+	want := fmt.Sprintf("%s/v1/users/%s/graphs/%s.html", baseURL, username, graphID)
+
+	// skip checking instance creation error
+	pixela, _ := New(username, token, false)
+	got := pixela.GetGraphDetailURL(graphID)
+
+	if got != want {
+		t.Fatalf("want %#v, but got %#v", want, got)
+	}
 }

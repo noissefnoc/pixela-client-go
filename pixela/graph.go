@@ -110,7 +110,7 @@ func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, self
 	return postResponseBody, nil
 }
 
-// GetGraphDefinition is method for `graph def` subcommand
+// GetGraphDefinition is method for `graph get` subcommand
 func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 	// build request url
 	// TODO: rewrite by url package
@@ -121,14 +121,14 @@ func (pixela *Pixela) GetGraphDefinition() (GraphDefinitions, error) {
 	responseBody, err := pixela.get(requestURL)
 
 	if err != nil {
-		return GraphDefinitions{}, errors.Wrap(err, "`graph def`: http request failed")
+		return GraphDefinitions{}, errors.Wrap(err, "`graph get`: http request failed")
 	}
 
 	graphDefinitions := GraphDefinitions{}
 	err = json.Unmarshal(responseBody, &graphDefinitions)
 
 	if err != nil {
-		return GraphDefinitions{}, errors.Wrap(err, "`graph def`: http response parse failed")
+		return GraphDefinitions{}, errors.Wrap(err, "`graph get`: http response parse failed")
 	}
 
 	return graphDefinitions, nil
@@ -303,4 +303,9 @@ func (pixela *Pixela) GetGraphPixelsDateList(graphID, from, to string) (PixelsDa
 	}
 
 	return pixelsDateList, nil
+}
+
+// GetGraphDetailURL is method for `graph detail` subcommand
+func (pixela *Pixela) GetGraphDetailURL(graphID string) string {
+	return fmt.Sprintf("%s/v1/users/%s/graphs/%s.html", baseURL, pixela.Username, graphID)
 }

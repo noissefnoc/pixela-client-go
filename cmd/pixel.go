@@ -23,18 +23,18 @@ see official document (https://docs.pixe.la) for more detail`,
 		},
 	}
 
-	pixelCmd.AddCommand(newPixelCreateCmd())
+	pixelCmd.AddCommand(newPixelPostCmd())
 	pixelCmd.AddCommand(newPixelGetCmd())
 	pixelCmd.AddCommand(newPixelUpdateCmd())
 	pixelCmd.AddCommand(newPixelDeleteCmd())
-	pixelCmd.AddCommand(newPixelIncCmd())
-	pixelCmd.AddCommand(newPixelDecCmd())
+	pixelCmd.AddCommand(newPixelIncrementCmd())
+	pixelCmd.AddCommand(newPixelDecrementCmd())
 
 	return pixelCmd
 }
 
-func newPixelCreateCmd() *cobra.Command {
-	pixelCreateCmd := &cobra.Command{
+func newPixelPostCmd() *cobra.Command {
+	pixelPostCmd := &cobra.Command{
 		Use:   "create",
 		Short: "create pixel",
 		Long: `create pixel. Usage:
@@ -55,7 +55,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 				return err
 			}
 
-			response, err := client.CreatePixel(args[0], args[1], args[2], optionalData)
+			response, err := client.PostPixel(args[0], args[1], args[2], optionalData)
 
 			if err != nil {
 				return errors.Wrap(err, "request error: ")
@@ -76,7 +76,7 @@ see official document (https://docs.pixe.la/#/post-pixel) for more detail.`,
 		},
 	}
 
-	return pixelCreateCmd
+	return pixelPostCmd
 }
 
 func newPixelGetCmd() *cobra.Command {
@@ -223,19 +223,19 @@ see official document (https://docs.pixe.la/#/delete-pixel) for more detail.`,
 	return pixelDeleteCmd
 }
 
-func newPixelIncCmd() *cobra.Command {
-	pixelIncCmd := &cobra.Command{
-		Use:   "inc",
+func newPixelIncrementCmd() *cobra.Command {
+	pixelIncrementCmd := &cobra.Command{
+		Use:   "increment",
 		Short: "increment pixel quantity",
 		Long: `increment pixel quantity. Usage:
 
-$ pixela pixel inc <graph id>
+$ pixela pixel increment <graph id>
 
 see official document (https://docs.pixe.la/#/increment-pixel) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return fmt.Errorf("argument error: `pixel inc` requires 1 arguments give %d arguments", len(args))
+				return fmt.Errorf("argument error: `pixel increment` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -245,7 +245,7 @@ see official document (https://docs.pixe.la/#/increment-pixel) for more detail.`
 				return err
 			}
 
-			response, err := client.IncPixel(args[0])
+			response, err := client.IncrementPixel(args[0])
 
 			if err != nil {
 				return errors.Wrap(err, "request error: ")
@@ -266,22 +266,22 @@ see official document (https://docs.pixe.la/#/increment-pixel) for more detail.`
 		},
 	}
 
-	return pixelIncCmd
+	return pixelIncrementCmd
 }
 
-func newPixelDecCmd() *cobra.Command {
-	pixelDecCmd := &cobra.Command{
-		Use:   "dec",
+func newPixelDecrementCmd() *cobra.Command {
+	pixelDecrementCmd := &cobra.Command{
+		Use:   "decrement",
 		Short: "decrement today's pixel quantity",
 		Long: `decrement today's pixel quantity. Usage:
 
-$ pixela pixel dec <graph id>
+$ pixela pixel decrement <graph id>
 
 see official document (https://docs.pixe.la/#/decrement-pixel) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 1 {
-				return fmt.Errorf("argument error: `pixel dec` requires 1 arguments give %d arguments", len(args))
+				return fmt.Errorf("argument error: `pixel decrement` requires 1 arguments give %d arguments", len(args))
 			}
 
 			// do request
@@ -291,7 +291,7 @@ see official document (https://docs.pixe.la/#/decrement-pixel) for more detail.`
 				return err
 			}
 
-			response, err := client.DecPixel(args[0])
+			response, err := client.DecrementPixel(args[0])
 
 			if err != nil {
 				return errors.Wrap(err, "request error: ")
@@ -312,5 +312,5 @@ see official document (https://docs.pixe.la/#/decrement-pixel) for more detail.`
 		},
 	}
 
-	return pixelDecCmd
+	return pixelDecrementCmd
 }

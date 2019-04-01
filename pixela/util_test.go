@@ -52,10 +52,10 @@ const (
 	userCreate subCommand = iota
 	userUpdate
 	userDelete
-	pixelCreate
+	pixelPost
 	pixelGet
-	pixelInc
-	pixelDec
+	pixelIncrement
+	pixelDecrement
 	pixelDelete
 	pixelUpdate
 	webhookCreate
@@ -65,53 +65,55 @@ const (
 	graphCreate
 	graphUpdate
 	graphDelete
-	graphDef
+	graphGet
 	graphSvg
 	graphPixels
+	graphDetail
 )
 
 var subCommandStringMap = map[subCommand]string{
-	userCreate:    "user create",
-	userUpdate:    "user update",
-	userDelete:    "user delete",
-	pixelCreate:   "pixel create",
-	pixelGet:      "pixel get",
-	pixelInc:      "pixel inc",
-	pixelDec:      "pixel dec",
-	pixelDelete:   "pixel delete",
-	pixelUpdate:   "pixel update",
-	webhookCreate: "webhook create",
-	webhookGet:    "webhook get",
-	webhookInvoke: "webhook invoke",
-	webhookDelete: "webhook delete",
-	graphCreate:   "graph create",
-	graphUpdate:   "graph update",
-	graphDelete:   "graph delete",
-	graphDef:      "graph def",
-	graphSvg:      "graph svg",
-	graphPixels:   "graph pixels",
+	userCreate:     "user create",
+	userUpdate:     "user update",
+	userDelete:     "user delete",
+	pixelPost:      "pixel post",
+	pixelGet:       "pixel get",
+	pixelIncrement: "pixel increment",
+	pixelDecrement: "pixel decrement",
+	pixelDelete:    "pixel delete",
+	pixelUpdate:    "pixel update",
+	webhookCreate:  "webhook create",
+	webhookGet:     "webhook get",
+	webhookInvoke:  "webhook invoke",
+	webhookDelete:  "webhook delete",
+	graphCreate:    "graph create",
+	graphUpdate:    "graph update",
+	graphDelete:    "graph delete",
+	graphGet:       "graph get",
+	graphSvg:       "graph svg",
+	graphPixels:    "graph pixels",
+	graphDetail:    "graph detail",
 }
 
 var subCommandMethodMap = map[subCommand]string{
-	userCreate:    http.MethodPost,
-	userUpdate:    http.MethodPut,
-	userDelete:    http.MethodDelete,
-	pixelCreate:   http.MethodPost,
-	pixelGet:      http.MethodGet,
-	pixelInc:      http.MethodPut,
-	pixelDec:      http.MethodPut,
-	pixelDelete:   http.MethodDelete,
-	pixelUpdate:   http.MethodPut,
-	webhookCreate: http.MethodPost,
-	webhookGet:    http.MethodGet,
-	webhookInvoke: http.MethodPost,
-	webhookDelete: http.MethodDelete,
-	graphCreate:   http.MethodPost,
-	graphUpdate:   http.MethodPut,
-	graphDelete:   http.MethodDelete,
-	graphDef:      http.MethodGet,
-	graphSvg:      http.MethodGet,
-	graphPixels:   http.MethodGet,
+	userCreate:     http.MethodPost,
+	userUpdate:     http.MethodPut,
+	userDelete:     http.MethodDelete,
+	pixelPost:      http.MethodPost,
+	pixelGet:       http.MethodGet,
+	pixelIncrement: http.MethodPut,
+	pixelDecrement: http.MethodPut,
+	pixelDelete:    http.MethodDelete,
+	pixelUpdate:    http.MethodPut,
+	webhookCreate:  http.MethodPost,
+	webhookGet:     http.MethodGet,
+	webhookInvoke:  http.MethodPost,
+	webhookDelete:  http.MethodDelete,
+	graphCreate:    http.MethodPost,
+	graphUpdate:    http.MethodPut,
+	graphDelete:    http.MethodDelete,
+	graphGet:       http.MethodGet,
+	graphSvg:       http.MethodGet,
+	graphPixels:    http.MethodGet,
 }
 
 func (c subCommand) String() string {
@@ -183,7 +185,7 @@ func subCommandTestHelper(t *testing.T, cmd subCommand, tests testCases, urlStr 
 						t.Fatalf("want %#v, but got %#v", method, req.Method)
 					}
 
-					if cmd == pixelInc || cmd == pixelDec {
+					if cmd == pixelIncrement || cmd == pixelDecrement {
 						if req.Header.Get(contentLength) != contentZeroLen {
 							t.Fatalf("want %#v, but got %#v", contentZeroLen, req.Header.Get(contentLength))
 						}
@@ -216,14 +218,14 @@ func subCommandMethodCall(pixela *Pixela, tt testCase, cmd subCommand) error {
 		_, err = pixela.UpdateUser(tt.args[0])
 	case userDelete:
 		_, err = pixela.DeleteUser()
-	case pixelCreate:
-		_, err = pixela.CreatePixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
+	case pixelPost:
+		_, err = pixela.PostPixel(tt.args[0], tt.args[1], tt.args[2], tt.args[3])
 	case pixelGet:
 		_, err = pixela.GetPixel(tt.args[0], tt.args[1])
-	case pixelInc:
-		_, err = pixela.IncPixel(tt.args[0])
-	case pixelDec:
-		_, err = pixela.DecPixel(tt.args[0])
+	case pixelIncrement:
+		_, err = pixela.IncrementPixel(tt.args[0])
+	case pixelDecrement:
+		_, err = pixela.DecrementPixel(tt.args[0])
 	case pixelDelete:
 		_, err = pixela.DeletePixel(tt.args[0], tt.args[1])
 	case pixelUpdate:
@@ -249,7 +251,7 @@ func subCommandMethodCall(pixela *Pixela, tt testCase, cmd subCommand) error {
 		_, err = pixela.UpdateGraph(tt.args[0], payload)
 	case graphDelete:
 		_, err = pixela.DeleteGraph(tt.args[0])
-	case graphDef:
+	case graphGet:
 		_, err = pixela.GetGraphDefinition()
 	case graphSvg:
 		_, err = pixela.GetGraphSvg(tt.args[0], tt.args[1], tt.args[2])

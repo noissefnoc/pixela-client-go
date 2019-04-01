@@ -8,11 +8,11 @@ import (
 func TestPixela_CreatePixel(t *testing.T) {
 	pixelCreateURL := fmt.Sprintf("%s/v1/users/%s/graphs/%s", baseURL, username, graphID)
 
-	ivGraphIDErr := newCommandError(pixelCreate, "wrong arguments: "+validationErrorMessages["GraphID"])
-	ivDateErr := newCommandError(pixelCreate, "wrong arguments: "+validationErrorMessages["Date"])
-	ivQuantityErr := newCommandError(pixelCreate, "wrong arguments: "+validationErrorMessages["Quantity"])
-	ivOptionalDataErr := newCommandError(pixelCreate, "wrong arguments: "+validationErrorMessages["OptionalData"])
-	respDataErr := newCommandError(pixelCreate, "http request failed: post request failed: errorMessage")
+	ivGraphIDErr := newCommandError(pixelPost, "wrong arguments: "+validationErrorMessages["GraphID"])
+	ivDateErr := newCommandError(pixelPost, "wrong arguments: "+validationErrorMessages["Date"])
+	ivQuantityErr := newCommandError(pixelPost, "wrong arguments: "+validationErrorMessages["Quantity"])
+	ivOptionalDataErr := newCommandError(pixelPost, "wrong arguments: "+validationErrorMessages["OptionalData"])
+	respDataErr := newCommandError(pixelPost, "http request failed: post request failed: errorMessage")
 
 	tests := testCases{
 		{"normal case wo optionalData", sucStatus, scResp, nil, []string{graphID, dateStr, quantityStr, ""}},
@@ -24,7 +24,7 @@ func TestPixela_CreatePixel(t *testing.T) {
 		{"status error", errStatus, errResp, respDataErr, []string{graphID, dateStr, quantityStr, ""}},
 	}
 
-	subCommandTestHelper(t, pixelCreate, tests, pixelCreateURL)
+	subCommandTestHelper(t, pixelPost, tests, pixelCreateURL)
 }
 
 func TestPixela_GetPixel(t *testing.T) {
@@ -48,8 +48,8 @@ func TestPixela_GetPixel(t *testing.T) {
 func TestPixela_IncPixel(t *testing.T) {
 	pixelIncURL := fmt.Sprintf("%s/v1/users/%s/graphs/%s/increment", baseURL, username, graphID)
 
-	ivGraphIDErr := newCommandError(pixelInc, "wrong arguments: "+validationErrorMessages["GraphID"])
-	respDataErr := newCommandError(pixelInc, "http request failed: put request failed: errorMessage")
+	ivGraphIDErr := newCommandError(pixelIncrement, "wrong arguments: "+validationErrorMessages["GraphID"])
+	respDataErr := newCommandError(pixelIncrement, "http request failed: put request failed: errorMessage")
 
 	tests := testCases{
 		{"normal case", sucStatus, scResp, nil, []string{graphID}},
@@ -57,14 +57,14 @@ func TestPixela_IncPixel(t *testing.T) {
 		{"status error", errStatus, errResp, respDataErr, []string{graphID}},
 	}
 
-	subCommandTestHelper(t, pixelInc, tests, pixelIncURL)
+	subCommandTestHelper(t, pixelIncrement, tests, pixelIncURL)
 }
 
 func TestPixela_DecPixel(t *testing.T) {
 	pixelDecURL := fmt.Sprintf("%s/v1/users/%s/graphs/%s/decrement", baseURL, username, graphID)
 
-	ivGraphIDErr := newCommandError(pixelDec, "wrong arguments: "+validationErrorMessages["GraphID"])
-	respDataErr := newCommandError(pixelDec, "http request failed: put request failed: errorMessage")
+	ivGraphIDErr := newCommandError(pixelDecrement, "wrong arguments: "+validationErrorMessages["GraphID"])
+	respDataErr := newCommandError(pixelDecrement, "http request failed: put request failed: errorMessage")
 
 	tests := testCases{
 		{"normal case", sucStatus, scResp, nil, []string{graphID}},
@@ -72,7 +72,7 @@ func TestPixela_DecPixel(t *testing.T) {
 		{"status error", errStatus, errResp, respDataErr, []string{graphID}},
 	}
 
-	subCommandTestHelper(t, pixelDec, tests, pixelDecURL)
+	subCommandTestHelper(t, pixelDecrement, tests, pixelDecURL)
 }
 
 func TestPixela_DeletePixel(t *testing.T) {

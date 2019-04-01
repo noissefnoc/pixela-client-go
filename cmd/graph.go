@@ -28,6 +28,7 @@ see official document (https://docs.pixe.la) for more detail`,
 	graphCmd.AddCommand(newGraphDefCmd())
 	graphCmd.AddCommand(newGraphSvgCmd())
 	graphCmd.AddCommand(newGraphPixelsDateCmd())
+	graphCmd.AddCommand(newGraphDetailURLCmd())
 
 	return graphCmd
 }
@@ -203,17 +204,17 @@ see official document (https://docs.pixe.la/#/delete-graph) for more detail.`,
 
 func newGraphDefCmd() *cobra.Command {
 	graphDefinitionCmd := &cobra.Command{
-		Use:   "def",
+		Use:   "get",
 		Short: "get graph definitions",
 		Long: `get graph definitions. Usage:
 
-$ pixela graph def
+$ pixela graph get
 
 see official document (https://docs.pixe.la/#/get-graph) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// check arguments
 			if len(args) != 0 {
-				return errors.New("argument error: `graph def` does not accept any argument")
+				return errors.New("argument error: `graph get` does not accept any argument")
 			}
 
 			// do request
@@ -337,4 +338,38 @@ see official document (https://docs.pixe.la/#/get-graph-pixels) for more detail.
 	graphPixelsDateCmd.Flags().StringP("to", "", "", "to")
 
 	return graphPixelsDateCmd
+}
+
+func newGraphDetailURLCmd() *cobra.Command {
+	graphDetailURLCmd := &cobra.Command{
+		Use:   "detail",
+		Short: "get graph detail URL",
+		Long: `get graph detail URL. Usage:
+
+$ pixela graph detail <graph id>
+
+see official document (https://docs.pixe.la/#/get-graph-html) for more detail.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			// check arguments
+			if len(args) != 1 {
+				return fmt.Errorf("argument error: `graph detail` requires 1 argument give %d arguments", len(args))
+			}
+
+			// do request
+			client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), viper.GetBool("verbose"))
+
+			if err != nil {
+				return err
+			}
+
+			response := client.GetGraphDetailURL(args[0])
+
+			// print result
+			cui.Outputln(response)
+
+			return nil
+		},
+	}
+
+	return graphDetailURLCmd
 }

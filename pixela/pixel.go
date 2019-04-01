@@ -20,8 +20,8 @@ type GetPixelResponseBody struct {
 	OptionalData string `json:"optionalData,omitempty"`
 }
 
-// CreatePixel is method for `pixel create` subcommand
-func (pixela *Pixela) CreatePixel(graphID, date, quantity, optionalData string) (NoneGetResponseBody, error) {
+// PostPixel is method for `pixel post` subcommand
+func (pixela *Pixela) PostPixel(graphID, date, quantity, optionalData string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
 		GraphID:      graphID,
@@ -33,7 +33,7 @@ func (pixela *Pixela) CreatePixel(graphID, date, quantity, optionalData string) 
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel post`: wrong arguments")
 	}
 
 	// create payload
@@ -50,7 +50,7 @@ func (pixela *Pixela) CreatePixel(graphID, date, quantity, optionalData string) 
 	plJSON, err := json.Marshal(pl)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: can not marshal request payload")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel post`: can not marshal request payload")
 	}
 
 	// build request url
@@ -62,14 +62,14 @@ func (pixela *Pixela) CreatePixel(graphID, date, quantity, optionalData string) 
 	responseBody, err := pixela.post(requestURL, bytes.NewBuffer(plJSON))
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: http request failed")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel post`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel create`: response parse failed")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel post`: response parse failed")
 	}
 
 	return postResponseBody, nil
@@ -165,8 +165,8 @@ func (pixela *Pixela) UpdatePixel(graphID, date, quantity, optionalData string) 
 	return postResponseBody, nil
 }
 
-// IncPixel is method for `pixel inc` subcommand
-func (pixela *Pixela) IncPixel(graphID string) (NoneGetResponseBody, error) {
+// IncrementPixel is method for `pixel increment` subcommand
+func (pixela *Pixela) IncrementPixel(graphID string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
 		GraphID: graphID,
@@ -175,7 +175,7 @@ func (pixela *Pixela) IncPixel(graphID string) (NoneGetResponseBody, error) {
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel increment`: wrong arguments")
 	}
 
 	// build request url
@@ -187,21 +187,21 @@ func (pixela *Pixela) IncPixel(graphID string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: http request failed")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel increment`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel inc`: response parse failed")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel increment`: response parse failed")
 	}
 
 	return postResponseBody, nil
 }
 
-// DecPixel is method for `pixel dec` subcommand
-func (pixela *Pixela) DecPixel(graphID string) (NoneGetResponseBody, error) {
+// DecrementPixel is method for `pixel decrement` subcommand
+func (pixela *Pixela) DecrementPixel(graphID string) (NoneGetResponseBody, error) {
 	// argument validation
 	vf := validateField{
 		GraphID: graphID,
@@ -210,7 +210,7 @@ func (pixela *Pixela) DecPixel(graphID string) (NoneGetResponseBody, error) {
 	err := pixela.Validator.Validate(vf)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: wrong arguments")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel decrement`: wrong arguments")
 	}
 
 	// build request url
@@ -222,14 +222,14 @@ func (pixela *Pixela) DecPixel(graphID string) (NoneGetResponseBody, error) {
 	responseBody, err := pixela.put(requestURL, nil)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: http request failed")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel decrement`: http request failed")
 	}
 
 	postResponseBody := NoneGetResponseBody{}
 	err = json.Unmarshal(responseBody, &postResponseBody)
 
 	if err != nil {
-		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel dec`: response parse failed")
+		return NoneGetResponseBody{}, errors.Wrap(err, "`pixel decrement`: response parse failed")
 	}
 
 	return postResponseBody, nil
