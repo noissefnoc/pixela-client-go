@@ -71,15 +71,15 @@ USAGE:
     pixela [global options] command [command options] subcommand [subcommand options] [arguments...]
 
 VERSION:
-    0.0.3
+    0.0.4
     
 AUTHOR:
     noissefnoc <noissefnoc@gmail.com>
     
 COMMANDS:
     user    Create, Update token, Delete user
-    graph   Create, Get definition, Get SVG data, Update definition, Delete graph, Get pixels date
-    pixel   Create, Get, Increment, Decrement, Update, Delete pixel
+    graph   Create, Get definition, Get SVG data, Update definition, Delete graph, Get pixels date, Get detail URL
+    pixel   Post, Get, Increment, Decrement, Update, Delete pixel
     webhook Create, Get, Invoke, Delete webhook
 
 SUBCOMMANDS:
@@ -89,18 +89,19 @@ SUBCOMMANDS:
         delete Delete user
     graph
         create Create graph
-        def    Get graph definitions (all graphs you created)
+        get    Get graph definitions (all graphs you created)
         svg    Get graph SVG format
         update Update graph definitions
         delete Delete graph
         pixels Get pixel regestored dates in the graph
+        detail Get graph detail URL
     pixel
-        create Create pixel
-        get    Get pixel's quantitiy and optional data
-        inc    Increment pixel quantity
-        dec    Decrement pixel quantity
-        update Update pixel quantity and optionl data
-        delete Delete pixel
+        post      Post pixel
+        get       Get pixel's quantitiy and optional data
+        increment Increment pixel quantity
+        decrement Decrement pixel quantity
+        update    Update pixel quantity and optionl data
+        delete    Delete pixel
     webhook
         create Create webhook
         get    Get webhook
