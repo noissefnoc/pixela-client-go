@@ -4,6 +4,7 @@ REVISION := $(shell git rev-parse --short HEAD)
 
 SRCS := $(shell find . -type f -name '*.go')
 LDFLAGS := -ldflags="-s -w -X \"main.Version=$(VERSION)\" -X \"main.Revision=$(REVISION)\" -extldflags \"-static\""
+PROJECT_DIR := $(shell pwd)
 
 .DEFAULT_GOAL := bin/$(NAME)
 
@@ -21,7 +22,9 @@ cross-build:
 	for os in darwin linux windows; do \
 		for arch in amd64; do \
 			GOOS=$$os GOARCH=$$arch CGO_ENABLED=0 go build -a -tags netgo -installsuffix netgo $(LDFLAGS) -o dist/$$os-$$arch/$(NAME); \
-			zip dist/$$os-$$arch/$(NAME)_$(VERSION)_$$os_$$arch.zip dist/$$os-$$arch/$(NAME); \
+			cd dist/$$os-$$arch; \
+			zip $(NAME)_$(VERSION)_$${os}_$${arch}.zip $(NAME); \
+			cd $(PROJECT_DIR); \
 		done; \
 	done
 
