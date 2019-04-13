@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.5] - 2019-04-13
+
+* update according to [Pixela v1.9.0 release](https://github.com/a-know/Pixela/releases/tag/v1.9.0)
+    * `graph svg --mode` accepts new mode `line` that returns line chart. 
+
 ## [0.0.4] - 2019-04-06
 
 ### Added

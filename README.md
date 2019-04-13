@@ -71,7 +71,7 @@ USAGE:
     pixela [global options] command [command options] subcommand [subcommand options] [arguments...]
 
 VERSION:
-    0.0.4
+    0.0.5
     
 AUTHOR:
     noissefnoc <noissefnoc@gmail.com>
