@@ -252,7 +252,7 @@ func newGraphSvgCmd() *cobra.Command {
 		Short: "get graph SVG HTML tag",
 		Long: `get graph SVG HTML tag. Usage:
 
-$ pixela graph svg <graph id>
+$ pixela graph svg <graph id> [--date yyyyMMdd] [--mode short/line]
 
 see official document (https://docs.pixe.la/#/get-svg) for more detail.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
