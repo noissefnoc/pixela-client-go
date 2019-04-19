@@ -8,7 +8,7 @@
 
 [pi](https://github.com/a-know/pi) is official CLI. Please use `pi` for proper usage.
 
-This program build and check with Go 1.11.
+This program build and check with Go 1.12 with go modules mode.
 
 
 ## Synopsis
