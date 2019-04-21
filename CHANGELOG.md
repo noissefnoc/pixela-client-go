@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6] - 2019-04-21
+
+### Added
+
+* update according to [Pixela v1.10.0 release](https://github.com/a-know/Pixela/releases/tag/v1.10.0)
+    * `graph stat` subcommand
+
 ## [0.0.5] - 2019-04-13
 
 * update according to [Pixela v1.9.0 release](https://github.com/a-know/Pixela/releases/tag/v1.9.0)
