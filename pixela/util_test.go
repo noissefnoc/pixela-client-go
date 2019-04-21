@@ -44,6 +44,7 @@ var webhookResp, _ = json.Marshal(WebhookDefinitions{[]Webhook{{webhookHash, gra
 var graphDefResp, _ = json.Marshal(GraphDefinitions{[]Graph{{graphID, graphName, graphUnit, numType, validColor, "Asia/Tokyo", []string{""}}}})
 var graphSvgResp = `<sgv>test</svg>`
 var graphPixelsResp, _ = json.Marshal(PixelsDateList{[]string{"20190101", "20190102"}})
+var graphStatResp, _ = json.Marshal(GraphStat{10, 10, 0, 100, 20, 5})
 
 // sub commands
 type subCommand int
@@ -69,6 +70,7 @@ const (
 	graphSvg
 	graphPixels
 	graphDetail
+	graphStat
 )
 
 var subCommandStringMap = map[subCommand]string{
@@ -92,6 +94,7 @@ var subCommandStringMap = map[subCommand]string{
 	graphSvg:       "graph svg",
 	graphPixels:    "graph pixels",
 	graphDetail:    "graph detail",
+	graphStat:    "graph stat",
 }
 
 var subCommandMethodMap = map[subCommand]string{
@@ -114,6 +117,7 @@ var subCommandMethodMap = map[subCommand]string{
 	graphGet:       http.MethodGet,
 	graphSvg:       http.MethodGet,
 	graphPixels:    http.MethodGet,
+	graphStat:      http.MethodGet,
 }
 
 func (c subCommand) String() string {
@@ -257,6 +261,8 @@ func subCommandMethodCall(pixela *Pixela, tt testCase, cmd subCommand) error {
 		_, err = pixela.GetGraphSvg(tt.args[0], tt.args[1], tt.args[2])
 	case graphPixels:
 		_, err = pixela.GetGraphPixelsDateList(tt.args[0], tt.args[1], tt.args[2])
+	case graphStat:
+		_, err = pixela.GetGraphStat(tt.args[0])
 	default:
 		err = fmt.Errorf("unexpected cmd %s", cmd)
 	}

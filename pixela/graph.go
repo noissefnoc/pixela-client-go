@@ -50,6 +50,16 @@ type PixelsDateList struct {
 	Pixels []string `json:"pixels"`
 }
 
+// GraphStat is response for `graph stat` suncommand
+type GraphStat struct {
+	TotalPixelsCount int     `json:"totalPixelsCount"`
+	MaxQuantity      int     `json:"maxQuantity"`
+	MinQuantity      int     `json:"minQuantity"`
+	TotalQuantity    int     `json:"totalQuantity"`
+	AvgQuantity      float64 `json:"avgQuantity"`
+	TodaysQuantity   int     `json:"todaysQuantity"`
+}
+
 // CreateGraph is method for `graph create` subcommand
 func (pixela *Pixela) CreateGraph(id, name, unit, numType, color, timezone, selfSufficient string) (NoneGetResponseBody, error) {
 	// create payload
@@ -308,4 +318,39 @@ func (pixela *Pixela) GetGraphPixelsDateList(graphID, from, to string) (PixelsDa
 // GetGraphDetailURL is method for `graph detail` subcommand
 func (pixela *Pixela) GetGraphDetailURL(graphID string) string {
 	return fmt.Sprintf("%s/v1/users/%s/graphs/%s.html", baseURL, pixela.Username, graphID)
+}
+
+// GetGraphStat is method for `graph stat` subcommand
+func (pixela *Pixela) GetGraphStat(graphID string) (GraphStat, error) {
+	// argument validation
+	vf := validateField{
+		GraphID: graphID,
+	}
+
+	err := pixela.Validator.Validate(vf)
+
+	if err != nil {
+		return GraphStat{}, errors.Wrap(err, "`graph stat`: wrong arguments")
+	}
+
+	// build request url
+	// TODO: rewrite by url package
+	requestURL := fmt.Sprintf(
+		"%s/v1/users/%s/graphs/%s/stats", baseURL, pixela.Username, graphID)
+
+	// do request
+	responseBody, err := pixela.get(requestURL)
+
+	if err != nil {
+		return GraphStat{}, errors.Wrap(err, "`graph stat`: http request failed")
+	}
+
+	graphStat := GraphStat{}
+	err = json.Unmarshal(responseBody, &graphStat)
+
+	if err != nil {
+		return GraphStat{}, errors.Wrap(err, "`graph stat`: http response parse failed")
+	}
+
+	return graphStat, nil
 }

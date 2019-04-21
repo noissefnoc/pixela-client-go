@@ -1,5 +1,7 @@
 module github.com/noissefnoc/pixela-client-go
 
+go 1.12
+
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/go-playground/locales v0.12.1 // indirect
@@ -9,12 +11,9 @@ require (
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.8.1
-	github.com/spf13/afero v1.2.1 // indirect
 	github.com/spf13/cobra v0.0.3
-	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/spf13/viper v1.3.1
+	github.com/spf13/viper v1.3.2
 	github.com/spiegel-im-spiegel/gocli v0.9.4
-	golang.org/x/sys v0.0.0-20190310054646-10058d7d4faa // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/go-playground/validator.v9 v9.27.0
+	gopkg.in/go-playground/validator.v9 v9.28.0
 )
