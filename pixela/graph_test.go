@@ -123,3 +123,17 @@ func TestPixela_GetGraphDetailURL(t *testing.T) {
 		t.Fatalf("want %#v, but got %#v", want, got)
 	}
 }
+
+func TestPixela_GetGraphStat(t *testing.T) {
+	graphStatURL := fmt.Sprintf("%s/v1/users/%s/graphs/%s/stats", baseURL, username, graphID)
+
+	respDataErr := newCommandError(graphStat, "http request failed: get request failed: errorMessage")
+
+	tests := testCases{
+		{"normal case", sucStatus, graphStatResp, nil, []string{graphID}},
+		{"invalid response status", errStatus, errResp, respDataErr, []string{graphID}},
+		{"invalid response data", sucStatus, errResp, respDataErr, []string{graphID}},
+	}
+
+	subCommandTestHelper(t, graphStat, tests, graphStatURL)
+}

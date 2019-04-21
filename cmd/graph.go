@@ -29,6 +29,7 @@ see official document (https://docs.pixe.la) for more detail`,
 	graphCmd.AddCommand(newGraphSvgCmd())
 	graphCmd.AddCommand(newGraphPixelsDateCmd())
 	graphCmd.AddCommand(newGraphDetailURLCmd())
+	graphCmd.AddCommand(newGraphStatCmd())
 
 	return graphCmd
 }
@@ -372,4 +373,48 @@ see official document (https://docs.pixe.la/#/get-graph-html) for more detail.`,
 	}
 
 	return graphDetailURLCmd
+}
+
+func newGraphStatCmd() *cobra.Command {
+	graphStatCmd := &cobra.Command{
+		Use:   "stat",
+		Short: "get graph stat",
+		Long: `get graph stat (such as total pixels count). Usage:
+
+$ pixela graph stat <graph id>
+
+see official document (https://docs.pixe.la/#/get-graph-stat) for more detail.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			// check arguments
+			if len(args) != 1 {
+				return fmt.Errorf("argument error: `graph stat` requires 1 argument give %d arguments", len(args))
+			}
+
+			// do request
+			client, err := pixela.New(viper.GetString("username"), viper.GetString("token"), viper.GetBool("verbose"))
+
+			if err != nil {
+				return err
+			}
+
+			response, err := client.GetGraphStat(args[0])
+
+			if err != nil {
+				return err
+			}
+
+			responseJSON, err := json.Marshal(response)
+
+			if err != nil {
+				return errors.Wrap(err, "response parse error: ")
+			}
+
+			// print result
+			cui.Outputln(string(responseJSON))
+
+			return nil
+		},
+	}
+
+	return graphStatCmd
 }
