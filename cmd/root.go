@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"runtime"
+
+	"github.com/goark/gocli/exitcode"
+	"github.com/goark/gocli/rwi"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/spiegel-im-spiegel/gocli/exitcode"
-	"github.com/spiegel-im-spiegel/gocli/rwi"
-	"os"
-	"runtime"
 )
 
 // variable for configuration file name

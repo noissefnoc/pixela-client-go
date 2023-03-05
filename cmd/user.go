@@ -3,14 +3,16 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
-	"github.com/noissefnoc/pixela-client-go/pixela"
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
+	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/noissefnoc/pixela-client-go/pixela"
 )
 
 // UserCreateOptions is struct for `user create` subcommand

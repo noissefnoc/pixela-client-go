@@ -1,9 +1,10 @@
 package pixela
 
 import (
-	"github.com/pkg/errors"
 	"strings"
 	"testing"
+
+	"github.com/pkg/errors"
 )
 
 type validateTestCase struct {

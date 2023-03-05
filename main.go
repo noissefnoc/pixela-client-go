@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/noissefnoc/pixela-client-go/cmd"
-	"github.com/spiegel-im-spiegel/gocli/rwi"
 	"os"
+
+	"github.com/goark/gocli/rwi"
+
+	"github.com/noissefnoc/pixela-client-go/cmd"
 )
 
 var (
