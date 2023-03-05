@@ -2,11 +2,12 @@ package pixela
 
 import (
 	"bytes"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/pkg/errors"
 )
 
 // test for pixela.New

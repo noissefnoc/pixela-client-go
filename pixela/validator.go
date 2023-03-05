@@ -2,11 +2,12 @@ package pixela
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
-	"gopkg.in/go-playground/validator.v9"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/pkg/errors"
 )
 
 type newInstanceValidateField struct {

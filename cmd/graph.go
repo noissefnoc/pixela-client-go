@@ -3,10 +3,12 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/noissefnoc/pixela-client-go/pixela"
+
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/noissefnoc/pixela-client-go/pixela"
 )
 
 func newGraphCmd() *cobra.Command {

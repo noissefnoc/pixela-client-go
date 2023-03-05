@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/url"
 	"path"
+
+	"github.com/pkg/errors"
 )
 
 // CreateGraphPayload is payload for `graph create` subcommand
