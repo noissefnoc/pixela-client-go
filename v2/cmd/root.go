@@ -12,7 +12,7 @@ import (
 
 var (
 	// Version is the build version of the CLI.
-	Version = "v2.0.0-dev"
+	Version = "v2.0.0"
 	// Revision is the git revision of the build.
 	Revision = ""
 )
