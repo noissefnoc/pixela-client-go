@@ -7,16 +7,29 @@ prek = "0.5.7"
 [env]
 NAME = "pixela"
 VERSION = "v0.0.6"
+VERSION_V2 = "v2.0.0-dev"
 
 [tasks.default]
 depends = ["build"]
 
 [tasks.build]
-description = "Build binary"
+description = "Build binaries (v1 and v2)"
+depends = ["build:v1", "build:v2"]
+
+[tasks."build:v1"]
+description = "Build v1 binary"
 run = '''
 REVISION=$(git rev-parse --short HEAD)
 LDFLAGS="-s -w -X main.Version=${VERSION} -X main.Revision=${REVISION} -extldflags -static"
 go build -ldflags "${LDFLAGS}" -o bin/${NAME}
+'''
+
+[tasks."build:v2"]
+description = "Build v2 binary"
+run = '''
+REVISION=$(git rev-parse --short HEAD)
+LDFLAGS="-s -w -X main.Version=${VERSION_V2} -X main.Revision=${REVISION}"
+(cd v2 && go build -ldflags "${LDFLAGS}" -o ../bin/${NAME}-v2 .)
 '''
 
 [tasks.clean]
@@ -30,20 +43,31 @@ go test -cover -v ./...
 (cd v2 && go test -cover -v ./...)
 '''
 
+[tasks."test:v2"]
+description = "Run v2 tests with coverage"
+run = "(cd v2 && go test -cover -v ./...)"
+
 [tasks.deps]
 description = "Download Go module dependencies"
-run = "go mod download"
+run = '''
+go mod download
+(cd v2 && go mod download)
+'''
 
 [tasks.install]
 description = "Install binary"
 run = '''
 REVISION=$(git rev-parse --short HEAD)
-LDFLAGS="-s -w -X main.Version=${VERSION} -X main.Revision=${REVISION} -extldflags -static"
-go install -ldflags "${LDFLAGS}"
+LDFLAGS="-s -w -X main.Version=${VERSION_V2} -X main.Revision=${REVISION}"
+(cd v2 && go install -ldflags "${LDFLAGS}")
 '''
 
 [tasks.cross-build]
 description = "Cross-build binaries for darwin, linux, and windows"
+depends = ["cross-build:v1", "cross-build:v2"]
+
+[tasks."cross-build:v1"]
+description = "Cross-build v1 binaries"
 run = '''
 PROJECT_DIR=$(pwd)
 REVISION=$(git rev-parse --short HEAD)
@@ -52,6 +76,24 @@ for os in darwin linux windows; do
   for arch in amd64; do
     GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -a -tags netgo -installsuffix netgo -ldflags "${LDFLAGS}" -o dist/$os-$arch/${NAME}
     (cd dist/$os-$arch && zip ${NAME}_${VERSION}_${os}_${arch}.zip ${NAME})
+  done
+done
+'''
+
+[tasks."cross-build:v2"]
+description = "Cross-build v2 binaries"
+run = '''
+REVISION=$(git rev-parse --short HEAD)
+LDFLAGS="-s -w -X main.Version=${VERSION_V2} -X main.Revision=${REVISION}"
+for os in darwin linux windows; do
+  for arch in amd64 arm64; do
+    ext=""
+    if [ "$os" = "windows" ]; then
+      ext=".exe"
+    fi
+    mkdir -p dist/v2/$os-$arch
+    GOOS=$os GOARCH=$arch CGO_ENABLED=0 go -C v2 build -ldflags "${LDFLAGS}" -o ../dist/v2/$os-$arch/${NAME}${ext} .
+    (cd dist/v2/$os-$arch && zip ${NAME}_${VERSION_V2}_${os}_${arch}.zip ${NAME}${ext})
   done
 done
 '''
