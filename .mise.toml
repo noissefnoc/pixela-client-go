@@ -24,8 +24,11 @@ description = "Clean build artifacts"
 run = "rm -rf bin/* dist/* vendor/*"
 
 [tasks.test]
-description = "Run tests with coverage"
-run = "go test -cover -v ./..."
+description = "Run tests with coverage (v1 and v2)"
+run = '''
+go test -cover -v ./...
+(cd v2 && go test -cover -v ./...)
+'''
 
 [tasks.deps]
 description = "Download Go module dependencies"
