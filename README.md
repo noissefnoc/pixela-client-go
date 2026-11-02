@@ -1,6 +1,6 @@
 # pixela-client-go
 
-[![Build Status](https://travis-ci.org/noissefnoc/pixela-client-go.svg?branch=master)](https://travis-ci.org/noissefnoc/pixela-client-go)
+[![Test](https://github.com/noissefnoc/pixela-client-go/actions/workflows/test.yml/badge.svg)](https://github.com/noissefnoc/pixela-client-go/actions/workflows/test.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/noissefnoc/pixela-client-go)](https://goreportcard.com/report/github.com/noissefnoc/pixela-client-go)
 [![Coverage Status](https://coveralls.io/repos/github/noissefnoc/pixela-client-go/badge.svg?branch=master)](https://coveralls.io/github/noissefnoc/pixela-client-go?branch=master)
 
