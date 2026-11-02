@@ -1,5 +1,8 @@
 # zizmor configuration
 # Unpinned uses are secured by GitHub Actions workflow dependency lockfiles (.github/workflows/actions.lock)
+# Support for workflow lockfiles is planned in an upcoming zizmor release:
+# https://github.com/zizmorcore/zizmor/issues/2477#issuecomment-6517428122
+# Tracked in https://github.com/noissefnoc/pixela-client-go/issues/9
 rules:
   unpinned-uses:
     disable: true
