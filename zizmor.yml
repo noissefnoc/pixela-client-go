@@ -1,0 +1,5 @@
+# zizmor configuration
+# Unpinned uses are secured by GitHub Actions workflow dependency lockfiles (.github/workflows/actions.lock)
+rules:
+  unpinned-uses:
+    disable: true
