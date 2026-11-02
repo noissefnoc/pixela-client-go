@@ -1,7 +1,11 @@
 package pixela
 
 import (
+	"bytes"
+	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 )
@@ -64,6 +68,13 @@ func (e *APIError) Error() string {
 
 // New creates a new Pixela API client.
 func New(username, token string, opts ...Option) (*Client, error) {
+	if err := validateUsername(username); err != nil {
+		return nil, fmt.Errorf("initialization error: %w", err)
+	}
+	if err := validateToken(token); err != nil {
+		return nil, fmt.Errorf("initialization error: %w", err)
+	}
+
 	c := &Client{
 		httpClient: &http.Client{
 			Timeout: defaultTimeout,
@@ -90,5 +101,67 @@ func (c *Client) BaseURL() string {
 	return c.baseURL
 }
 
-// Mock/stub helper for Step 1 interface definition (implemented in Step 2)
-var errNotImplemented = fmt.Errorf("not implemented yet (Step 2)")
+func (c *Client) do(ctx context.Context, method, requestURL string, payload []byte, requiresAuth bool) ([]byte, error) {
+	var bodyReader io.Reader
+	if payload != nil {
+		bodyReader = bytes.NewReader(payload)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, requestURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	if payload != nil {
+		req.Header.Set("Content-Type", "application/json")
+	} else if method == http.MethodPost || method == http.MethodPut {
+		req.Header.Set("Content-Length", "0")
+	}
+
+	if requiresAuth && c.token != "" {
+		req.Header.Set("X-USER-TOKEN", c.token)
+	}
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("http request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	if resp.StatusCode >= 400 {
+		var apiErr Result
+		if jsonErr := json.Unmarshal(respBody, &apiErr); jsonErr == nil && apiErr.Message != "" {
+			return nil, &APIError{
+				StatusCode: resp.StatusCode,
+				Message:    apiErr.Message,
+				IsSuccess:  apiErr.IsSuccess,
+			}
+		}
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Message:    string(respBody),
+			IsSuccess:  false,
+		}
+	}
+
+	return respBody, nil
+}
+
+func (c *Client) doResult(ctx context.Context, method, requestURL string, payload []byte, requiresAuth bool) (*Result, error) {
+	respBody, err := c.do(ctx, method, requestURL, payload, requiresAuth)
+	if err != nil {
+		return nil, err
+	}
+
+	var res Result
+	if err := json.Unmarshal(respBody, &res); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	return &res, nil
+}
