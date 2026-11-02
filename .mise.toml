@@ -7,7 +7,7 @@ prek = "0.5.7"
 [env]
 NAME = "pixela"
 VERSION = "v0.0.6"
-VERSION_V2 = "v2.0.0-dev"
+VERSION_V2 = "v2.0.0"
 
 [tasks.default]
 depends = ["build"]
@@ -110,8 +110,17 @@ find * -type d -exec zip -r ${NAME}-${VERSION}-{}.zip {} \;
 '''
 
 [tasks.release]
-description = "Tag and push release"
+description = "Tag and push release (v1)"
 run = '''
 git tag ${VERSION}
 git push origin ${VERSION}
+'''
+
+[tasks."release:v2"]
+description = "Tag, cross-build, and publish GitHub Release for v2"
+depends = ["cross-build:v2"]
+run = '''
+git tag ${VERSION_V2}
+git push origin ${VERSION_V2}
+gh release create ${VERSION_V2} dist/v2/*/*.zip --title "${VERSION_V2}" --generate-notes
 '''
