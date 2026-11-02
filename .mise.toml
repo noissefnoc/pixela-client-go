@@ -3,3 +3,70 @@ go = "1.27.3"
 jactionlint = "2.4.0"
 zizmor = "1.31.1"
 prek = "0.5.7"
+
+[env]
+NAME = "pixela"
+VERSION = "v0.0.6"
+
+[tasks.default]
+depends = ["build"]
+
+[tasks.build]
+description = "Build binary"
+run = '''
+REVISION=$(git rev-parse --short HEAD)
+LDFLAGS="-s -w -X main.Version=${VERSION} -X main.Revision=${REVISION} -extldflags -static"
+go build -ldflags "${LDFLAGS}" -o bin/${NAME}
+'''
+
+[tasks.clean]
+description = "Clean build artifacts"
+run = "rm -rf bin/* dist/* vendor/*"
+
+[tasks.test]
+description = "Run tests with coverage"
+run = "go test -cover -v ./..."
+
+[tasks.deps]
+description = "Download Go module dependencies"
+run = "go mod download"
+
+[tasks.install]
+description = "Install binary"
+run = '''
+REVISION=$(git rev-parse --short HEAD)
+LDFLAGS="-s -w -X main.Version=${VERSION} -X main.Revision=${REVISION} -extldflags -static"
+go install -ldflags "${LDFLAGS}"
+'''
+
+[tasks.cross-build]
+description = "Cross-build binaries for darwin, linux, and windows"
+run = '''
+PROJECT_DIR=$(pwd)
+REVISION=$(git rev-parse --short HEAD)
+LDFLAGS="-s -w -X main.Version=${VERSION} -X main.Revision=${REVISION} -extldflags -static"
+for os in darwin linux windows; do
+  for arch in amd64; do
+    GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -a -tags netgo -installsuffix netgo -ldflags "${LDFLAGS}" -o dist/$os-$arch/${NAME}
+    (cd dist/$os-$arch && zip ${NAME}_${VERSION}_${os}_${arch}.zip ${NAME})
+  done
+done
+'''
+
+[tasks.dist]
+description = "Package distribution archives"
+depends = ["cross-build"]
+run = '''
+cd dist
+find * -type d -exec cp ../LICENSE {} \;
+find * -type d -exec cp ../README.md {} \;
+find * -type d -exec tar -zcf ${NAME}-${VERSION}-{}.tar.gz {} \;
+find * -type d -exec zip -r ${NAME}-${VERSION}-{}.zip {} \;
+'''
+
+[tasks.release]
+description = "Tag and push release"
+run = '''
+git tag ${VERSION}
+git push origin ${VERSION}
+'''
